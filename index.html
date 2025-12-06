@@ -1,0 +1,2655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚙️🜁 SIGPROSERV 4.0 - Sistema Integrado</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 15px 30px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 60px;
+            bottom: 0;
+            width: 260px;
+            background: #2c3e50;
+            color: white;
+            overflow-y: auto;
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 10px 0;
+        }
+
+        .sidebar-menu li {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu li:hover {
+            background: #34495e;
+            border-left-color: #3498db;
+        }
+
+        .sidebar-menu li.active {
+            background: #34495e;
+            border-left-color: #3498db;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            margin-top: 60px;
+            padding: 30px;
+            min-height: calc(100vh - 60px);
+        }
+
+        .module {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .module.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 12px;
+            margin: 0 3px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table th {
+            background: #34495e;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .badge {
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 32px;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .log-entry {
+            padding: 10px;
+            border-left: 3px solid #3498db;
+            background: #ecf0f1;
+            margin-bottom: 10px;
+            border-radius: 3px;
+        }
+
+        .log-entry .time {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: #3498db;
+            transition: width 0.3s;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .info-card h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .info-card p {
+            color: #7f8c8d;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .risk-matrix {
+            display: grid;
+            grid-template-columns: 60px repeat(5, 1fr);
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .risk-matrix-cell {
+            padding: 20px;
+            text-align: center;
+            font-weight: 600;
+            border-radius: 5px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .risk-matrix-label {
+            background: #34495e;
+            color: white;
+            font-size: 12px;
+        }
+
+        .risk-low {
+            background: #27ae60;
+            color: white;
+        }
+
+        .risk-medium {
+            background: #f39c12;
+            color: white;
+        }
+
+        .risk-high {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .sla-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .sla-card {
+            background: white;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s;
+        }
+
+        .sla-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .sla-card h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .sla-metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚙️🜁 SIGPROSERV 4.0 - Sistema Integrado de Proyectos, Servicios TI y Riesgos</h1>
+        <div id="clock"></div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+            <li class="active" data-module="inicio">🏠 Inicio del Sistema</li>
+            <li data-module="pmbok">📊 Gestión de Proyectos (PMBOK)</li>
+            <li data-module="iso20000">🔧 Gestión de Servicios TI (ISO 20000)</li>
+            <li data-module="incidentes">🚨 Gestión de Incidentes (ITIL)</li>
+            <li data-module="problemas">🔍 Gestión de Problemas (ITIL)</li>
+            <li data-module="cambios">🔄 Gestión de Cambios (ITIL)</li>
+            <li data-module="solicitudes">📝 Gestión de Solicitudes</li>
+            <li data-module="sla">⏱️ Gestión de SLA</li>
+            <li data-module="riesgos">⚠️ Gestión de Riesgos (ISO 31000)</li>
+            <li data-module="activos">💻 Gestión de Activos y CMDB</li>
+            <li data-module="seguridad">🔒 Seguridad (ISO 27001)</li>
+            <li data-module="continuidad">🛡️ Continuidad (ISO 22301)</li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <!-- MÓDULO INICIO -->
+        <div class="module active" id="inicio">
+            <div class="alert alert-info">
+                <strong>Bienvenido a SIGPROSERV 4.0</strong><br>
+                Sistema Integrado de Gestión que unifica PMBOK, ISO 20000, ITIL, ISO 27001, ISO 31000 e ISO 22301
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="stat-proyectos">0</h3>
+                    <p>Proyectos Activos</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="stat-incidentes">0</h3>
+                    <p>Incidentes Abiertos</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="stat-servicios">0</h3>
+                    <p>Servicios TI Activos</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="stat-problemas">0</h3>
+                    <p>Problemas Abiertos</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="stat-cambios">0</h3>
+                    <p>RFC Pendientes</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="stat-riesgos">0</h3>
+                    <p>Riesgos Críticos</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Accesos Rápidos</div>
+                <div class="quick-actions">
+                    <button class="btn btn-primary" onclick="navegarYAbrir('incidentes', 'modal-incidente')">🚨 Nuevo Incidente</button>
+                    <button class="btn btn-primary" onclick="navegarYAbrir('pmbok', 'modal-proyecto')">📊 Nuevo Proyecto</button>
+                    <button class="btn btn-primary" onclick="navegarYAbrir('cambios', 'modal-cambio')">🔄 Nuevo RFC</button>
+                    <button class="btn btn-primary" onclick="navegarYAbrir('riesgos', 'modal-riesgo')">⚠️ Registrar Riesgo</button>
+                    <button class="btn btn-primary" onclick="navegarYAbrir('iso20000', 'modal-servicio')">🔧 Nuevo Servicio TI</button>
+                    <button class="btn btn-primary" onclick="navegarYAbrir('problemas', 'modal-problema')">🔍 Nuevo Problema</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">📊 Todos los Servicios de TI</div>
+                <table id="tabla-servicios-dashboard">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Servicio</th>
+                            <th>Categoría</th>
+                            <th>Estado</th>
+                            <th>Disponibilidad</th>
+                            <th>Responsable</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">🔍 Todos los Problemas</div>
+                <table id="tabla-problemas-dashboard">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Descripción</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Incidentes</th>
+                            <th>Responsable</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">🔄 Todos los Cambios (RFC)</div>
+                <table id="tabla-cambios-dashboard">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Descripción</th>
+                            <th>Tipo</th>
+                            <th>Estado</th>
+                            <th>Impacto</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Actividades Recientes del Sistema</div>
+                <div id="log-container"></div>
+            </div>
+        </div>
+
+        <!-- MÓDULO PROYECTOS -->
+        <div class="module" id="pmbok">
+            <div class="card">
+                <div class="card-header">
+                    📊 Gestión de Proyectos (PMBOK 7)
+                    <button class="btn btn-primary" onclick="abrirModal('modal-proyecto')">+ Nuevo Proyecto</button>
+                </div>
+                <table id="tabla-proyectos">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Estado</th>
+                            <th>Avance</th>
+                            <th>Responsable</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MÓDULO SERVICIOS TI (ISO 20000) -->
+        <div class="module" id="iso20000">
+            <div class="alert alert-info">
+                <strong>Gestión de Servicios TI según ISO 20000</strong><br>
+                Sistema de gestión de servicios que garantiza la entrega de servicios TI de calidad
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>📋 Catálogo de Servicios</h4>
+                    <p>Registro completo de todos los servicios TI activos y sus características</p>
+                </div>
+                <div class="info-card">
+                    <h4>🎯 Niveles de Servicio</h4>
+                    <p>Cumplimiento de SLA y métricas de disponibilidad</p>
+                </div>
+                <div class="info-card">
+                    <h4>📊 Métricas de Calidad</h4>
+                    <p>Monitoreo continuo del rendimiento y satisfacción</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    🔧 Catálogo de Servicios TI
+                    <button class="btn btn-primary" onclick="abrirModal('modal-servicio')">+ Nuevo Servicio</button>
+                </div>
+                <table id="tabla-servicios">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre del Servicio</th>
+                            <th>Categoría</th>
+                            <th>Estado</th>
+                            <th>Disponibilidad</th>
+                            <th>Responsable</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MÓDULO INCIDENTES -->
+        <div class="module" id="incidentes">
+            <div class="card">
+                <div class="card-header">
+                    🚨 Gestión de Incidentes (ITIL)
+                    <button class="btn btn-primary" onclick="abrirModal('modal-incidente')">+ Nuevo Incidente</button>
+                </div>
+                <table id="tabla-incidentes">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Título</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Asignado a</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MÓDULO PROBLEMAS (ITIL) -->
+        <div class="module" id="problemas">
+            <div class="alert alert-info">
+                <strong>Gestión de Problemas según ITIL</strong><br>
+                Identificación y resolución de causas raíz de incidentes recurrentes
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>🔍 Análisis de Causa Raíz</h4>
+                    <p>Investigación profunda de problemas para prevenir incidentes futuros</p>
+                </div>
+                <div class="info-card">
+                    <h4>📈 Base de Conocimiento</h4>
+                    <p>Documentación de soluciones y errores conocidos</p>
+                </div>
+                <div class="info-card">
+                    <h4>🎯 Prevención Proactiva</h4>
+                    <p>Identificación de problemas potenciales antes de que ocurran</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    🔍 Registro de Problemas
+                    <button class="btn btn-primary" onclick="abrirModal('modal-problema')">+ Nuevo Problema</button>
+                </div>
+                <table id="tabla-problemas">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Descripción</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Incidentes Relacionados</th>
+                            <th>Responsable</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MÓDULO CAMBIOS (ITIL) -->
+        <div class="module" id="cambios">
+            <div class="alert alert-info">
+                <strong>Gestión de Cambios según ITIL</strong><br>
+                Control y aprobación de cambios para minimizar riesgos en servicios TI
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>📝 RFC - Request for Change</h4>
+                    <p>Solicitudes formales de cambio con evaluación de impacto</p>
+                </div>
+                <div class="info-card">
+                    <h4>✅ CAB - Change Advisory Board</h4>
+                    <p>Comité de aprobación y evaluación de cambios</p>
+                </div>
+                <div class="info-card">
+                    <h4>📊 Tipos de Cambio</h4>
+                    <p>Estándar, Normal y Emergencia con procesos diferenciados</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    🔄 Solicitudes de Cambio (RFC)
+                    <button class="btn btn-primary" onclick="abrirModal('modal-cambio')">+ Nueva RFC</button>
+                </div>
+                <table id="tabla-cambios">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Descripción</th>
+                            <th>Tipo</th>
+                            <th>Estado</th>
+                            <th>Impacto</th>
+                            <th>Fecha Programada</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MÓDULO SOLICITUDES -->
+        <div class="module" id="solicitudes">
+            <div class="alert alert-info">
+                <strong>Gestión de Solicitudes de Servicio</strong><br>
+                Gestión de peticiones estándar de usuarios y servicios predefinidos
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>📋 Catálogo de Solicitudes</h4>
+                    <p>Servicios estándar disponibles para usuarios</p>
+                </div>
+                <div class="info-card">
+                    <h4>⚡ Automatización</h4>
+                    <p>Flujos de aprobación y cumplimiento automático</p>
+                </div>
+                <div class="info-card">
+                    <h4>📊 Métricas de Cumplimiento</h4>
+                    <p>Seguimiento de tiempos y satisfacción del usuario</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    📝 Registro de Solicitudes
+                    <button class="btn btn-primary" onclick="abrirModal('modal-solicitud')">+ Nueva Solicitud</button>
+                </div>
+                <table id="tabla-solicitudes">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tipo de Solicitud</th>
+                            <th>Solicitante</th>
+                            <th>Estado</th>
+                            <th>Prioridad</th>
+                            <th>Fecha Solicitud</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MÓDULO SLA -->
+        <div class="module" id="sla">
+            <div class="alert alert-info">
+                <strong>Gestión de Acuerdos de Nivel de Servicio (SLA)</strong><br>
+                Monitoreo y cumplimiento de compromisos de servicio con clientes
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>📊 Indicadores Clave</h4>
+                    <p>KPI de disponibilidad, tiempo de respuesta y resolución</p>
+                </div>
+                <div class="info-card">
+                    <h4>⏱️ Cumplimiento SLA</h4>
+                    <p>Seguimiento en tiempo real del cumplimiento de acuerdos</p>
+                </div>
+                <div class="info-card">
+                    <h4>📈 Reportes de Servicio</h4>
+                    <p>Informes mensuales de calidad y rendimiento</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">⏱️ Matriz de SLA por Servicio</div>
+                <div class="sla-matrix" id="sla-matrix"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    📊 Acuerdos de Nivel de Servicio
+                    <button class="btn btn-primary" onclick="abrirModal('modal-sla')">+ Nuevo SLA</button>
+                </div>
+                <table id="tabla-sla">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Servicio</th>
+                            <th>Disponibilidad</th>
+                            <th>Tiempo Respuesta</th>
+                            <th>Tiempo Resolución</th>
+                            <th>Cumplimiento</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MÓDULO RIESGOS -->
+        <div class="module" id="riesgos">
+            <div class="alert alert-info">
+                <strong>Gestión de Riesgos según ISO 31000</strong><br>
+                Identificación, evaluación y tratamiento de riesgos organizacionales
+            </div>
+
+            <div class="card">
+                <div class="card-header">⚠️ Matriz de Riesgos (Probabilidad vs Impacto)</div>
+                <div class="risk-matrix">
+                    <div class="risk-matrix-cell"></div>
+                    <div class="risk-matrix-cell risk-matrix-label">Muy Bajo</div>
+                    <div class="risk-matrix-cell risk-matrix-label">Bajo</div>
+                    <div class="risk-matrix-cell risk-matrix-label">Medio</div>
+                    <div class="risk-matrix-cell risk-matrix-label">Alto</div>
+                    <div class="risk-matrix-cell risk-matrix-label">Muy Alto</div>
+                    
+                    <div class="risk-matrix-cell risk-matrix-label">Muy Alta</div>
+                    <div class="risk-matrix-cell risk-medium" id="risk-5-1">0</div>
+                    <div class="risk-matrix-cell risk-medium" id="risk-5-2">0</div>
+                    <div class="risk-matrix-cell risk-high" id="risk-5-3">0</div>
+                    <div class="risk-matrix-cell risk-high" id="risk-5-4">0</div>
+                    <div class="risk-matrix-cell risk-high" id="risk-5-5">0</div>
+                    
+                    <div class="risk-matrix-cell risk-matrix-label">Alta</div>
+                    <div class="risk-matrix-cell risk-low" id="risk-4-1">0</div>
+                    <div class="risk-matrix-cell risk-medium" id="risk-4-2">0</div>
+                    <div class="risk-matrix-cell risk-medium" id="risk-4-3">0</div>
+                    <div class="risk-matrix-cell risk-high" id="risk-4-4">0</div>
+                    <div class="risk-matrix-cell risk-high" id="risk-4-5">0</div>
+                    
+                    <div class="risk-matrix-cell risk-matrix-label">Media</div>
+                    <div class="risk-matrix-cell risk-low" id="risk-3-1">0</div>
+                    <div class="risk-matrix-cell risk-low" id="risk-3-2">0</div>
+                    <div class="risk-matrix-cell risk-medium" id="risk-3-3">0</div>
+                    <div class="risk-matrix-cell risk-medium" id="risk-3-4">0</div>
+                    <div class="risk-matrix-cell risk-high" id="risk-3-5">0</div>
+                    
+                    <div class="risk-matrix-cell risk-matrix-label">Baja</div>
+                    <div class="risk-matrix-cell risk-low" id="risk-2-1">0</div>
+                    <div class="risk-matrix-cell risk-low" id="risk-2-2">0</div>
+                    <div class="risk-matrix-cell risk-low" id="risk-2-3">0</div>
+                    <div class="risk-matrix-cell risk-medium" id="risk-2-4">0</div>
+                    <div class="risk-matrix-cell risk-medium" id="risk-2-5">0</div>
+                    
+                    <div class="risk-matrix-cell risk-matrix-label">Muy Baja</div>
+                    <div class="risk-matrix-cell risk-low" id="risk-1-1">0</div>
+                    <div class="risk-matrix-cell risk-low" id="risk-1-2">0</div>
+                    <div class="risk-matrix-cell risk-low" id="risk-1-3">0</div>
+                    <div class="risk-matrix-cell risk-low" id="risk-1-4">0</div>
+                    <div class="risk-matrix-cell risk-medium" id="risk-1-5">0</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    ⚠️ Registro de Riesgos (ISO 31000)
+                    <button class="btn btn-primary" onclick="abrirModal('modal-riesgo')">+ Nuevo Riesgo</button>
+                </div>
+                <table id="tabla-riesgos">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Descripción</th>
+                            <th>Probabilidad</th>
+                            <th>Impacto</th>
+                            <th>Nivel</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MÓDULO ACTIVOS -->
+        <div class="module" id="activos">
+            <div class="alert alert-info">
+                <strong>Gestión de Activos y CMDB</strong><br>
+                Base de datos de configuración y gestión del ciclo de vida de activos TI
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>💻 Inventario de Activos</h4>
+                    <p>Registro completo de hardware, software y componentes</p>
+                </div>
+                <div class="info-card">
+                    <h4>🔗 Relaciones CMDB</h4>
+                    <p>Mapeo de dependencias entre activos y servicios</p>
+                </div>
+                <div class="info-card">
+                    <h4>📊 Ciclo de Vida</h4>
+                    <p>Seguimiento desde adquisición hasta retiro</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    💻 Inventario de Activos TI
+                    <button class="btn btn-primary" onclick="abrirModal('modal-activo')">+ Nuevo Activo</button>
+                </div>
+                <table id="tabla-activos">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Estado</th>
+                            <th>Ubicación</th>
+                            <th>Responsable</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MÓDULO SEGURIDAD -->
+        <div class="module" id="seguridad">
+            <div class="alert alert-info">
+                <strong>Gestión de Seguridad de la Información (ISO 27001)</strong><br>
+                Sistema de gestión de seguridad para proteger la confidencialidad, integridad y disponibilidad
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>🔒 Controles de Seguridad</h4>
+                    <p>Implementación de controles según Anexo A de ISO 27001</p>
+                </div>
+                <div class="info-card">
+                    <h4>🛡️ Gestión de Vulnerabilidades</h4>
+                    <p>Identificación y mitigación de vulnerabilidades</p>
+                </div>
+                <div class="info-card">
+                    <h4>📋 Auditorías y Cumplimiento</h4>
+                    <p>Verificación continua del cumplimiento normativo</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    🔒 Controles de Seguridad
+                    <button class="btn btn-primary" onclick="abrirModal('modal-control')">+ Nuevo Control</button>
+                </div>
+                <table id="tabla-controles">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Control</th>
+                            <th>Categoría</th>
+                            <th>Estado</th>
+                            <th>Nivel Cumplimiento</th>
+                            <th>Responsable</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MÓDULO CONTINUIDAD -->
+        <div class="module" id="continuidad">
+            <div class="alert alert-info">
+                <strong>Gestión de Continuidad del Negocio (ISO 22301)</strong><br>
+                Preparación, respuesta y recuperación ante incidentes disruptivos
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>📋 Planes de Continuidad</h4>
+                    <p>BCP documentados y probados regularmente</p>
+                </div>
+                <div class="info-card">
+                    <h4>⚡ Plan de Recuperación</h4>
+                    <p>DRP con RTO y RPO definidos por servicio crítico</p>
+                </div>
+                <div class="info-card">
+                    <h4>🔄 Pruebas y Simulacros</h4>
+                    <p>Ejercicios periódicos de validación de planes</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    🛡️ Planes de Continuidad
+                    <button class="btn btn-primary" onclick="abrirModal('modal-continuidad')">+ Nuevo Plan</button>
+                </div>
+                <table id="tabla-continuidad">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Servicio Crítico</th>
+                            <th>RTO</th>
+                            <th>RPO</th>
+                            <th>Estado Plan</th>
+                            <th>Última Prueba</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALES -->
+    <div class="modal" id="modal-proyecto">
+        <div class="modal-content">
+            <div class="modal-header">Nuevo Proyecto (PMBOK 7)</div>
+            <form onsubmit="guardarProyecto(event)">
+                <div class="form-group">
+                    <label>Nombre del Proyecto</label>
+                    <input type="text" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Responsable</label>
+                    <input type="text" name="responsable" required>
+                </div>
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select name="estado">
+                        <option>Iniciación</option>
+                        <option>Planificación</option>
+                        <option>En Ejecución</option>
+                        <option>Completado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Avance (%)</label>
+                    <input type="number" name="avance" min="0" max="100" value="0">
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-danger" onclick="cerrarModal('modal-proyecto')">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-servicio">
+        <div class="modal-content">
+            <div class="modal-header">Nuevo Servicio TI (ISO 20000)</div>
+            <form onsubmit="guardarServicio(event)">
+                <div class="form-group">
+                    <label>Nombre del Servicio</label>
+                    <input type="text" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select name="categoria">
+                        <option>Infraestructura</option>
+                        <option>Aplicaciones</option>
+                        <option>Seguridad</option>
+                        <option>Soporte</option>
+                        <option>Comunicaciones</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Responsable</label>
+                    <input type="text" name="responsable" required>
+                </div>
+                <div class="form-group">
+                    <label>Disponibilidad Objetivo (%)</label>
+                    <input type="number" name="disponibilidad" min="90" max="100" value="99.9" step="0.1">
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-danger" onclick="cerrarModal('modal-servicio')">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-incidente">
+        <div class="modal-content">
+            <div class="modal-header">Nuevo Incidente</div>
+            <form onsubmit="guardarIncidente(event)">
+                <div class="form-group">
+                    <label>Título del Incidente</label>
+                    <input type="text" name="titulo" required>
+                </div>
+                <div class="form-group">
+                    <label>Prioridad</label>
+                    <select name="prioridad">
+                        <option>Crítica</option>
+                        <option>Alta</option>
+                        <option>Media</option>
+                        <option>Baja</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Asignado a</label>
+                    <input type="text" name="asignado" required>
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea name="descripcion" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-danger" onclick="cerrarModal('modal-incidente')">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-problema">
+        <div class="modal-content">
+            <div class="modal-header">Nuevo Problema (ITIL)</div>
+            <form onsubmit="guardarProblema(event)">
+                <div class="form-group">
+                    <label>Descripción del Problema</label>
+                    <textarea name="descripcion" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Prioridad</label>
+                    <select name="prioridad">
+                        <option>Crítica</option>
+                        <option>Alta</option>
+                        <option>Media</option>
+                        <option>Baja</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Responsable</label>
+                    <input type="text" name="responsable" required>
+                </div>
+                <div class="form-group">
+                    <label>Incidentes Relacionados</label>
+                    <input type="number" name="incidentes" min="0" value="0">
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-danger" onclick="cerrarModal('modal-problema')">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-cambio">
+        <div class="modal-content">
+            <div class="modal-header">Nueva Solicitud de Cambio (RFC)</div>
+            <form onsubmit="guardarCambio(event)">
+                <div class="form-group">
+                    <label>Descripción del Cambio</label>
+                    <textarea name="descripcion" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Tipo de Cambio</label>
+                    <select name="tipo">
+                        <option>Estándar</option>
+                        <option>Normal</option>
+                        <option>Emergencia</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Impacto Esperado</label>
+                    <select name="impacto">
+                        <option>Bajo</option>
+                        <option>Medio</option>
+                        <option>Alto</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Fecha Programada</label>
+                    <input type="date" name="fecha" required>
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-danger" onclick="cerrarModal('modal-cambio')">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-riesgo">
+        <div class="modal-content">
+            <div class="modal-header">Nuevo Riesgo (ISO 31000)</div>
+            <form onsubmit="guardarRiesgo(event)">
+                <div class="form-group">
+                    <label>Descripción del Riesgo</label>
+                    <textarea name="descripcion" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Probabilidad</label>
+                    <select name="probabilidad">
+                        <option value="1">Muy Baja</option>
+                        <option value="2">Baja</option>
+                        <option value="3">Media</option>
+                        <option value="4">Alta</option>
+                        <option value="5">Muy Alta</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Impacto</label>
+                    <select name="impacto">
+                        <option value="1">Muy Bajo</option>
+                        <option value="2">Bajo</option>
+                        <option value="3">Medio</option>
+                        <option value="4">Alto</option>
+                        <option value="5">Muy Alto</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-danger" onclick="cerrarModal('modal-riesgo')">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-solicitud">
+        <div class="modal-content">
+            <div class="modal-header">Nueva Solicitud de Servicio</div>
+            <form onsubmit="guardarSolicitud(event)">
+                <div class="form-group">
+                    <label>Tipo de Solicitud</label>
+                    <select name="tipo">
+                        <option>Acceso a Sistema</option>
+                        <option>Nuevo Equipo</option>
+                        <option>Software</option>
+                        <option>Permisos</option>
+                        <option>Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Solicitante</label>
+                    <input type="text" name="solicitante" required>
+                </div>
+                <div class="form-group">
+                    <label>Prioridad</label>
+                    <select name="prioridad">
+                        <option>Alta</option>
+                        <option>Media</option>
+                        <option>Baja</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea name="descripcion" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-danger" onclick="cerrarModal('modal-solicitud')">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-sla">
+        <div class="modal-content">
+            <div class="modal-header">Nuevo Acuerdo SLA</div>
+            <form onsubmit="guardarSLA(event)">
+                <div class="form-group">
+                    <label>Servicio</label>
+                    <input type="text" name="servicio" required>
+                </div>
+                <div class="form-group">
+                    <label>Disponibilidad (%)</label>
+                    <input type="number" name="disponibilidad" min="90" max="100" value="99.9" step="0.1" required>
+                </div>
+                <div class="form-group">
+                    <label>Tiempo Respuesta (horas)</label>
+                    <input type="number" name="tiempoRespuesta" min="1" value="4" required>
+                </div>
+                <div class="form-group">
+                    <label>Tiempo Resolución (horas)</label>
+                    <input type="number" name="tiempoResolucion" min="1" value="24" required>
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-danger" onclick="cerrarModal('modal-sla')">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-activo">
+        <div class="modal-content">
+            <div class="modal-header">Nuevo Activo TI</div>
+            <form onsubmit="guardarActivo(event)">
+                <div class="form-group">
+                    <label>Nombre del Activo</label>
+                    <input type="text" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <select name="tipo">
+                        <option>Servidor</option>
+                        <option>PC</option>
+                        <option>Laptop</option>
+                        <option>Red</option>
+                        <option>Software</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Ubicación</label>
+                    <input type="text" name="ubicacion" required>
+                </div>
+                <div class="form-group">
+                    <label>Responsable</label>
+                    <input type="text" name="responsable" required>
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-danger" onclick="cerrarModal('modal-activo')">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-control">
+        <div class="modal-content">
+            <div class="modal-header">Nuevo Control de Seguridad</div>
+            <form onsubmit="guardarControl(event)">
+                <div class="form-group">
+                    <label>Nombre del Control</label>
+                    <input type="text" name="control" required>
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select name="categoria">
+                        <option>Acceso</option>
+                        <option>Cifrado</option>
+                        <option>Backup</option>
+                        <option>Firewall</option>
+                        <option>Monitoreo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nivel de Cumplimiento (%)</label>
+                    <input type="number" name="cumplimiento" min="0" max="100" value="100" required>
+                </div>
+                <div class="form-group">
+                    <label>Responsable</label>
+                    <input type="text" name="responsable" required>
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-danger" onclick="cerrarModal('modal-control')">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-continuidad">
+        <div class="modal-content">
+            <div class="modal-header">Nuevo Plan de Continuidad</div>
+            <form onsubmit="guardarContinuidad(event)">
+                <div class="form-group">
+                    <label>Servicio Crítico</label>
+                    <input type="text" name="servicio" required>
+                </div>
+                <div class="form-group">
+                    <label>RTO - Recovery Time Objective (horas)</label>
+                    <input type="number" name="rto" min="1" value="4" required>
+                </div>
+                <div class="form-group">
+                    <label>RPO - Recovery Point Objective (horas)</label>
+                    <input type="number" name="rpo" min="1" value="24" required>
+                </div>
+                <div class="form-group">
+                    <label>Última Fecha de Prueba</label>
+                    <input type="date" name="ultimaPrueba" required>
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-danger" onclick="cerrarModal('modal-continuidad')">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let datos = {
+            proyectos: [],
+            incidentes: [],
+            cambios: [],
+            riesgos: [],
+            servicios: [],
+            problemas: [],
+            solicitudes: [],
+            sla: [],
+            activos: [],
+            controles: [],
+            continuidad: [],
+            logs: []
+        };
+
+        let contadores = {
+            proyecto: 1,
+            incidente: 1,
+            cambio: 1,
+            riesgo: 1,
+            servicio: 1,
+            problema: 1,
+            solicitud: 1,
+            sla: 1,
+            activo: 1,
+            control: 1,
+            continuidad: 1
+        };
+
+        function generarDatosIniciales() {
+            const proyectosIniciales = [
+                { nombre: 'Implementación Sistema ERP', responsable: 'Laura Sánchez', estado: 'En Ejecución', avance: 65 },
+                { nombre: 'Migración a la Nube', responsable: 'Miguel Torres', estado: 'Planificación', avance: 25 },
+                { nombre: 'Desarrollo App Móvil', responsable: 'Isabel Ramírez', estado: 'En Ejecución', avance: 45 }
+            ];
+
+            proyectosIniciales.forEach(p => {
+                datos.proyectos.push({
+                    id: `PRY-${String(contadores.proyecto++).padStart(3, '0')}`,
+                    ...p
+                });
+            });
+
+            const serviciosIniciales = [
+                { nombre: 'Correo Electrónico Corporativo', categoria: 'Comunicaciones', responsable: 'Carlos Méndez', disponibilidad: 99.9 },
+                { nombre: 'Sistema ERP Principal', categoria: 'Aplicaciones', responsable: 'Ana Silva', disponibilidad: 99.5 },
+                { nombre: 'Infraestructura de Red', categoria: 'Infraestructura', responsable: 'Roberto Gómez', disponibilidad: 99.8 },
+                { nombre: 'Backup y Recuperación', categoria: 'Seguridad', responsable: 'María Torres', disponibilidad: 99.9 }
+            ];
+
+            serviciosIniciales.forEach(s => {
+                datos.servicios.push({
+                    id: `SRV-${String(contadores.servicio++).padStart(3, '0')}`,
+                    ...s,
+                    estado: 'Operativo'
+                });
+            });
+
+            const incidentesIniciales = [
+                { titulo: 'Servicio de correo lento', prioridad: 'Media', asignado: 'Juan Pérez', estado: 'Abierto' },
+                { titulo: 'Usuario no puede acceder', prioridad: 'Alta', asignado: 'María García', estado: 'Abierto' },
+                { titulo: 'Impresora sin conexión', prioridad: 'Baja', asignado: 'Carlos López', estado: 'Cerrado' },
+                { titulo: 'Base de datos lenta', prioridad: 'Crítica', asignado: 'Ana Martínez', estado: 'Abierto' }
+            ];
+
+            incidentesIniciales.forEach(i => {
+                datos.incidentes.push({
+                    id: `INC-${String(contadores.incidente++).padStart(3, '0')}`,
+                    ...i
+                });
+            });
+
+            const problemasIniciales = [
+                { descripcion: 'Degradación rendimiento servidor web', prioridad: 'Alta', responsable: 'Pedro Ruiz', incidentes: 5, estado: 'En Investigación' },
+                { descripcion: 'Fallas intermitentes en VPN', prioridad: 'Media', responsable: 'Laura Díaz', incidentes: 3, estado: 'En Análisis' },
+                { descripcion: 'Errores recurrentes en backup', prioridad: 'Crítica', responsable: 'José Vargas', incidentes: 8, estado: 'Resuelto' }
+            ];
+
+            problemasIniciales.forEach(p => {
+                datos.problemas.push({
+                    id: `PRB-${String(contadores.problema++).padStart(3, '0')}`,
+                    ...p
+                });
+            });
+
+            const cambiosIniciales = [
+                { descripcion: 'Actualización de parches de seguridad', tipo: 'Estándar', estado: 'Aprobado', impacto: 'Bajo', fecha: '2025-01-15' },
+                { descripcion: 'Instalación nueva versión ERP', tipo: 'Normal', estado: 'Evaluación', impacto: 'Alto', fecha: '2025-02-01' },
+                { descripcion: 'Modificación reglas firewall', tipo: 'Normal', estado: 'Solicitud', impacto: 'Medio', fecha: '2025-01-20' }
+            ];
+
+            cambiosIniciales.forEach(c => {
+                datos.cambios.push({
+                    id: `RFC-${String(contadores.cambio++).padStart(3, '0')}`,
+                    ...c
+                });
+            });
+
+            const riesgosIniciales = [
+                { descripcion: 'Fallo en sistema de respaldo', prob: 3, imp: 4 },
+                { descripcion: 'Vulnerabilidad en servidor web', prob: 4, imp: 4 },
+                { descripcion: 'Pérdida de datos por hardware antiguo', prob: 2, imp: 5 }
+            ];
+
+            riesgosIniciales.forEach(r => {
+                const nivel_calc = r.prob * r.imp;
+                datos.riesgos.push({
+                    id: `RSK-${String(contadores.riesgo++).padStart(3, '0')}`,
+                    descripcion: r.descripcion,
+                    probabilidad: r.prob,
+                    impacto: r.imp,
+                    nivel: nivel_calc <= 6 ? 'Bajo' : nivel_calc <= 15 ? 'Medio' : 'Alto'
+                });
+            });
+
+            const solicitudesIniciales = [
+                { tipo: 'Acceso a Sistema', solicitante: 'Carlos Ruiz', prioridad: 'Alta', estado: 'Pendiente' },
+                { tipo: 'Nuevo Equipo', solicitante: 'María López', prioridad: 'Media', estado: 'En Proceso' },
+                { tipo: 'Software', solicitante: 'Juan Martínez', prioridad: 'Baja', estado: 'Completado' }
+            ];
+
+            solicitudesIniciales.forEach(s => {
+                datos.solicitudes.push({
+                    id: `SOL-${String(contadores.solicitud++).padStart(3, '0')}`,
+                    ...s,
+                    fecha: new Date().toISOString().split('T')[0]
+                });
+            });
+
+            const slaIniciales = [
+                { servicio: 'Correo Corporativo', disponibilidad: 99.9, tiempoRespuesta: 2, tiempoResolucion: 8, cumplimiento: 98.5 },
+                { servicio: 'Sistema ERP', disponibilidad: 99.5, tiempoRespuesta: 4, tiempoResolucion: 24, cumplimiento: 99.2 },
+                { servicio: 'Red Corporativa', disponibilidad: 99.8, tiempoRespuesta: 1, tiempoResolucion: 4, cumplimiento: 97.8 }
+            ];
+
+            slaIniciales.forEach(s => {
+                datos.sla.push({
+                    id: `SLA-${String(contadores.sla++).padStart(3, '0')}`,
+                    ...s
+                });
+            });
+
+            const activosIniciales = [
+                { nombre: 'Servidor Principal', tipo: 'Servidor', ubicacion: 'Datacenter A', responsable: 'IT Admin', estado: 'Operativo' },
+                { nombre: 'Switch Core', tipo: 'Red', ubicacion: 'Sala Equipos', responsable: 'Red Admin', estado: 'Operativo' },
+                { nombre: 'Firewall Principal', tipo: 'Red', ubicacion: 'DMZ', responsable: 'Seguridad', estado: 'Operativo' }
+            ];
+
+            activosIniciales.forEach(a => {
+                datos.activos.push({
+                    id: `ACT-${String(contadores.activo++).padStart(3, '0')}`,
+                    ...a
+                });
+            });
+
+            const controlesIniciales = [
+                { control: 'Control de Acceso Lógico', categoria: 'Acceso', cumplimiento: 100, responsable: 'CISO', estado: 'Implementado' },
+                { control: 'Cifrado de Datos', categoria: 'Cifrado', cumplimiento: 95, responsable: 'IT Security', estado: 'Implementado' },
+                { control: 'Backup Diario', categoria: 'Backup', cumplimiento: 100, responsable: 'Operaciones', estado: 'Implementado' }
+            ];
+
+            controlesIniciales.forEach(c => {
+                datos.controles.push({
+                    id: `CTL-${String(contadores.control++).padStart(3, '0')}`,
+                    ...c
+                });
+            });
+
+            const continuidadIniciales = [
+                { servicio: 'Sistema ERP', rto: 4, rpo: 1, estado: 'Actualizado', ultimaPrueba: '2024-11-15' },
+                { servicio: 'Correo Corporativo', rto: 2, rpo: 1, estado: 'Actualizado', ultimaPrueba: '2024-11-20' },
+                { servicio: 'Base de Datos Principal', rto: 6, rpo: 4, estado: 'Pendiente Prueba', ultimaPrueba: '2024-10-10' }
+            ];
+
+            continuidadIniciales.forEach(c => {
+                datos.continuidad.push({
+                    id: `BCP-${String(contadores.continuidad++).padStart(3, '0')}`,
+                    ...c
+                });
+            });
+
+            agregarLog('✅ Sistema inicializado con datos de ejemplo');
+        }
+
+        function generarDatosAutomaticos() {
+            if (Math.random() > 0.85) {
+                const nombresProyectos = ['Sistema Gestión Documental', 'Portal Web Corporativo', 'Actualización Infraestructura', 'Migración Base Datos', 'Proyecto BI'];
+                const responsables = ['Laura Sánchez', 'Miguel Torres', 'Isabel Ramírez', 'Carlos Mendoza', 'Ana Rojas'];
+                const estados = ['Iniciación', 'Planificación', 'En Ejecución'];
+                
+                const proyecto = {
+                    id: `PRY-${String(contadores.proyecto++).padStart(3, '0')}`,
+                    nombre: nombresProyectos[Math.floor(Math.random() * nombresProyectos.length)],
+                    responsable: responsables[Math.floor(Math.random() * responsables.length)],
+                    estado: estados[Math.floor(Math.random() * estados.length)],
+                    avance: Math.floor(Math.random() * 60) + 10
+                };
+                
+                datos.proyectos.push(proyecto);
+                agregarLog(`📊 Nuevo proyecto: ${proyecto.nombre}`);
+                renderizarProyectos();
+                actualizarEstadisticas();
+            }
+
+            if (Math.random() > 0.7) {
+                const nombresServicios = ['Sistema CRM', 'Portal de Autoservicio', 'Servicio de Videoconferencia', 'Sistema de Monitoreo', 'Plataforma E-learning'];
+                const categorias = ['Aplicaciones', 'Comunicaciones', 'Infraestructura', 'Soporte', 'Seguridad'];
+                const responsables = ['Carlos Méndez', 'Ana Silva', 'Roberto Gómez', 'María Torres', 'Pedro Vargas'];
+                
+                const servicio = {
+                    id: `SRV-${String(contadores.servicio++).padStart(3, '0')}`,
+                    nombre: nombresServicios[Math.floor(Math.random() * nombresServicios.length)],
+                    categoria: categorias[Math.floor(Math.random() * categorias.length)],
+                    responsable: responsables[Math.floor(Math.random() * responsables.length)],
+                    disponibilidad: (99 + Math.random()).toFixed(1),
+                    estado: 'Operativo'
+                };
+                
+                datos.servicios.push(servicio);
+                agregarLog(`🔧 Nuevo servicio TI: ${servicio.nombre}`);
+                renderizarServicios();
+                renderizarServiciosDashboard();
+                actualizarEstadisticas();
+            }
+
+            if (Math.random() > 0.7) {
+                const titulosIncidentes = ['Error en aplicación nómina', 'Red lenta piso 3', 'VPN no conecta', 'Disco duro lleno', 'Sistema lento', 'Impresora offline'];
+                const prioridades = ['Crítica', 'Alta', 'Media', 'Baja'];
+                const tecnicos = ['Juan Pérez', 'María García', 'Carlos López', 'Ana Martínez', 'Luis Fernández'];
+                
+                const incidente = {
+                    id: `INC-${String(contadores.incidente++).padStart(3, '0')}`,
+                    titulo: titulosIncidentes[Math.floor(Math.random() * titulosIncidentes.length)],
+                    prioridad: prioridades[Math.floor(Math.random() * prioridades.length)],
+                    asignado: tecnicos[Math.floor(Math.random() * tecnicos.length)],
+                    estado: 'Abierto'
+                };
+                
+                datos.incidentes.push(incidente);
+                agregarLog(`🚨 Nuevo incidente: ${incidente.titulo}`);
+                renderizarIncidentes();
+                actualizarEstadisticas();
+            }
+
+            if (Math.random() > 0.75) {
+                const problemasDesc = ['Latencia en red corporativa', 'Errores sistema facturación', 'Fallos intermitentes DB', 'Problemas autenticación SSO', 'Rendimiento servidor web'];
+                const prioridades = ['Crítica', 'Alta', 'Media', 'Baja'];
+                const responsables = ['Pedro Ruiz', 'Laura Díaz', 'José Vargas', 'Carmen Mora', 'Diego Silva'];
+                const estados = ['En Investigación', 'En Análisis', 'Resuelto'];
+                
+                const problema = {
+                    id: `PRB-${String(contadores.problema++).padStart(3, '0')}`,
+                    descripcion: problemasDesc[Math.floor(Math.random() * problemasDesc.length)],
+                    prioridad: prioridades[Math.floor(Math.random() * prioridades.length)],
+                    responsable: responsables[Math.floor(Math.random() * responsables.length)],
+                    incidentes: Math.floor(Math.random() * 10) + 1,
+                    estado: estados[Math.floor(Math.random() * estados.length)]
+                };
+                
+                datos.problemas.push(problema);
+                agregarLog(`🔍 Nuevo problema: ${problema.descripcion}`);
+                renderizarProblemas();
+                renderizarProblemasDashboard();
+                actualizarEstadisticas();
+            }
+
+            if (Math.random() > 0.8) {
+                const cambiosDesc = ['Actualización certificados SSL', 'Cambio config VLAN', 'Upgrade base datos', 'Instalación antivirus', 'Parches seguridad', 'Cambio en firewall'];
+                const tipos = ['Estándar', 'Normal', 'Emergencia'];
+                const estados = ['Solicitud', 'Evaluación', 'Aprobado'];
+                const impactos = ['Bajo', 'Medio', 'Alto'];
+                
+                const hoy = new Date();
+                const fechaCambio = new Date(hoy.getTime() + Math.random() * 30 * 24 * 60 * 60 * 1000);
+                
+                const cambio = {
+                    id: `RFC-${String(contadores.cambio++).padStart(3, '0')}`,
+                    descripcion: cambiosDesc[Math.floor(Math.random() * cambiosDesc.length)],
+                    tipo: tipos[Math.floor(Math.random() * tipos.length)],
+                    estado: estados[Math.floor(Math.random() * estados.length)],
+                    impacto: impactos[Math.floor(Math.random() * impactos.length)],
+                    fecha: fechaCambio.toISOString().split('T')[0]
+                };
+                
+                datos.cambios.push(cambio);
+                agregarLog(`🔄 Nueva RFC: ${cambio.id}`);
+                renderizarCambios();
+                renderizarCambiosDashboard();
+                actualizarEstadisticas();
+            }
+
+            if (Math.random() > 0.85) {
+                const riesgosDesc = ['Interrupción servicio eléctrico', 'Ataque ransomware', 'Fuga información', 'Fallo hardware crítico', 'Desastre natural', 'Ciberataque DDoS'];
+                
+                const prob = Math.floor(Math.random() * 5) + 1;
+                const imp = Math.floor(Math.random() * 5) + 1;
+                const nivel_calc = prob * imp;
+                
+                const riesgo = {
+                    id: `RSK-${String(contadores.riesgo++).padStart(3, '0')}`,
+                    descripcion: riesgosDesc[Math.floor(Math.random() * riesgosDesc.length)],
+                    probabilidad: prob,
+                    impacto: imp,
+                    nivel: nivel_calc <= 6 ? 'Bajo' : nivel_calc <= 15 ? 'Medio' : 'Alto'
+                };
+                
+                datos.riesgos.push(riesgo);
+                agregarLog(`⚠️ Nuevo riesgo: ${riesgo.nivel}`);
+                renderizarRiesgos();
+                actualizarMatrizRiesgos();
+                actualizarEstadisticas();
+            }
+
+            if (Math.random() > 0.82) {
+                const tipos = ['Acceso a Sistema', 'Nuevo Equipo', 'Software', 'Permisos', 'Otro'];
+                const solicitantes = ['Carlos Ruiz', 'María López', 'Juan Martínez', 'Ana García', 'Pedro Silva'];
+                const prioridades = ['Alta', 'Media', 'Baja'];
+                const estados = ['Pendiente', 'En Proceso', 'Completado'];
+                
+                const solicitud = {
+                    id: `SOL-${String(contadores.solicitud++).padStart(3, '0')}`,
+                    tipo: tipos[Math.floor(Math.random() * tipos.length)],
+                    solicitante: solicitantes[Math.floor(Math.random() * solicitantes.length)],
+                    prioridad: prioridades[Math.floor(Math.random() * prioridades.length)],
+                    estado: estados[Math.floor(Math.random() * estados.length)],
+                    fecha: new Date().toISOString().split('T')[0]
+                };
+                
+                datos.solicitudes.push(solicitud);
+                agregarLog(`📝 Nueva solicitud: ${solicitud.tipo}`);
+                renderizarSolicitudes();
+            }
+
+            if (Math.random() > 0.88) {
+                const servicios = ['Portal Web', 'Sistema CRM', 'Base de Datos', 'Servidor Aplicaciones', 'Red WiFi'];
+                
+                const sla = {
+                    id: `SLA-${String(contadores.sla++).padStart(3, '0')}`,
+                    servicio: servicios[Math.floor(Math.random() * servicios.length)],
+                    disponibilidad: (99 + Math.random()).toFixed(1),
+                    tiempoRespuesta: Math.floor(Math.random() * 8) + 1,
+                    tiempoResolucion: Math.floor(Math.random() * 48) + 4,
+                    cumplimiento: (95 + Math.random() * 5).toFixed(1)
+                };
+                
+                datos.sla.push(sla);
+                agregarLog(`⏱️ Nuevo SLA: ${sla.servicio}`);
+                renderizarSLA();
+                renderizarMatrizSLA();
+            }
+
+            if (Math.random() > 0.87) {
+                const nombres = ['Servidor Backup', 'Router Edge', 'Switch Piso 2', 'Laptop Gerencia', 'PC Finanzas'];
+                const tipos = ['Servidor', 'PC', 'Laptop', 'Red', 'Software'];
+                const ubicaciones = ['Datacenter', 'Oficina Central', 'Sucursal Norte', 'Piso 3', 'Sala Reuniones'];
+                const responsables = ['IT Admin', 'Red Admin', 'Soporte', 'Gerencia TI', 'Operaciones'];
+                
+                const activo = {
+                    id: `ACT-${String(contadores.activo++).padStart(3, '0')}`,
+                    nombre: nombres[Math.floor(Math.random() * nombres.length)],
+                    tipo: tipos[Math.floor(Math.random() * tipos.length)],
+                    ubicacion: ubicaciones[Math.floor(Math.random() * ubicaciones.length)],
+                    responsable: responsables[Math.floor(Math.random() * responsables.length)],
+                    estado: 'Operativo'
+                };
+                
+                datos.activos.push(activo);
+                agregarLog(`💻 Nuevo activo: ${activo.nombre}`);
+                renderizarActivos();
+            }
+
+            if (Math.random() > 0.89) {
+                const controles = ['Autenticación Multifactor', 'Monitoreo SIEM', 'Escaneo Vulnerabilidades', 'Control Acceso Físico', 'Política Contraseñas'];
+                const categorias = ['Acceso', 'Cifrado', 'Backup', 'Firewall', 'Monitoreo'];
+                const responsables = ['CISO', 'IT Security', 'Operaciones', 'Compliance', 'Auditoria'];
+                
+                const control = {
+                    id: `CTL-${String(contadores.control++).padStart(3, '0')}`,
+                    control: controles[Math.floor(Math.random() * controles.length)],
+                    categoria: categorias[Math.floor(Math.random() * categorias.length)],
+                    cumplimiento: Math.floor(Math.random() * 20) + 80,
+                    responsable: responsables[Math.floor(Math.random() * responsables.length)],
+                    estado: 'Implementado'
+                };
+                
+                datos.controles.push(control);
+                agregarLog(`🔒 Nuevo control: ${control.control}`);
+                renderizarControles();
+            }
+
+            if (Math.random() > 0.90) {
+                const servicios = ['Infraestructura Crítica', 'Aplicaciones Core', 'Servicios Cloud', 'Red Primaria', 'Sistema Financiero'];
+                const estados = ['Actualizado', 'Pendiente Prueba', 'En Revisión'];
+                
+                const hoy = new Date();
+                const fechaPrueba = new Date(hoy.getTime() - Math.random() * 90 * 24 * 60 * 60 * 1000);
+                
+                const continuidad = {
+                    id: `BCP-${String(contadores.continuidad++).padStart(3, '0')}`,
+                    servicio: servicios[Math.floor(Math.random() * servicios.length)],
+                    rto: Math.floor(Math.random() * 24) + 1,
+                    rpo: Math.floor(Math.random() * 12) + 1,
+                    estado: estados[Math.floor(Math.random() * estados.length)],
+                    ultimaPrueba: fechaPrueba.toISOString().split('T')[0]
+                };
+                
+                datos.continuidad.push(continuidad);
+                agregarLog(`🛡️ Nuevo plan: ${continuidad.servicio}`);
+                renderizarContinuidad();
+            }
+        }
+
+        function navegarA(modulo) {
+            document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
+            document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
+            
+            document.getElementById(modulo).classList.add('active');
+            document.querySelector(`[data-module="${modulo}"]`).classList.add('active');
+            
+            renderizarModulo(modulo);
+        }
+
+        function navegarYAbrir(modulo, modalId) {
+            navegarA(modulo);
+            setTimeout(() => abrirModal(modalId), 100);
+        }
+
+        function renderizarModulo(modulo) {
+            switch(modulo) {
+                case 'pmbok': renderizarProyectos(); break;
+                case 'iso20000': renderizarServicios(); break;
+                case 'incidentes': renderizarIncidentes(); break;
+                case 'problemas': renderizarProblemas(); break;
+                case 'cambios': renderizarCambios(); break;
+                case 'riesgos': 
+                    renderizarRiesgos(); 
+                    actualizarMatrizRiesgos();
+                    break;
+                case 'solicitudes': renderizarSolicitudes(); break;
+                case 'sla': 
+                    renderizarSLA(); 
+                    renderizarMatrizSLA();
+                    break;
+                case 'activos': renderizarActivos(); break;
+                case 'seguridad': renderizarControles(); break;
+                case 'continuidad': renderizarContinuidad(); break;
+            }
+        }
+
+        document.querySelectorAll('.sidebar-menu li').forEach(item => {
+            item.addEventListener('click', () => {
+                navegarA(item.getAttribute('data-module'));
+            });
+        });
+
+        function abrirModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        function cerrarModal(id) {
+            document.getElementById(id).classList.remove('active');
+            const form = document.getElementById(id).querySelector('form');
+            if (form) form.reset();
+        }
+
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+
+        function agregarLog(mensaje) {
+            datos.logs.unshift({ mensaje, fecha: new Date().toLocaleString() });
+            if (datos.logs.length > 50) datos.logs.pop();
+            renderizarLogs();
+        }
+
+        function renderizarLogs() {
+            const container = document.getElementById('log-container');
+            if (!container) return;
+            container.innerHTML = datos.logs.slice(0, 10).map(log => `
+                <div class="log-entry">
+                    <div class="time">${log.fecha}</div>
+                    <div>${log.mensaje}</div>
+                </div>
+            `).join('');
+        }
+
+        function guardarProyecto(e) {
+            e.preventDefault();
+            const form = e.target;
+            const proyecto = {
+                id: `PRY-${String(contadores.proyecto++).padStart(3, '0')}`,
+                nombre: form.nombre.value,
+                responsable: form.responsable.value,
+                estado: form.estado.value,
+                avance: form.avance.value
+            };
+            datos.proyectos.push(proyecto);
+            cerrarModal('modal-proyecto');
+            renderizarProyectos();
+            agregarLog(`✅ Proyecto creado: ${proyecto.nombre}`);
+            actualizarEstadisticas();
+            alert(`✅ Proyecto ${proyecto.id} creado exitosamente`);
+        }
+
+        function renderizarProyectos() {
+            const tbody = document.querySelector('#tabla-proyectos tbody');
+            if (!tbody) return;
+            
+            if (datos.proyectos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay proyectos registrados</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = datos.proyectos.map(p => `
+                <tr>
+                    <td>${p.id}</td>
+                    <td><strong>${p.nombre}</strong></td>
+                    <td><span class="badge badge-info">${p.estado}</span></td>
+                    <td>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill" style="width: ${p.avance}%"></div>
+                        </div>
+                        ${p.avance}%
+                    </td>
+                    <td>${p.responsable}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarProyecto('${p.id}')">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function eliminarProyecto(id) {
+            if (confirm('¿Eliminar este proyecto?')) {
+                datos.proyectos = datos.proyectos.filter(p => p.id !== id);
+                renderizarProyectos();
+                agregarLog(`Proyecto eliminado: ${id}`);
+                actualizarEstadisticas();
+            }
+        }
+
+        function guardarServicio(e) {
+            e.preventDefault();
+            const form = e.target;
+            const servicio = {
+                id: `SRV-${String(contadores.servicio++).padStart(3, '0')}`,
+                nombre: form.nombre.value,
+                categoria: form.categoria.value,
+                responsable: form.responsable.value,
+                disponibilidad: form.disponibilidad.value,
+                estado: 'Operativo'
+            };
+            datos.servicios.push(servicio);
+            cerrarModal('modal-servicio');
+            renderizarServicios();
+            renderizarServiciosDashboard();
+            agregarLog(`✅ Servicio TI creado: ${servicio.nombre}`);
+            actualizarEstadisticas();
+            alert(`✅ Servicio ${servicio.id} creado exitosamente`);
+        }
+
+        function renderizarServicios() {
+            const tbody = document.querySelector('#tabla-servicios tbody');
+            if (!tbody) return;
+            
+            if (datos.servicios.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay servicios registrados</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = datos.servicios.map(s => `
+                <tr>
+                    <td>${s.id}</td>
+                    <td><strong>${s.nombre}</strong></td>
+                    <td><span class="badge badge-info">${s.categoria}</span></td>
+                    <td><span class="badge badge-success">${s.estado}</span></td>
+                    <td>${s.disponibilidad}%</td>
+                    <td>${s.responsable}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarServicio('${s.id}')">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function eliminarServicio(id) {
+            if (confirm('¿Eliminar este servicio?')) {
+                datos.servicios = datos.servicios.filter(s => s.id !== id);
+                renderizarServicios();
+                renderizarServiciosDashboard();
+                agregarLog(`Servicio eliminado: ${id}`);
+                actualizarEstadisticas();
+            }
+        }
+
+        function renderizarServiciosDashboard() {
+            const tbody = document.querySelector('#tabla-servicios-dashboard tbody');
+            if (!tbody) return;
+            
+            if (datos.servicios.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d;">No hay servicios registrados</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = datos.servicios.map(s => `
+                <tr>
+                    <td>${s.id}</td>
+                    <td>${s.nombre}</td>
+                    <td><span class="badge badge-info">${s.categoria}</span></td>
+                    <td><span class="badge badge-success">${s.estado}</span></td>
+                    <td>${s.disponibilidad}%</td>
+                    <td>${s.responsable}</td>
+                </tr>
+            `).join('');
+        }
+
+        function guardarIncidente(e) {
+            e.preventDefault();
+            const form = e.target;
+            const incidente = {
+                id: `INC-${String(contadores.incidente++).padStart(3, '0')}`,
+                titulo: form.titulo.value,
+                prioridad: form.prioridad.value,
+                asignado: form.asignado.value,
+                estado: 'Abierto'
+            };
+            datos.incidentes.push(incidente);
+            cerrarModal('modal-incidente');
+            renderizarIncidentes();
+            agregarLog(`✅ Incidente creado: ${incidente.titulo}`);
+            actualizarEstadisticas();
+            alert(`✅ Incidente ${incidente.id} creado exitosamente`);
+        }
+
+        function renderizarIncidentes() {
+            const tbody = document.querySelector('#tabla-incidentes tbody');
+            if (!tbody) return;
+            
+            if (datos.incidentes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay incidentes registrados</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = datos.incidentes.map(i => `
+                <tr>
+                    <td>${i.id}</td>
+                    <td>${i.titulo}</td>
+                    <td><span class="badge badge-${getBadgePrioridad(i.prioridad)}">${i.prioridad}</span></td>
+                    <td><span class="badge badge-${i.estado === 'Abierto' ? 'warning' : 'success'}">${i.estado}</span></td>
+                    <td>${i.asignado}</td>
+                    <td>
+                        <button class="btn btn-success btn-sm" onclick="cerrarIncidente('${i.id}')">Cerrar</button>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarIncidente('${i.id}')">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function getBadgePrioridad(prioridad) {
+            const map = { 'Crítica': 'danger', 'Alta': 'warning', 'Media': 'info', 'Baja': 'success' };
+            return map[prioridad] || 'info';
+        }
+
+        function cerrarIncidente(id) {
+            const inc = datos.incidentes.find(i => i.id === id);
+            if (inc) {
+                inc.estado = 'Cerrado';
+                renderizarIncidentes();
+                agregarLog(`Incidente cerrado: ${id}`);
+                actualizarEstadisticas();
+            }
+        }
+
+        function eliminarIncidente(id) {
+            if (confirm('¿Eliminar este incidente?')) {
+                datos.incidentes = datos.incidentes.filter(i => i.id !== id);
+                renderizarIncidentes();
+                agregarLog(`Incidente eliminado: ${id}`);
+                actualizarEstadisticas();
+            }
+        }
+
+        function guardarProblema(e) {
+            e.preventDefault();
+            const form = e.target;
+            const problema = {
+                id: `PRB-${String(contadores.problema++).padStart(3, '0')}`,
+                descripcion: form.descripcion.value,
+                prioridad: form.prioridad.value,
+                responsable: form.responsable.value,
+                incidentes: form.incidentes.value,
+                estado: 'En Investigación'
+            };
+            datos.problemas.push(problema);
+            cerrarModal('modal-problema');
+            renderizarProblemas();
+            renderizarProblemasDashboard();
+            agregarLog(`✅ Problema creado: ${problema.descripcion}`);
+            actualizarEstadisticas();
+            alert(`✅ Problema ${problema.id} creado exitosamente`);
+        }
+
+        function renderizarProblemas() {
+            const tbody = document.querySelector('#tabla-problemas tbody');
+            if (!tbody) return;
+            
+            if (datos.problemas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay problemas registrados</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = datos.problemas.map(p => `
+                <tr>
+                    <td>${p.id}</td>
+                    <td>${p.descripcion}</td>
+                    <td><span class="badge badge-${getBadgePrioridad(p.prioridad)}">${p.prioridad}</span></td>
+                    <td><span class="badge badge-info">${p.estado}</span></td>
+                    <td>${p.incidentes}</td>
+                    <td>${p.responsable}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarProblema('${p.id}')">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function eliminarProblema(id) {
+            if (confirm('¿Eliminar este problema?')) {
+                datos.problemas = datos.problemas.filter(p => p.id !== id);
+                renderizarProblemas();
+                renderizarProblemasDashboard();
+                agregarLog(`Problema eliminado: ${id}`);
+                actualizarEstadisticas();
+            }
+        }
+
+        function renderizarProblemasDashboard() {
+            const tbody = document.querySelector('#tabla-problemas-dashboard tbody');
+            if (!tbody) return;
+            
+            if (datos.problemas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d;">No hay problemas registrados</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = datos.problemas.map(p => `
+                <tr>
+                    <td>${p.id}</td>
+                    <td>${p.descripcion.substring(0, 50)}${p.descripcion.length > 50 ? '...' : ''}</td>
+                    <td><span class="badge badge-${getBadgePrioridad(p.prioridad)}">${p.prioridad}</span></td>
+                    <td><span class="badge badge-info">${p.estado}</span></td>
+                    <td>${p.incidentes}</td>
+                    <td>${p.responsable}</td>
+                </tr>
+            `).join('');
+        }
+
+        function guardarCambio(e) {
+            e.preventDefault();
+            const form = e.target;
+            const cambio = {
+                id: `RFC-${String(contadores.cambio++).padStart(3, '0')}`,
+                descripcion: form.descripcion.value,
+                tipo: form.tipo.value,
+                estado: 'Solicitud',
+                impacto: form.impacto.value,
+                fecha: form.fecha.value
+            };
+            datos.cambios.push(cambio);
+            cerrarModal('modal-cambio');
+            renderizarCambios();
+            renderizarCambiosDashboard();
+            agregarLog(`✅ RFC creada: ${cambio.id}`);
+            actualizarEstadisticas();
+            alert(`✅ RFC ${cambio.id} creado exitosamente`);
+        }
+
+        function renderizarCambios() {
+            const tbody = document.querySelector('#tabla-cambios tbody');
+            if (!tbody) return;
+            
+            if (datos.cambios.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay cambios registrados</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = datos.cambios.map(c => `
+                <tr>
+                    <td>${c.id}</td>
+                    <td>${c.descripcion}</td>
+                    <td><span class="badge badge-info">${c.tipo}</span></td>
+                    <td><span class="badge badge-warning">${c.estado}</span></td>
+                    <td><span class="badge badge-${c.impacto === 'Alto' ? 'danger' : c.impacto === 'Medio' ? 'warning' : 'success'}">${c.impacto}</span></td>
+                    <td>${c.fecha}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarCambio('${c.id}')">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function eliminarCambio(id) {
+            if (confirm('¿Eliminar este cambio?')) {
+                datos.cambios = datos.cambios.filter(c => c.id !== id);
+                renderizarCambios();
+                renderizarCambiosDashboard();
+                agregarLog(`Cambio eliminado: ${id}`);
+                actualizarEstadisticas();
+            }
+        }
+
+        function renderizarCambiosDashboard() {
+            const tbody = document.querySelector('#tabla-cambios-dashboard tbody');
+            if (!tbody) return;
+            
+            if (datos.cambios.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d;">No hay cambios registrados</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = datos.cambios.map(c => `
+                <tr>
+                    <td>${c.id}</td>
+                    <td>${c.descripcion.substring(0, 50)}${c.descripcion.length > 50 ? '...' : ''}</td>
+                    <td><span class="badge badge-info">${c.tipo}</span></td>
+                    <td><span class="badge badge-warning">${c.estado}</span></td>
+                    <td><span class="badge badge-${c.impacto === 'Alto' ? 'danger' : c.impacto === 'Medio' ? 'warning' : 'success'}">${c.impacto}</span></td>
+                    <td>${c.fecha}</td>
+                </tr>
+            `).join('');
+        }
+
+        function guardarRiesgo(e) {
+            e.preventDefault();
+            const form = e.target;
+            const prob = parseInt(form.probabilidad.value);
+            const imp = parseInt(form.impacto.value);
+            const nivel_calc = prob * imp;
+            
+            const riesgo = {
+                id: `RSK-${String(contadores.riesgo++).padStart(3, '0')}`,
+                descripcion: form.descripcion.value,
+                probabilidad: prob,
+                impacto: imp,
+                nivel: nivel_calc <= 6 ? 'Bajo' : nivel_calc <= 15 ? 'Medio' : 'Alto'
+            };
+            datos.riesgos.push(riesgo);
+            cerrarModal('modal-riesgo');
+            renderizarRiesgos();
+            actualizarMatrizRiesgos();
+            agregarLog(`✅ Riesgo registrado: ${riesgo.id} - Nivel ${riesgo.nivel}`);
+            actualizarEstadisticas();
+            alert(`✅ Riesgo ${riesgo.id} registrado - Nivel: ${riesgo.nivel}`);
+        }
+
+        function renderizarRiesgos() {
+            const tbody = document.querySelector('#tabla-riesgos tbody');
+            if (!tbody) return;
+            
+            if (datos.riesgos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay riesgos registrados</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = datos.riesgos.map(r => `
+                <tr>
+                    <td>${r.id}</td>
+                    <td>${r.descripcion}</td>
+                    <td>${r.probabilidad}</td>
+                    <td>${r.impacto}</td>
+                    <td><span class="badge badge-${r.nivel === 'Alto' ? 'danger' : r.nivel === 'Medio' ? 'warning' : 'success'}">${r.nivel}</span></td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarRiesgo('${r.id}')">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function eliminarRiesgo(id) {
+            if (confirm('¿Eliminar este riesgo?')) {
+                datos.riesgos = datos.riesgos.filter(r => r.id !== id);
+                renderizarRiesgos();
+                actualizarMatrizRiesgos();
+                agregarLog(`Riesgo eliminado: ${id}`);
+                actualizarEstadisticas();
+            }
+        }
+
+        function actualizarMatrizRiesgos() {
+            for (let p = 1; p <= 5; p++) {
+                for (let i = 1; i <= 5; i++) {
+                    const cell = document.getElementById(`risk-${p}-${i}`);
+                    if (cell) {
+                        const count = datos.riesgos.filter(r => r.probabilidad === p && r.impacto === i).length;
+                        cell.textContent = count;
+                    }
+                }
+            }
+        }
+
+        function guardarSolicitud(e) {
+            e.preventDefault();
+            const form = e.target;
+            const solicitud = {
+                id: `SOL-${String(contadores.solicitud++).padStart(3, '0')}`,
+                tipo: form.tipo.value,
+                solicitante: form.solicitante.value,
+                prioridad: form.prioridad.value,
+                estado: 'Pendiente',
+                fecha: new Date().toISOString().split('T')[0]
+            };
+            datos.solicitudes.push(solicitud);
+            cerrarModal('modal-solicitud');
+            renderizarSolicitudes();
+            agregarLog(`✅ Solicitud creada: ${solicitud.tipo}`);
+            alert(`✅ Solicitud ${solicitud.id} creada exitosamente`);
+        }
+
+        function renderizarSolicitudes() {
+            const tbody = document.querySelector('#tabla-solicitudes tbody');
+            if (!tbody) return;
+            
+            if (datos.solicitudes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay solicitudes registradas</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = datos.solicitudes.map(s => `
+                <tr>
+                    <td>${s.id}</td>
+                    <td>${s.tipo}</td>
+                    <td>${s.solicitante}</td>
+                    <td><span class="badge badge-${s.estado === 'Completado' ? 'success' : s.estado === 'En Proceso' ? 'info' : 'warning'}">${s.estado}</span></td>
+                    <td><span class="badge badge-${getBadgePrioridad(s.prioridad)}">${s.prioridad}</span></td>
+                    <td>${s.fecha}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarSolicitud('${s.id}')">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function eliminarSolicitud(id) {
+            if (confirm('¿Eliminar esta solicitud?')) {
+                datos.solicitudes = datos.solicitudes.filter(s => s.id !== id);
+                renderizarSolicitudes();
+                agregarLog(`Solicitud eliminada: ${id}`);
+            }
+        }
+
+        function guardarSLA(e) {
+            e.preventDefault();
+            const form = e.target;
+            const sla = {
+                id: `SLA-${String(contadores.sla++).padStart(3, '0')}`,
+                servicio: form.servicio.value,
+                disponibilidad: form.disponibilidad.value,
+                tiempoRespuesta: form.tiempoRespuesta.value,
+                tiempoResolucion: form.tiempoResolucion.value,
+                cumplimiento: (95 + Math.random() * 5).toFixed(1)
+            };
+            datos.sla.push(sla);
+            cerrarModal('modal-sla');
+            renderizarSLA();
+            renderizarMatrizSLA();
+            agregarLog(`✅ SLA creado: ${sla.servicio}`);
+            alert(`✅ SLA ${sla.id} creado exitosamente`);
+        }
+
+        function renderizarSLA() {
+            const tbody = document.querySelector('#tabla-sla tbody');
+            if (!tbody) return;
+            
+            if (datos.sla.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay SLAs registrados</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = datos.sla.map(s => `
+                <tr>
+                    <td>${s.id}</td>
+                    <td>${s.servicio}</td>
+                    <td>${s.disponibilidad}%</td>
+                    <td>${s.tiempoRespuesta}h</td>
+                    <td>${s.tiempoResolucion}h</td>
+                    <td><span class="badge badge-${s.cumplimiento >= 98 ? 'success' : s.cumplimiento >= 95 ? 'warning' : 'danger'}">${s.cumplimiento}%</span></td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarSLA('${s.id}')">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function eliminarSLA(id) {
+            if (confirm('¿Eliminar este SLA?')) {
+                datos.sla = datos.sla.filter(s => s.id !== id);
+                renderizarSLA();
+                renderizarMatrizSLA();
+                agregarLog(`SLA eliminado: ${id}`);
+            }
+        }
+
+        function renderizarMatrizSLA() {
+            const container = document.getElementById('sla-matrix');
+            if (!container) return;
+            
+            if (datos.sla.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #7f8c8d;">No hay SLAs registrados</p>';
+                return;
+            }
+            
+            container.innerHTML = datos.sla.map(s => `
+                <div class="sla-card">
+                    <h4>${s.servicio}</h4>
+                    <div class="sla-metric">
+                        <span>Disponibilidad:</span>
+                        <strong>${s.disponibilidad}%</strong>
+                    </div>
+                    <div class="sla-metric">
+                        <span>Tiempo Respuesta:</span>
+                        <strong>${s.tiempoRespuesta}h</strong>
+                    </div>
+                    <div class="sla-metric">
+                        <span>Tiempo Resolución:</span>
+                        <strong>${s.tiempoResolucion}h</strong>
+                    </div>
+                    <div class="sla-metric">
+                        <span>Cumplimiento:</span>
+                        <strong style="color: ${s.cumplimiento >= 98 ? '#27ae60' : s.cumplimiento >= 95 ? '#f39c12' : '#e74c3c'}">${s.cumplimiento}%</strong>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function guardarActivo(e) {
+            e.preventDefault();
+            const form = e.target;
+            const activo = {
+                id: `ACT-${String(contadores.activo++).padStart(3, '0')}`,
+                nombre: form.nombre.value,
+                tipo: form.tipo.value,
+                ubicacion: form.ubicacion.value,
+                responsable: form.responsable.value,
+                estado: 'Operativo'
+            };
+            datos.activos.push(activo);
+            cerrarModal('modal-activo');
+            renderizarActivos();
+            agregarLog(`✅ Activo creado: ${activo.nombre}`);
+            alert(`✅ Activo ${activo.id} creado exitosamente`);
+        }
+
+        function renderizarActivos() {
+            const tbody = document.querySelector('#tabla-activos tbody');
+            if (!tbody) return;
+            
+            if (datos.activos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay activos registrados</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = datos.activos.map(a => `
+                <tr>
+                    <td>${a.id}</td>
+                    <td>${a.nombre}</td>
+                    <td><span class="badge badge-info">${a.tipo}</span></td>
+                    <td><span class="badge badge-success">${a.estado}</span></td>
+                    <td>${a.ubicacion}</td>
+                    <td>${a.responsable}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarActivo('${a.id}')">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function eliminarActivo(id) {
+            if (confirm('¿Eliminar este activo?')) {
+                datos.activos = datos.activos.filter(a => a.id !== id);
+                renderizarActivos();
+                agregarLog(`Activo eliminado: ${id}`);
+            }
+        }
+
+        function guardarControl(e) {
+            e.preventDefault();
+            const form = e.target;
+            const control = {
+                id: `CTL-${String(contadores.control++).padStart(3, '0')}`,
+                control: form.control.value,
+                categoria: form.categoria.value,
+                cumplimiento: form.cumplimiento.value,
+                responsable: form.responsable.value,
+                estado: 'Implementado'
+            };
+            datos.controles.push(control);
+            cerrarModal('modal-control');
+            renderizarControles();
+            agregarLog(`✅ Control creado: ${control.control}`);
+            alert(`✅ Control ${control.id} creado exitosamente`);
+        }
+
+        function renderizarControles() {
+            const tbody = document.querySelector('#tabla-controles tbody');
+            if (!tbody) return;
+            
+            if (datos.controles.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay controles registrados</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = datos.controles.map(c => `
+                <tr>
+                    <td>${c.id}</td>
+                    <td>${c.control}</td>
+                    <td><span class="badge badge-info">${c.categoria}</span></td>
+                    <td><span class="badge badge-success">${c.estado}</span></td>
+                    <td>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill" style="width: ${c.cumplimiento}%; background: ${c.cumplimiento >= 90 ? '#27ae60' : c.cumplimiento >= 70 ? '#f39c12' : '#e74c3c'}"></div>
+                        </div>
+                        ${c.cumplimiento}%
+                    </td>
+                    <td>${c.responsable}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarControl('${c.id}')">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function eliminarControl(id) {
+            if (confirm('¿Eliminar este control?')) {
+                datos.controles = datos.controles.filter(c => c.id !== id);
+                renderizarControles();
+                agregarLog(`Control eliminado: ${id}`);
+            }
+        }
+
+        function guardarContinuidad(e) {
+            e.preventDefault();
+            const form = e.target;
+            const continuidad = {
+                id: `BCP-${String(contadores.continuidad++).padStart(3, '0')}`,
+                servicio: form.servicio.value,
+                rto: form.rto.value,
+                rpo: form.rpo.value,
+                estado: 'Actualizado',
+                ultimaPrueba: form.ultimaPrueba.value
+            };
+            datos.continuidad.push(continuidad);
+            cerrarModal('modal-continuidad');
+            renderizarContinuidad();
+            agregarLog(`✅ Plan de continuidad creado: ${continuidad.servicio}`);
+            alert(`✅ Plan ${continuidad.id} creado exitosamente`);
+        }
+
+        function renderizarContinuidad() {
+            const tbody = document.querySelector('#tabla-continuidad tbody');
+            if (!tbody) return;
+            
+            if (datos.continuidad.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay planes registrados</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = datos.continuidad.map(c => `
+                <tr>
+                    <td>${c.id}</td>
+                    <td>${c.servicio}</td>
+                    <td>${c.rto}h</td>
+                    <td>${c.rpo}h</td>
+                    <td><span class="badge badge-${c.estado === 'Actualizado' ? 'success' : c.estado === 'Pendiente Prueba' ? 'warning' : 'info'}">${c.estado}</span></td>
+                    <td>${c.ultimaPrueba}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarContinuidad('${c.id}')">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function eliminarContinuidad(id) {
+            if (confirm('¿Eliminar este plan?')) {
+                datos.continuidad = datos.continuidad.filter(c => c.id !== id);
+                renderizarContinuidad();
+                agregarLog(`Plan eliminado: ${id}`);
+            }
+        }
+
+        function actualizarEstadisticas() {
+            document.getElementById('stat-proyectos').textContent = datos.proyectos.filter(p => p.estado !== 'Completado').length;
+            document.getElementById('stat-incidentes').textContent = datos.incidentes.filter(i => i.estado === 'Abierto').length;
+            document.getElementById('stat-servicios').textContent = datos.servicios.length;
+            document.getElementById('stat-problemas').textContent = datos.problemas.filter(p => p.estado !== 'Resuelto').length;
+            document.getElementById('stat-cambios').textContent = datos.cambios.filter(c => c.estado !== 'Completado').length;
+            document.getElementById('stat-riesgos').textContent = datos.riesgos.filter(r => r.nivel === 'Alto').length;
+        }
+
+        function actualizarReloj() {
+            document.getElementById('clock').textContent = new Date().toLocaleString('es-ES');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            generarDatosIniciales();
+            
+            renderizarProyectos();
+            renderizarServicios();
+            renderizarIncidentes();
+            renderizarProblemas();
+            renderizarCambios();
+            renderizarRiesgos();
+            renderizarSolicitudes();
+            renderizarSLA();
+            renderizarActivos();
+            renderizarControles();
+            renderizarContinuidad();
+            renderizarServiciosDashboard();
+            renderizarProblemasDashboard();
+            renderizarCambiosDashboard();
+            renderizarMatrizSLA();
+            actualizarMatrizRiesgos();
+            renderizarLogs();
+            actualizarEstadisticas();
+            actualizarReloj();
+            
+            setInterval(actualizarReloj, 1000);
+            setInterval(generarDatosAutomaticos, 5000);
+            
+            agregarLog('✅ Sistema SIGPROSERV 4.0 iniciado correctamente');
+        });
+    </script>
+</body>
+</html>
