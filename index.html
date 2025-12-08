@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,7 +27,7 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -89,8 +90,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .card {
@@ -98,7 +106,7 @@
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .card-header {
@@ -193,7 +201,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 10000;
             align-items: center;
             justify-content: center;
@@ -215,8 +223,15 @@
         }
 
         @keyframes slideDown {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .modal-header {
@@ -290,28 +305,11 @@
             background: white;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
         .stat-card h3 {
-            font-size: 32px;
-            color: #3498db;
-            margin-bottom: 5px;
-        }
-
-        .stat-card p {
-            color: #7f8c8d;
-            font-size: 14px;
-        }
-
-        .alert {
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-
-        .alert-success {
             background: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
@@ -385,26 +383,25 @@
 
         .risk-matrix {
             display: grid;
-            grid-template-columns: 60px repeat(5, 1fr);
+            grid-template-columns: 50px repeat(5, 1fr);
             gap: 5px;
-            margin-top: 20px;
+            margin: 20px 0;
         }
 
-        .risk-matrix-cell {
+        .risk-cell {
             padding: 20px;
             text-align: center;
             font-weight: 600;
             border-radius: 5px;
-            min-height: 80px;
+        }
+
+        .risk-header {
+            background: #34495e;
+            color: white;
+            padding: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .risk-matrix-label {
-            background: #34495e;
-            color: white;
-            font-size: 12px;
         }
 
         .risk-low {
@@ -426,20 +423,21 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 15px;
-            margin-top: 20px;
+            margin: 20px 0;
         }
 
         .sla-card {
             background: white;
-            border: 2px solid #ecf0f1;
-            border-radius: 8px;
+            border-left: 4px solid #3498db;
             padding: 15px;
-            transition: all 0.3s;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
 
         .sla-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transform: translateY(-2px);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .sla-card h4 {
@@ -447,24 +445,1010 @@
             margin-bottom: 10px;
         }
 
-        .sla-metric {
-            display: flex;
-            justify-content: space-between;
-            margin: 8px 0;
+        .sla-percentage {
+            font-size: 28px;
+            font-weight: 600;
+            color: #3498db;
+            margin: 10px 0;
+        }
+
+        /* RACI Matrix Styles */
+        .raci-matrix {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .raci-matrix th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
             font-size: 14px;
+        }
+
+        .raci-matrix td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ecf0f1;
+            transition: all 0.2s;
+        }
+
+        .raci-matrix td:first-child {
+            text-align: left;
+            font-weight: 600;
+            background: #f8f9fa;
+            color: #2c3e50;
+        }
+
+        .raci-matrix tr:hover td {
+            background: #f0f8ff;
+        }
+
+        .raci-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            min-width: 30px;
+        }
+
+        .raci-r {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .raci-a {
+            background: #3498db;
+            color: white;
+        }
+
+        .raci-c {
+            background: #f39c12;
+            color: white;
+        }
+
+        .raci-i {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .raci-legend {
+            display: flex;
+            gap: 20px;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+
+        .raci-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .raci-legend-item span:first-child {
+            font-weight: 600;
+        }
+
+        .sla-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .sla-metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .sla-metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .sla-metric-card h3 {
+            font-size: 36px;
+            margin-bottom: 5px;
+        }
+
+        .sla-metric-card p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .performance-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        .performance-indicator .indicator-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .indicator-dot.green {
+            background: #27ae60;
+        }
+
+        .indicator-dot.yellow {
+            background: #f39c12;
+        }
+
+        .indicator-dot.red {
+            background: #e74c3c;
         }
 
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
             }
-            
+
             .main-content {
                 margin-left: 0;
             }
         }
+
+        /* ============================================================
+           ANIMACIONES ADICIONALES
+           ============================================================ */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            70% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-10px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(10px);
+            }
+        }
+
+        @keyframes slideRight {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary);
+            }
+
+            50% {
+                box-shadow: 0 0 20px var(--primary), 0 0 30px var(--primary);
+            }
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* ============================================================
+           EFECTOS DE PARTÍCULAS Y FONDOS ANIMADOS
+           ============================================================ */
+        .particles-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        /* ============================================================
+           COMPONENTES TABS
+           ============================================================ */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+            bottom: -2px;
+        }
+
+        .tab:hover {
+            color: var(--text);
+            background: rgba(var(--primary-rgb), 0.1);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ============================================================
+           COMPONENTES ACCORDION
+           ============================================================ */
+        .accordion {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .accordion-header {
+            padding: 16px;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            user-select: none;
+        }
+
+        .accordion-header:hover {
+            background: rgba(var(--primary-rgb), 0.1);
+        }
+
+        .accordion-header::after {
+            content: '▼';
+            font-size: 12px;
+            transition: transform 0.3s;
+        }
+
+        .accordion.open .accordion-header::after {
+            transform: rotate(180deg);
+        }
+
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s;
+            padding: 0 16px;
+        }
+
+        .accordion.open .accordion-body {
+            max-height: 500px;
+            padding: 16px;
+        }
+
+        /* ============================================================
+           PROGRESS CIRCLES
+           ============================================================ */
+        .progress-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary) calc(var(--progress) * 1%),
+                    var(--bg-secondary) 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .progress-circle::before {
+            content: '';
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--bg);
+            position: absolute;
+        }
+
+        .progress-circle-value {
+            position: relative;
+            z-index: 1;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* ============================================================
+           BADGES AVANZADOS
+           ============================================================ */
+        .badge.badge-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .badge.badge-glow {
+            animation: glow 2s infinite;
+        }
+
+        .badge.badge-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--success));
+            background-size: 200% 200%;
+            animation: gradientShift 3s infinite;
+        }
+
+        .badge.badge-dot::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            display: inline-block;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+
+        /* ============================================================
+           CARDS AVANZADOS
+           ============================================================ */
+        .card.card-hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card.card-hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.card-gradient {
+            background: linear-gradient(135deg, var(--bg-secondary), rgba(var(--primary-rgb), 0.1));
+        }
+
+        .card.card-glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card.card-bordered {
+            border-left: 4px solid var(--primary);
+        }
+
+        /* ============================================================
+           MODALES MEJORADOS
+           ============================================================ */
+        .modal.modal-fullscreen .modal-content {
+            width: 95vw;
+            height: 95vh;
+            max-width: none;
+            max-height: none;
+        }
+
+        .modal.modal-side {
+            align-items: flex-end;
+            justify-content: flex-end;
+        }
+
+        .modal.modal-side .modal-content {
+            height: 100vh;
+            max-height: none;
+            border-radius: 0;
+            animation: slideRight 0.3s;
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            animation: fadeIn 0.3s;
+        }
+
+        /* ============================================================
+           BOTONES AVANZADOS
+           ============================================================ */
+        .btn.btn-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--success));
+            background-size: 200% 200%;
+            animation: gradientShift 3s infinite;
+            border: none;
+        }
+
+        .btn.btn-outline-gradient {
+            background: transparent;
+            border: 2px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn.btn-outline-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(var(--primary-rgb), 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn.btn-outline-gradient:hover::before {
+            left: 100%;
+        }
+
+        .btn.btn-icon {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .btn.btn-floating {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            animation: float 3s infinite;
+        }
+
+        /* ============================================================
+           INPUTS MEJORADOS
+           ============================================================ */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+        }
+
+        .input-group label {
+            position: absolute;
+            top: -10px;
+            left: 12px;
+            background: var(--bg);
+            padding: 0 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .input-group.input-icon input {
+            padding-left: 44px;
+        }
+
+        .input-group.input-icon::before {
+            content: attr(data-icon);
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: var(--text-muted);
+        }
+
+        /* ============================================================
+           TOOLTIPS MEJORADOS
+           ============================================================ */
+        [data-tooltip] {
+            position: relative;
+            cursor: help;
+        }
+
+        [data-tooltip]::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.2s;
+            pointer-events: none;
+        }
+
+        [data-tooltip]::after {
+            content: '';
+            position: absolute;
+            bottom: calc(100% + 2px);
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            border: 6px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.9);
+            opacity: 0;
+            transition: all 0.2s;
+            pointer-events: none;
+        }
+
+        [data-tooltip]:hover::before,
+        [data-tooltip]:hover::after {
+            transform: translateX(-50%) scale(1);
+            opacity: 1;
+        }
+
+        /* ============================================================
+           ALERTS Y NOTIFICACIONES
+           ============================================================ */
+        .alert {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s;
+        }
+
+        .alert.alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            color: #3b82f6;
+        }
+
+        .alert.alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            border-left: 4px solid #22c55e;
+            color: #22c55e;
+        }
+
+        .alert.alert-warning {
+            background: rgba(251, 191, 36, 0.1);
+            border-left: 4px solid #fbbf24;
+            color: #fbbf24;
+        }
+
+        .alert.alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            color: #ef4444;
+        }
+
+        .alert-icon {
+            font-size: 24px;
+        }
+
+        .alert-close {
+            margin-left: auto;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .alert-close:hover {
+            opacity: 1;
+        }
+
+        /* ============================================================
+           LISTAS MEJORADAS
+           ============================================================ */
+        .list-group {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .list-item {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item:hover {
+            background: rgba(var(--primary-rgb), 0.05);
+        }
+
+        .list-item.active {
+            background: rgba(var(--primary-rgb), 0.1);
+            border-left: 4px solid var(--primary);
+        }
+
+        /* ============================================================
+           DIVIDERS
+           ============================================================ */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 24px 0;
+            position: relative;
+        }
+
+        .divider.divider-text::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg);
+            padding: 0 16px;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* ============================================================
+           RESPONSIVE UTILITIES
+           ============================================================ */
+        @media (max-width: 1200px) {
+            .hide-lg {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hide-md {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hide-sm {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hide-xs {
+                display: none !important;
+            }
+        }
+
+        /* ============================================================
+           UTILITY CLASSES
+           ============================================================ */
+        .text-center {
+            text-align: center;
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-uppercase {
+            text-transform: uppercase;
+        }
+
+        .text-lowercase {
+            text-transform: lowercase;
+        }
+
+        .text-capitalize {
+            text-transform: capitalize;
+        }
+
+        .font-bold {
+            font-weight: 700;
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        .font-normal {
+            font-weight: 400;
+        }
+
+        .font-light {
+            font-weight: 300;
+        }
+
+        .opacity-50 {
+            opacity: 0.5;
+        }
+
+        .opacity-75 {
+            opacity: 0.75;
+        }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        .cursor-not-allowed {
+            cursor: not-allowed;
+        }
+
+        .overflow-hidden {
+            overflow: hidden;
+        }
+
+        .overflow-auto {
+            overflow: auto;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .d-none {
+            display: none;
+        }
+
+        .d-block {
+            display: block;
+        }
+
+        .d-flex {
+            display: flex;
+        }
+
+        .flex-column {
+            flex-direction: column;
+        }
+
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+
+        .justify-center {
+            justify-content: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .align-center {
+            align-items: center;
+        }
+
+        .gap-1 {
+            gap: 8px;
+        }
+
+        .gap-2 {
+            gap: 16px;
+        }
+
+        .gap-3 {
+            gap: 24px;
+        }
+
+        .m-0 {
+            margin: 0;
+        }
+
+        .m-1 {
+            margin: 8px;
+        }
+
+        .m-2 {
+            margin: 16px;
+        }
+
+        .m-3 {
+            margin: 24px;
+        }
+
+        .mt-1 {
+            margin-top: 8px;
+        }
+
+        .mt-2 {
+            margin-top: 16px;
+        }
+
+        .mt-3 {
+            margin-top: 24px;
+        }
+
+        .mb-1 {
+            margin-bottom: 8px;
+        }
+
+        .mb-2 {
+            margin-bottom: 16px;
+        }
+
+        .mb-3 {
+            margin-bottom: 24px;
+        }
+
+        .p-0 {
+            padding: 0;
+        }
+
+        .p-1 {
+            padding: 8px;
+        }
+
+        .p-2 {
+            padding: 16px;
+        }
+
+        .p-3 {
+            padding: 24px;
+        }
+
+        .w-100 {
+            width: 100%;
+        }
+
+        .h-100 {
+            height: 100%;
+        }
+
+        .rounded {
+            border-radius: 8px;
+        }
+
+        .rounded-full {
+            border-radius: 9999px;
+        }
+
+        .shadow-sm {
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .shadow {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .shadow-lg {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
+
 <body>
     <div class="header">
         <h1>⚙️🜁 SIGPROSERV 4.0 - Sistema Integrado de Proyectos, Servicios TI y Riesgos</h1>
@@ -521,22 +1505,40 @@
                     <h3 id="stat-riesgos">0</h3>
                     <p>Riesgos Críticos</p>
                 </div>
+                <div class="stat-card">
+                    <h3 id="stat-solicitudes">0</h3>
+                    <p>Solicitudes Activas</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="stat-activos">0</h3>
+                    <p>Activos Registrados</p>
+                </div>
             </div>
 
             <div class="card">
                 <div class="card-header">Accesos Rápidos</div>
                 <div class="quick-actions">
-                    <button class="btn btn-primary" onclick="navegarYAbrir('incidentes', 'modal-incidente')">🚨 Nuevo Incidente</button>
-                    <button class="btn btn-primary" onclick="navegarYAbrir('pmbok', 'modal-proyecto')">📊 Nuevo Proyecto</button>
-                    <button class="btn btn-primary" onclick="navegarYAbrir('cambios', 'modal-cambio')">🔄 Nuevo RFC</button>
-                    <button class="btn btn-primary" onclick="navegarYAbrir('riesgos', 'modal-riesgo')">⚠️ Registrar Riesgo</button>
-                    <button class="btn btn-primary" onclick="navegarYAbrir('iso20000', 'modal-servicio')">🔧 Nuevo Servicio TI</button>
-                    <button class="btn btn-primary" onclick="navegarYAbrir('problemas', 'modal-problema')">🔍 Nuevo Problema</button>
+                    <button class="btn btn-primary" onclick="navegarYAbrir('incidentes', 'modal-incidente')">🚨 Nuevo
+                        Incidente</button>
+                    <button class="btn btn-primary" onclick="navegarYAbrir('pmbok', 'modal-proyecto')">📊 Nuevo
+                        Proyecto</button>
+                    <button class="btn btn-primary" onclick="navegarYAbrir('cambios', 'modal-cambio')">🔄 Nuevo
+                        RFC</button>
+                    <button class="btn btn-primary" onclick="navegarYAbrir('riesgos', 'modal-riesgo')">⚠️ Registrar
+                        Riesgo</button>
+                    <button class="btn btn-primary" onclick="navegarYAbrir('iso20000', 'modal-servicio')">🔧 Nuevo
+                        Servicio TI</button>
+                    <button class="btn btn-primary" onclick="navegarYAbrir('problemas', 'modal-problema')">🔍 Nuevo
+                        Problema</button>
+                    <button class="btn btn-primary" onclick="navegarYAbrir('solicitudes', 'modal-solicitud')">📝 Nueva
+                        Solicitud</button>
+                    <button class="btn btn-primary" onclick="navegarYAbrir('activos', 'modal-activo')">💻 Nuevo
+                        Activo</button>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-header">📊 Todos los Servicios de TI</div>
+                <div class="card-header">📊 Todos los Servicios TI</div>
                 <table id="tabla-servicios-dashboard">
                     <thead>
                         <tr>
@@ -545,7 +1547,6 @@
                             <th>Categoría</th>
                             <th>Estado</th>
                             <th>Disponibilidad</th>
-                            <th>Responsable</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -561,8 +1562,6 @@
                             <th>Descripción</th>
                             <th>Prioridad</th>
                             <th>Estado</th>
-                            <th>Incidentes</th>
-                            <th>Responsable</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -578,8 +1577,7 @@
                             <th>Descripción</th>
                             <th>Tipo</th>
                             <th>Estado</th>
-                            <th>Impacto</th>
-                            <th>Fecha</th>
+                            <th>Fecha Programada</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -774,21 +1772,21 @@
         <div class="module" id="solicitudes">
             <div class="alert alert-info">
                 <strong>Gestión de Solicitudes de Servicio</strong><br>
-                Gestión de peticiones estándar de usuarios y servicios predefinidos
+                Procesamiento de solicitudes estándar de usuarios y departamentos
             </div>
 
             <div class="info-grid">
                 <div class="info-card">
                     <h4>📋 Catálogo de Solicitudes</h4>
-                    <p>Servicios estándar disponibles para usuarios</p>
+                    <p>Servicios predefinidos con tiempos de respuesta establecidos</p>
                 </div>
                 <div class="info-card">
                     <h4>⚡ Automatización</h4>
-                    <p>Flujos de aprobación y cumplimiento automático</p>
+                    <p>Procesamiento automático de solicitudes comunes</p>
                 </div>
                 <div class="info-card">
                     <h4>📊 Métricas de Cumplimiento</h4>
-                    <p>Seguimiento de tiempos y satisfacción del usuario</p>
+                    <p>Seguimiento de tiempos de respuesta y satisfacción</p>
                 </div>
             </div>
 
@@ -801,11 +1799,11 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Tipo de Solicitud</th>
-                            <th>Solicitante</th>
-                            <th>Estado</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
                             <th>Prioridad</th>
-                            <th>Fecha Solicitud</th>
+                            <th>Estado</th>
+                            <th>Solicitante</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -817,45 +1815,158 @@
         <!-- MÓDULO SLA -->
         <div class="module" id="sla">
             <div class="alert alert-info">
-                <strong>Gestión de Acuerdos de Nivel de Servicio (SLA)</strong><br>
-                Monitoreo y cumplimiento de compromisos de servicio con clientes
+                <strong>Gestión de Niveles de Servicio (SLA)</strong><br>
+                Monitoreo y cumplimiento de acuerdos de nivel de servicio con matriz RACI para responsabilidades
             </div>
 
-            <div class="info-grid">
-                <div class="info-card">
-                    <h4>📊 Indicadores Clave</h4>
-                    <p>KPI de disponibilidad, tiempo de respuesta y resolución</p>
-                </div>
-                <div class="info-card">
-                    <h4>⏱️ Cumplimiento SLA</h4>
-                    <p>Seguimiento en tiempo real del cumplimiento de acuerdos</p>
-                </div>
-                <div class="info-card">
-                    <h4>📈 Reportes de Servicio</h4>
-                    <p>Informes mensuales de calidad y rendimiento</p>
+            <!-- SLA Metrics Dashboard -->
+            <div class="card">
+                <div class="card-header">📊 Métricas Clave de SLA</div>
+                <div class="sla-metrics-grid">
+                    <div class="sla-metric-card">
+                        <h3 id="sla-cumplimiento-global">98.5%</h3>
+                        <p>Cumplimiento Global</p>
+                    </div>
+                    <div class="sla-metric-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <h3 id="sla-servicios-riesgo">2</h3>
+                        <p>Servicios en Riesgo</p>
+                    </div>
+                    <div class="sla-metric-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <h3 id="sla-incidentes-mes">45</h3>
+                        <p>Incidentes del Mes</p>
+                    </div>
+                    <div class="sla-metric-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <h3 id="sla-tiempo-promedio">2.3h</h3>
+                        <p>Tiempo Promedio Resolución</p>
+                    </div>
                 </div>
             </div>
 
+            <!-- RACI Matrix -->
+            <div class="card">
+                <div class="card-header">👥 Matriz RACI - Gestión de SLA</div>
+                <div class="raci-legend">
+                    <div class="raci-legend-item">
+                        <span class="raci-badge raci-r">R</span>
+                        <span>Responsable (Responsible): Ejecuta la tarea</span>
+                    </div>
+                    <div class="raci-legend-item">
+                        <span class="raci-badge raci-a">A</span>
+                        <span>Aprobador (Accountable): Autoridad final y aprueba</span>
+                    </div>
+                    <div class="raci-legend-item">
+                        <span class="raci-badge raci-c">C</span>
+                        <span>Consultado (Consulted): Proporciona información</span>
+                    </div>
+                    <div class="raci-legend-item">
+                        <span class="raci-badge raci-i">I</span>
+                        <span>Informado (Informed): Recibe información</span>
+                    </div>
+                </div>
+                <table class="raci-matrix">
+                    <thead>
+                        <tr>
+                            <th>Actividad / Rol</th>
+                            <th>Gerente de Servicios TI</th>
+                            <th>Administrador de SLA</th>
+                            <th>Equipo de Soporte</th>
+                            <th>Gerente de Operaciones</th>
+                            <th>Cliente/Usuario</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Definición de SLA</td>
+                            <td><span class="raci-badge raci-a">A</span></td>
+                            <td><span class="raci-badge raci-r">R</span></td>
+                            <td><span class="raci-badge raci-c">C</span></td>
+                            <td><span class="raci-badge raci-c">C</span></td>
+                            <td><span class="raci-badge raci-i">I</span></td>
+                        </tr>
+                        <tr>
+                            <td>Monitoreo de Cumplimiento</td>
+                            <td><span class="raci-badge raci-i">I</span></td>
+                            <td><span class="raci-badge raci-a">A</span> <span class="raci-badge raci-r">R</span></td>
+                            <td><span class="raci-badge raci-c">C</span></td>
+                            <td><span class="raci-badge raci-i">I</span></td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Resolución de Incidentes</td>
+                            <td><span class="raci-badge raci-i">I</span></td>
+                            <td><span class="raci-badge raci-i">I</span></td>
+                            <td><span class="raci-badge raci-a">A</span> <span class="raci-badge raci-r">R</span></td>
+                            <td><span class="raci-badge raci-c">C</span></td>
+                            <td><span class="raci-badge raci-i">I</span></td>
+                        </tr>
+                        <tr>
+                            <td>Reportes de SLA</td>
+                            <td><span class="raci-badge raci-a">A</span></td>
+                            <td><span class="raci-badge raci-r">R</span></td>
+                            <td><span class="raci-badge raci-c">C</span></td>
+                            <td><span class="raci-badge raci-i">I</span></td>
+                            <td><span class="raci-badge raci-i">I</span></td>
+                        </tr>
+                        <tr>
+                            <td>Revisión de Métricas</td>
+                            <td><span class="raci-badge raci-a">A</span></td>
+                            <td><span class="raci-badge raci-r">R</span></td>
+                            <td><span class="raci-badge raci-i">I</span></td>
+                            <td><span class="raci-badge raci-c">C</span></td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Escalamiento de Incidentes</td>
+                            <td><span class="raci-badge raci-a">A</span></td>
+                            <td><span class="raci-badge raci-c">C</span></td>
+                            <td><span class="raci-badge raci-r">R</span></td>
+                            <td><span class="raci-badge raci-c">C</span></td>
+                            <td><span class="raci-badge raci-i">I</span></td>
+                        </tr>
+                        <tr>
+                            <td>Mejora Continua de SLA</td>
+                            <td><span class="raci-badge raci-a">A</span></td>
+                            <td><span class="raci-badge raci-r">R</span></td>
+                            <td><span class="raci-badge raci-c">C</span></td>
+                            <td><span class="raci-badge raci-c">C</span></td>
+                            <td><span class="raci-badge raci-i">I</span></td>
+                        </tr>
+                        <tr>
+                            <td>Comunicación con Clientes</td>
+                            <td><span class="raci-badge raci-a">A</span></td>
+                            <td><span class="raci-badge raci-r">R</span></td>
+                            <td><span class="raci-badge raci-c">C</span></td>
+                            <td><span class="raci-badge raci-i">I</span></td>
+                            <td><span class="raci-badge raci-i">I</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Performance Indicators -->
+            <div class="card">
+                <div class="card-header">🎯 Indicadores de Rendimiento por Servicio</div>
+                <div id="performance-indicators"></div>
+            </div>
+
+            <!-- SLA Matrix -->
             <div class="card">
                 <div class="card-header">⏱️ Matriz de SLA por Servicio</div>
                 <div class="sla-matrix" id="sla-matrix"></div>
             </div>
 
+            <!-- SLA Compliance Table -->
             <div class="card">
-                <div class="card-header">
-                    📊 Acuerdos de Nivel de Servicio
-                    <button class="btn btn-primary" onclick="abrirModal('modal-sla')">+ Nuevo SLA</button>
-                </div>
+                <div class="card-header">📊 Cumplimiento de SLA</div>
                 <table id="tabla-sla">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Servicio</th>
-                            <th>Disponibilidad</th>
-                            <th>Tiempo Respuesta</th>
-                            <th>Tiempo Resolución</th>
-                            <th>Cumplimiento</th>
-                            <th>Acciones</th>
+                            <th>SLA Objetivo</th>
+                            <th>SLA Real</th>
+                            <th>Estado</th>
+                            <th>Incidentes del Mes</th>
+                            <th>Tendencia</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -867,53 +1978,53 @@
         <div class="module" id="riesgos">
             <div class="alert alert-info">
                 <strong>Gestión de Riesgos según ISO 31000</strong><br>
-                Identificación, evaluación y tratamiento de riesgos organizacionales
+                Identificación, análisis y tratamiento de riesgos organizacionales
             </div>
 
             <div class="card">
-                <div class="card-header">⚠️ Matriz de Riesgos (Probabilidad vs Impacto)</div>
+                <div class="card-header">⚠️ Matriz de Riesgos</div>
                 <div class="risk-matrix">
-                    <div class="risk-matrix-cell"></div>
-                    <div class="risk-matrix-cell risk-matrix-label">Muy Bajo</div>
-                    <div class="risk-matrix-cell risk-matrix-label">Bajo</div>
-                    <div class="risk-matrix-cell risk-matrix-label">Medio</div>
-                    <div class="risk-matrix-cell risk-matrix-label">Alto</div>
-                    <div class="risk-matrix-cell risk-matrix-label">Muy Alto</div>
-                    
-                    <div class="risk-matrix-cell risk-matrix-label">Muy Alta</div>
-                    <div class="risk-matrix-cell risk-medium" id="risk-5-1">0</div>
-                    <div class="risk-matrix-cell risk-medium" id="risk-5-2">0</div>
-                    <div class="risk-matrix-cell risk-high" id="risk-5-3">0</div>
-                    <div class="risk-matrix-cell risk-high" id="risk-5-4">0</div>
-                    <div class="risk-matrix-cell risk-high" id="risk-5-5">0</div>
-                    
-                    <div class="risk-matrix-cell risk-matrix-label">Alta</div>
-                    <div class="risk-matrix-cell risk-low" id="risk-4-1">0</div>
-                    <div class="risk-matrix-cell risk-medium" id="risk-4-2">0</div>
-                    <div class="risk-matrix-cell risk-medium" id="risk-4-3">0</div>
-                    <div class="risk-matrix-cell risk-high" id="risk-4-4">0</div>
-                    <div class="risk-matrix-cell risk-high" id="risk-4-5">0</div>
-                    
-                    <div class="risk-matrix-cell risk-matrix-label">Media</div>
-                    <div class="risk-matrix-cell risk-low" id="risk-3-1">0</div>
-                    <div class="risk-matrix-cell risk-low" id="risk-3-2">0</div>
-                    <div class="risk-matrix-cell risk-medium" id="risk-3-3">0</div>
-                    <div class="risk-matrix-cell risk-medium" id="risk-3-4">0</div>
-                    <div class="risk-matrix-cell risk-high" id="risk-3-5">0</div>
-                    
-                    <div class="risk-matrix-cell risk-matrix-label">Baja</div>
-                    <div class="risk-matrix-cell risk-low" id="risk-2-1">0</div>
-                    <div class="risk-matrix-cell risk-low" id="risk-2-2">0</div>
-                    <div class="risk-matrix-cell risk-low" id="risk-2-3">0</div>
-                    <div class="risk-matrix-cell risk-medium" id="risk-2-4">0</div>
-                    <div class="risk-matrix-cell risk-medium" id="risk-2-5">0</div>
-                    
-                    <div class="risk-matrix-cell risk-matrix-label">Muy Baja</div>
-                    <div class="risk-matrix-cell risk-low" id="risk-1-1">0</div>
-                    <div class="risk-matrix-cell risk-low" id="risk-1-2">0</div>
-                    <div class="risk-matrix-cell risk-low" id="risk-1-3">0</div>
-                    <div class="risk-matrix-cell risk-low" id="risk-1-4">0</div>
-                    <div class="risk-matrix-cell risk-medium" id="risk-1-5">0</div>
+                    <div class="risk-header" style="grid-column: 1;"></div>
+                    <div class="risk-header">Muy Baja</div>
+                    <div class="risk-header">Baja</div>
+                    <div class="risk-header">Media</div>
+                    <div class="risk-header">Alta</div>
+                    <div class="risk-header">Muy Alta</div>
+
+                    <div class="risk-header">Muy Alto</div>
+                    <div class="risk-cell risk-medium" id="risk-5-1">0</div>
+                    <div class="risk-cell risk-medium" id="risk-5-2">0</div>
+                    <div class="risk-cell risk-high" id="risk-5-3">0</div>
+                    <div class="risk-cell risk-high" id="risk-5-4">0</div>
+                    <div class="risk-cell risk-high" id="risk-5-5">0</div>
+
+                    <div class="risk-header">Alto</div>
+                    <div class="risk-cell risk-low" id="risk-4-1">0</div>
+                    <div class="risk-cell risk-medium" id="risk-4-2">0</div>
+                    <div class="risk-cell risk-medium" id="risk-4-3">0</div>
+                    <div class="risk-cell risk-high" id="risk-4-4">0</div>
+                    <div class="risk-cell risk-high" id="risk-4-5">0</div>
+
+                    <div class="risk-header">Medio</div>
+                    <div class="risk-cell risk-low" id="risk-3-1">0</div>
+                    <div class="risk-cell risk-low" id="risk-3-2">0</div>
+                    <div class="risk-cell risk-medium" id="risk-3-3">0</div>
+                    <div class="risk-cell risk-medium" id="risk-3-4">0</div>
+                    <div class="risk-cell risk-high" id="risk-3-5">0</div>
+
+                    <div class="risk-header">Bajo</div>
+                    <div class="risk-cell risk-low" id="risk-2-1">0</div>
+                    <div class="risk-cell risk-low" id="risk-2-2">0</div>
+                    <div class="risk-cell risk-low" id="risk-2-3">0</div>
+                    <div class="risk-cell risk-medium" id="risk-2-4">0</div>
+                    <div class="risk-cell risk-medium" id="risk-2-5">0</div>
+
+                    <div class="risk-header">Muy Bajo</div>
+                    <div class="risk-cell risk-low" id="risk-1-1">0</div>
+                    <div class="risk-cell risk-low" id="risk-1-2">0</div>
+                    <div class="risk-cell risk-low" id="risk-1-3">0</div>
+                    <div class="risk-cell risk-low" id="risk-1-4">0</div>
+                    <div class="risk-cell risk-medium" id="risk-1-5">0</div>
                 </div>
             </div>
 
@@ -942,21 +2053,21 @@
         <div class="module" id="activos">
             <div class="alert alert-info">
                 <strong>Gestión de Activos y CMDB</strong><br>
-                Base de datos de configuración y gestión del ciclo de vida de activos TI
+                Base de datos de configuración y registro de activos TI
             </div>
 
             <div class="info-grid">
                 <div class="info-card">
-                    <h4>💻 Inventario de Activos</h4>
-                    <p>Registro completo de hardware, software y componentes</p>
+                    <h4>💻 Hardware</h4>
+                    <p>Servidores, equipos de red, estaciones de trabajo</p>
                 </div>
                 <div class="info-card">
-                    <h4>🔗 Relaciones CMDB</h4>
-                    <p>Mapeo de dependencias entre activos y servicios</p>
+                    <h4>📦 Software</h4>
+                    <p>Aplicaciones, licencias y sistemas operativos</p>
                 </div>
                 <div class="info-card">
-                    <h4>📊 Ciclo de Vida</h4>
-                    <p>Seguimiento desde adquisición hasta retiro</p>
+                    <h4>🔗 Relaciones</h4>
+                    <p>Dependencias entre activos y servicios</p>
                 </div>
             </div>
 
@@ -969,10 +2080,10 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Nombre</th>
                             <th>Tipo</th>
-                            <th>Estado</th>
+                            <th>Nombre</th>
                             <th>Ubicación</th>
+                            <th>Estado</th>
                             <th>Responsable</th>
                             <th>Acciones</th>
                         </tr>
@@ -986,39 +2097,50 @@
         <div class="module" id="seguridad">
             <div class="alert alert-info">
                 <strong>Gestión de Seguridad de la Información (ISO 27001)</strong><br>
-                Sistema de gestión de seguridad para proteger la confidencialidad, integridad y disponibilidad
+                Sistema de gestión de seguridad de la información
             </div>
 
             <div class="info-grid">
                 <div class="info-card">
-                    <h4>🔒 Controles de Seguridad</h4>
-                    <p>Implementación de controles según Anexo A de ISO 27001</p>
+                    <h4>🔐 Controles de Acceso</h4>
+                    <p>Gestión de identidades y autenticación</p>
                 </div>
                 <div class="info-card">
-                    <h4>🛡️ Gestión de Vulnerabilidades</h4>
-                    <p>Identificación y mitigación de vulnerabilidades</p>
+                    <h4>🛡️ Protección de Datos</h4>
+                    <p>Cifrado, backup y prevención de pérdida</p>
                 </div>
                 <div class="info-card">
-                    <h4>📋 Auditorías y Cumplimiento</h4>
-                    <p>Verificación continua del cumplimiento normativo</p>
+                    <h4>📋 Auditorías</h4>
+                    <p>Revisiones periódicas y cumplimiento normativo</p>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-header">
-                    🔒 Controles de Seguridad
-                    <button class="btn btn-primary" onclick="abrirModal('modal-control')">+ Nuevo Control</button>
-                </div>
-                <table id="tabla-controles">
+                <div class="card-header">🔒 Incidentes de Seguridad</div>
+                <table id="tabla-seguridad">
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th>Severidad</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">📊 Controles de Seguridad Activos</div>
+                <table id="tabla-controles">
+                    <thead>
+                        <tr>
                             <th>Control</th>
                             <th>Categoría</th>
                             <th>Estado</th>
-                            <th>Nivel Cumplimiento</th>
-                            <th>Responsable</th>
-                            <th>Acciones</th>
+                            <th>Última Revisión</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -1030,39 +2152,50 @@
         <div class="module" id="continuidad">
             <div class="alert alert-info">
                 <strong>Gestión de Continuidad del Negocio (ISO 22301)</strong><br>
-                Preparación, respuesta y recuperación ante incidentes disruptivos
+                Preparación y respuesta ante interrupciones del negocio
             </div>
 
             <div class="info-grid">
                 <div class="info-card">
-                    <h4>📋 Planes de Continuidad</h4>
-                    <p>BCP documentados y probados regularmente</p>
+                    <h4>📋 BIA - Business Impact Analysis</h4>
+                    <p>Análisis de impacto en procesos críticos</p>
                 </div>
                 <div class="info-card">
-                    <h4>⚡ Plan de Recuperación</h4>
-                    <p>DRP con RTO y RPO definidos por servicio crítico</p>
+                    <h4>🔄 Planes de Recuperación</h4>
+                    <p>Estrategias de continuidad y recuperación</p>
                 </div>
                 <div class="info-card">
-                    <h4>🔄 Pruebas y Simulacros</h4>
-                    <p>Ejercicios periódicos de validación de planes</p>
+                    <h4>🧪 Pruebas y Ejercicios</h4>
+                    <p>Validación de planes de contingencia</p>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-header">
-                    🛡️ Planes de Continuidad
-                    <button class="btn btn-primary" onclick="abrirModal('modal-continuidad')">+ Nuevo Plan</button>
-                </div>
+                <div class="card-header">🛡️ Planes de Continuidad</div>
                 <table id="tabla-continuidad">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Servicio Crítico</th>
+                            <th>Proceso Crítico</th>
                             <th>RTO</th>
                             <th>RPO</th>
-                            <th>Estado Plan</th>
+                            <th>Estado</th>
                             <th>Última Prueba</th>
-                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">📊 Recursos de Respaldo</div>
+                <table id="tabla-recursos">
+                    <thead>
+                        <tr>
+                            <th>Recurso</th>
+                            <th>Tipo</th>
+                            <th>Disponibilidad</th>
+                            <th>Ubicación</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -1233,7 +2366,7 @@
 
     <div class="modal" id="modal-riesgo">
         <div class="modal-content">
-            <div class="modal-header">Nuevo Riesgo (ISO 31000)</div>
+            <div class="modal-header">Nuevo Riesgo</div>
             <form onsubmit="guardarRiesgo(event)">
                 <div class="form-group">
                     <label>Descripción del Riesgo</label>
@@ -1274,14 +2407,14 @@
                     <select name="tipo">
                         <option>Acceso a Sistema</option>
                         <option>Nuevo Equipo</option>
-                        <option>Software</option>
-                        <option>Permisos</option>
-                        <option>Otro</option>
+                        <option>Soporte Técnico</option>
+                        <option>Instalación Software</option>
+                        <option>Cambio de Contraseña</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Solicitante</label>
-                    <input type="text" name="solicitante" required>
+                    <label>Descripción</label>
+                    <textarea name="descripcion" required></textarea>
                 </div>
                 <div class="form-group">
                     <label>Prioridad</label>
@@ -1292,37 +2425,11 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Descripción</label>
-                    <textarea name="descripcion" required></textarea>
+                    <label>Solicitante</label>
+                    <input type="text" name="solicitante" required>
                 </div>
                 <button type="submit" class="btn btn-success">Guardar</button>
                 <button type="button" class="btn btn-danger" onclick="cerrarModal('modal-solicitud')">Cancelar</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="modal" id="modal-sla">
-        <div class="modal-content">
-            <div class="modal-header">Nuevo Acuerdo SLA</div>
-            <form onsubmit="guardarSLA(event)">
-                <div class="form-group">
-                    <label>Servicio</label>
-                    <input type="text" name="servicio" required>
-                </div>
-                <div class="form-group">
-                    <label>Disponibilidad (%)</label>
-                    <input type="number" name="disponibilidad" min="90" max="100" value="99.9" step="0.1" required>
-                </div>
-                <div class="form-group">
-                    <label>Tiempo Respuesta (horas)</label>
-                    <input type="number" name="tiempoRespuesta" min="1" value="4" required>
-                </div>
-                <div class="form-group">
-                    <label>Tiempo Resolución (horas)</label>
-                    <input type="number" name="tiempoResolucion" min="1" value="24" required>
-                </div>
-                <button type="submit" class="btn btn-success">Guardar</button>
-                <button type="button" class="btn btn-danger" onclick="cerrarModal('modal-sla')">Cancelar</button>
             </form>
         </div>
     </div>
@@ -1332,18 +2439,19 @@
             <div class="modal-header">Nuevo Activo TI</div>
             <form onsubmit="guardarActivo(event)">
                 <div class="form-group">
-                    <label>Nombre del Activo</label>
-                    <input type="text" name="nombre" required>
-                </div>
-                <div class="form-group">
-                    <label>Tipo</label>
+                    <label>Tipo de Activo</label>
                     <select name="tipo">
                         <option>Servidor</option>
-                        <option>PC</option>
                         <option>Laptop</option>
-                        <option>Red</option>
+                        <option>Desktop</option>
+                        <option>Switch</option>
+                        <option>Router</option>
                         <option>Software</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label>Nombre/Modelo</label>
+                    <input type="text" name="nombre" required>
                 </div>
                 <div class="form-group">
                     <label>Ubicación</label>
@@ -1359,64 +2467,6 @@
         </div>
     </div>
 
-    <div class="modal" id="modal-control">
-        <div class="modal-content">
-            <div class="modal-header">Nuevo Control de Seguridad</div>
-            <form onsubmit="guardarControl(event)">
-                <div class="form-group">
-                    <label>Nombre del Control</label>
-                    <input type="text" name="control" required>
-                </div>
-                <div class="form-group">
-                    <label>Categoría</label>
-                    <select name="categoria">
-                        <option>Acceso</option>
-                        <option>Cifrado</option>
-                        <option>Backup</option>
-                        <option>Firewall</option>
-                        <option>Monitoreo</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Nivel de Cumplimiento (%)</label>
-                    <input type="number" name="cumplimiento" min="0" max="100" value="100" required>
-                </div>
-                <div class="form-group">
-                    <label>Responsable</label>
-                    <input type="text" name="responsable" required>
-                </div>
-                <button type="submit" class="btn btn-success">Guardar</button>
-                <button type="button" class="btn btn-danger" onclick="cerrarModal('modal-control')">Cancelar</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="modal" id="modal-continuidad">
-        <div class="modal-content">
-            <div class="modal-header">Nuevo Plan de Continuidad</div>
-            <form onsubmit="guardarContinuidad(event)">
-                <div class="form-group">
-                    <label>Servicio Crítico</label>
-                    <input type="text" name="servicio" required>
-                </div>
-                <div class="form-group">
-                    <label>RTO - Recovery Time Objective (horas)</label>
-                    <input type="number" name="rto" min="1" value="4" required>
-                </div>
-                <div class="form-group">
-                    <label>RPO - Recovery Point Objective (horas)</label>
-                    <input type="number" name="rpo" min="1" value="24" required>
-                </div>
-                <div class="form-group">
-                    <label>Última Fecha de Prueba</label>
-                    <input type="date" name="ultimaPrueba" required>
-                </div>
-                <button type="submit" class="btn btn-success">Guardar</button>
-                <button type="button" class="btn btn-danger" onclick="cerrarModal('modal-continuidad')">Cancelar</button>
-            </form>
-        </div>
-    </div>
-
     <script>
         let datos = {
             proyectos: [],
@@ -1426,10 +2476,11 @@
             servicios: [],
             problemas: [],
             solicitudes: [],
-            sla: [],
             activos: [],
+            seguridad: [],
             controles: [],
             continuidad: [],
+            recursos: [],
             logs: []
         };
 
@@ -1441,9 +2492,8 @@
             servicio: 1,
             problema: 1,
             solicitud: 1,
-            sla: 1,
             activo: 1,
-            control: 1,
+            seguridad: 1,
             continuidad: 1
         };
 
@@ -1533,81 +2583,91 @@
                 });
             });
 
+            // Solicitudes iniciales
             const solicitudesIniciales = [
-                { tipo: 'Acceso a Sistema', solicitante: 'Carlos Ruiz', prioridad: 'Alta', estado: 'Pendiente' },
-                { tipo: 'Nuevo Equipo', solicitante: 'María López', prioridad: 'Media', estado: 'En Proceso' },
-                { tipo: 'Software', solicitante: 'Juan Martínez', prioridad: 'Baja', estado: 'Completado' }
+                { tipo: 'Acceso a Sistema', descripcion: 'Solicitud de acceso al sistema ERP', prioridad: 'Media', solicitante: 'Juan Rodríguez', estado: 'Pendiente' },
+                { tipo: 'Nuevo Equipo', descripcion: 'Laptop para nuevo empleado', prioridad: 'Alta', solicitante: 'María López', estado: 'En Proceso' }
             ];
 
             solicitudesIniciales.forEach(s => {
                 datos.solicitudes.push({
                     id: `SOL-${String(contadores.solicitud++).padStart(3, '0')}`,
-                    ...s,
-                    fecha: new Date().toISOString().split('T')[0]
-                });
-            });
-
-            const slaIniciales = [
-                { servicio: 'Correo Corporativo', disponibilidad: 99.9, tiempoRespuesta: 2, tiempoResolucion: 8, cumplimiento: 98.5 },
-                { servicio: 'Sistema ERP', disponibilidad: 99.5, tiempoRespuesta: 4, tiempoResolucion: 24, cumplimiento: 99.2 },
-                { servicio: 'Red Corporativa', disponibilidad: 99.8, tiempoRespuesta: 1, tiempoResolucion: 4, cumplimiento: 97.8 }
-            ];
-
-            slaIniciales.forEach(s => {
-                datos.sla.push({
-                    id: `SLA-${String(contadores.sla++).padStart(3, '0')}`,
                     ...s
                 });
             });
 
+            // Activos iniciales
             const activosIniciales = [
-                { nombre: 'Servidor Principal', tipo: 'Servidor', ubicacion: 'Datacenter A', responsable: 'IT Admin', estado: 'Operativo' },
-                { nombre: 'Switch Core', tipo: 'Red', ubicacion: 'Sala Equipos', responsable: 'Red Admin', estado: 'Operativo' },
-                { nombre: 'Firewall Principal', tipo: 'Red', ubicacion: 'DMZ', responsable: 'Seguridad', estado: 'Operativo' }
+                { tipo: 'Servidor', nombre: 'SERVER-PROD-01', ubicacion: 'Datacenter Principal', responsable: 'Carlos Méndez', estado: 'Activo' },
+                { tipo: 'Switch', nombre: 'SW-CORE-01', ubicacion: 'Sala de Servidores', responsable: 'Roberto Gómez', estado: 'Activo' }
             ];
 
             activosIniciales.forEach(a => {
                 datos.activos.push({
-                    id: `ACT-${String(contadores.activo++).padStart(3, '0')}`,
+                    id: `AST-${String(contadores.activo++).padStart(3, '0')}`,
                     ...a
                 });
             });
 
-            const controlesIniciales = [
-                { control: 'Control de Acceso Lógico', categoria: 'Acceso', cumplimiento: 100, responsable: 'CISO', estado: 'Implementado' },
-                { control: 'Cifrado de Datos', categoria: 'Cifrado', cumplimiento: 95, responsable: 'IT Security', estado: 'Implementado' },
-                { control: 'Backup Diario', categoria: 'Backup', cumplimiento: 100, responsable: 'Operaciones', estado: 'Implementado' }
+            // Incidentes de seguridad
+            const seguridadInicial = [
+                { tipo: 'Intento de Acceso', descripcion: 'Múltiples intentos fallidos de login', severidad: 'Media', estado: 'Investigando', fecha: '2025-12-01' },
+                { tipo: 'Malware Detectado', descripcion: 'Virus detectado en estación de trabajo', severidad: 'Alta', estado: 'Resuelto', fecha: '2025-12-03' }
             ];
 
-            controlesIniciales.forEach(c => {
-                datos.controles.push({
-                    id: `CTL-${String(contadores.control++).padStart(3, '0')}`,
-                    ...c
+            seguridadInicial.forEach(s => {
+                datos.seguridad.push({
+                    id: `SEC-${String(contadores.seguridad++).padStart(3, '0')}`,
+                    ...s
                 });
             });
 
-            const continuidadIniciales = [
-                { servicio: 'Sistema ERP', rto: 4, rpo: 1, estado: 'Actualizado', ultimaPrueba: '2024-11-15' },
-                { servicio: 'Correo Corporativo', rto: 2, rpo: 1, estado: 'Actualizado', ultimaPrueba: '2024-11-20' },
-                { servicio: 'Base de Datos Principal', rto: 6, rpo: 4, estado: 'Pendiente Prueba', ultimaPrueba: '2024-10-10' }
+            // Controles de seguridad
+            const controlesIniciales = [
+                { control: 'Firewall Perimetral', categoria: 'Red', estado: 'Activo', revision: '2025-12-01' },
+                { control: 'Antivirus Corporativo', categoria: 'Endpoint', estado: 'Activo', revision: '2025-12-02' },
+                { control: 'Control de Acceso', categoria: 'Identidad', estado: 'Activo', revision: '2025-12-03' }
             ];
 
-            continuidadIniciales.forEach(c => {
+            controlesIniciales.forEach(c => {
+                datos.controles.push(c);
+            });
+
+            // Planes de continuidad
+            const continuidadInicial = [
+                { proceso: 'Sistema ERP', rto: '4 horas', rpo: '1 hora', estado: 'Activo', prueba: '2025-11-15' },
+                { proceso: 'Correo Corporativo', rto: '2 horas', rpo: '30 min', estado: 'Activo', prueba: '2025-11-20' },
+                { proceso: 'Portal Web', rto: '8 horas', rpo: '4 horas', estado: 'Activo', prueba: '2025-11-25' }
+            ];
+
+            continuidadInicial.forEach(c => {
                 datos.continuidad.push({
                     id: `BCP-${String(contadores.continuidad++).padStart(3, '0')}`,
                     ...c
                 });
             });
 
+            // Recursos de respaldo
+            const recursosIniciales = [
+                { recurso: 'Datacenter Alterno', tipo: 'Infraestructura', disponibilidad: '99.9%', ubicacion: 'Sitio B' },
+                { recurso: 'Generador Eléctrico', tipo: 'Energía', disponibilidad: '100%', ubicacion: 'Datacenter Principal' },
+                { recurso: 'Enlaces Redundantes', tipo: 'Conectividad', disponibilidad: '99.8%', ubicacion: 'Múltiple' }
+            ];
+
+            recursosIniciales.forEach(r => {
+                datos.recursos.push(r);
+            });
+
             agregarLog('✅ Sistema inicializado con datos de ejemplo');
         }
 
         function generarDatosAutomaticos() {
+            // Generar proyectos
             if (Math.random() > 0.85) {
-                const nombresProyectos = ['Sistema Gestión Documental', 'Portal Web Corporativo', 'Actualización Infraestructura', 'Migración Base Datos', 'Proyecto BI'];
-                const responsables = ['Laura Sánchez', 'Miguel Torres', 'Isabel Ramírez', 'Carlos Mendoza', 'Ana Rojas'];
+                const nombresProyectos = ['Sistema Gestión Documental', 'Portal Web Corporativo', 'Actualización Infraestructura', 'Implementación CRM', 'Migración Office 365'];
+                const responsables = ['Laura Sánchez', 'Miguel Torres', 'Isabel Ramírez', 'Carlos Méndez', 'Ana Silva'];
                 const estados = ['Iniciación', 'Planificación', 'En Ejecución'];
-                
+
                 const proyecto = {
                     id: `PRY-${String(contadores.proyecto++).padStart(3, '0')}`,
                     nombre: nombresProyectos[Math.floor(Math.random() * nombresProyectos.length)],
@@ -1615,18 +2675,19 @@
                     estado: estados[Math.floor(Math.random() * estados.length)],
                     avance: Math.floor(Math.random() * 60) + 10
                 };
-                
+
                 datos.proyectos.push(proyecto);
                 agregarLog(`📊 Nuevo proyecto: ${proyecto.nombre}`);
                 renderizarProyectos();
                 actualizarEstadisticas();
             }
 
+            // Generar servicios
             if (Math.random() > 0.7) {
-                const nombresServicios = ['Sistema CRM', 'Portal de Autoservicio', 'Servicio de Videoconferencia', 'Sistema de Monitoreo', 'Plataforma E-learning'];
-                const categorias = ['Aplicaciones', 'Comunicaciones', 'Infraestructura', 'Soporte', 'Seguridad'];
-                const responsables = ['Carlos Méndez', 'Ana Silva', 'Roberto Gómez', 'María Torres', 'Pedro Vargas'];
-                
+                const nombresServicios = ['Sistema CRM', 'Portal de Autoservicio', 'Servicio de Videoconferencia', 'Sistema de Monitoreo', 'Plataforma E-learning', 'VPN Corporativa'];
+                const categorias = ['Aplicaciones', 'Comunicaciones', 'Infraestructura', 'Soporte'];
+                const responsables = ['Carlos Méndez', 'Ana Silva', 'Roberto Gómez', 'María Torres'];
+
                 const servicio = {
                     id: `SRV-${String(contadores.servicio++).padStart(3, '0')}`,
                     nombre: nombresServicios[Math.floor(Math.random() * nombresServicios.length)],
@@ -1635,19 +2696,21 @@
                     disponibilidad: (99 + Math.random()).toFixed(1),
                     estado: 'Operativo'
                 };
-                
+
                 datos.servicios.push(servicio);
                 agregarLog(`🔧 Nuevo servicio TI: ${servicio.nombre}`);
                 renderizarServicios();
                 renderizarServiciosDashboard();
+                renderizarSLA();
                 actualizarEstadisticas();
             }
 
+            // Generar incidentes
             if (Math.random() > 0.7) {
-                const titulosIncidentes = ['Error en aplicación nómina', 'Red lenta piso 3', 'VPN no conecta', 'Disco duro lleno', 'Sistema lento', 'Impresora offline'];
+                const titulosIncidentes = ['Error en aplicación nómina', 'Red lenta piso 3', 'VPN no conecta', 'Disco duro lleno', 'Sistema CRM caído', 'Problemas con email'];
                 const prioridades = ['Crítica', 'Alta', 'Media', 'Baja'];
-                const tecnicos = ['Juan Pérez', 'María García', 'Carlos López', 'Ana Martínez', 'Luis Fernández'];
-                
+                const tecnicos = ['Juan Pérez', 'María García', 'Carlos López', 'Ana Martínez'];
+
                 const incidente = {
                     id: `INC-${String(contadores.incidente++).padStart(3, '0')}`,
                     titulo: titulosIncidentes[Math.floor(Math.random() * titulosIncidentes.length)],
@@ -1655,19 +2718,20 @@
                     asignado: tecnicos[Math.floor(Math.random() * tecnicos.length)],
                     estado: 'Abierto'
                 };
-                
+
                 datos.incidentes.push(incidente);
                 agregarLog(`🚨 Nuevo incidente: ${incidente.titulo}`);
                 renderizarIncidentes();
                 actualizarEstadisticas();
             }
 
+            // Generar problemas
             if (Math.random() > 0.75) {
-                const problemasDesc = ['Latencia en red corporativa', 'Errores sistema facturación', 'Fallos intermitentes DB', 'Problemas autenticación SSO', 'Rendimiento servidor web'];
+                const problemasDesc = ['Latencia en red corporativa', 'Errores sistema facturación', 'Fallos intermitentes DB', 'Problemas autenticación SSO', 'Lentitud en aplicación web'];
                 const prioridades = ['Crítica', 'Alta', 'Media', 'Baja'];
-                const responsables = ['Pedro Ruiz', 'Laura Díaz', 'José Vargas', 'Carmen Mora', 'Diego Silva'];
+                const responsables = ['Pedro Ruiz', 'Laura Díaz', 'José Vargas', 'Carmen Mora'];
                 const estados = ['En Investigación', 'En Análisis', 'Resuelto'];
-                
+
                 const problema = {
                     id: `PRB-${String(contadores.problema++).padStart(3, '0')}`,
                     descripcion: problemasDesc[Math.floor(Math.random() * problemasDesc.length)],
@@ -1676,7 +2740,7 @@
                     incidentes: Math.floor(Math.random() * 10) + 1,
                     estado: estados[Math.floor(Math.random() * estados.length)]
                 };
-                
+
                 datos.problemas.push(problema);
                 agregarLog(`🔍 Nuevo problema: ${problema.descripcion}`);
                 renderizarProblemas();
@@ -1684,15 +2748,16 @@
                 actualizarEstadisticas();
             }
 
+            // Generar cambios
             if (Math.random() > 0.8) {
-                const cambiosDesc = ['Actualización certificados SSL', 'Cambio config VLAN', 'Upgrade base datos', 'Instalación antivirus', 'Parches seguridad', 'Cambio en firewall'];
+                const cambiosDesc = ['Actualización certificados SSL', 'Cambio config VLAN', 'Upgrade base datos', 'Instalación antivirus', 'Configuración firewall', 'Parche sistema operativo'];
                 const tipos = ['Estándar', 'Normal', 'Emergencia'];
                 const estados = ['Solicitud', 'Evaluación', 'Aprobado'];
                 const impactos = ['Bajo', 'Medio', 'Alto'];
-                
+
                 const hoy = new Date();
                 const fechaCambio = new Date(hoy.getTime() + Math.random() * 30 * 24 * 60 * 60 * 1000);
-                
+
                 const cambio = {
                     id: `RFC-${String(contadores.cambio++).padStart(3, '0')}`,
                     descripcion: cambiosDesc[Math.floor(Math.random() * cambiosDesc.length)],
@@ -1701,7 +2766,7 @@
                     impacto: impactos[Math.floor(Math.random() * impactos.length)],
                     fecha: fechaCambio.toISOString().split('T')[0]
                 };
-                
+
                 datos.cambios.push(cambio);
                 agregarLog(`🔄 Nueva RFC: ${cambio.id}`);
                 renderizarCambios();
@@ -1709,13 +2774,14 @@
                 actualizarEstadisticas();
             }
 
+            // Generar riesgos
             if (Math.random() > 0.85) {
-                const riesgosDesc = ['Interrupción servicio eléctrico', 'Ataque ransomware', 'Fuga información', 'Fallo hardware crítico', 'Desastre natural', 'Ciberataque DDoS'];
-                
+                const riesgosDesc = ['Interrupción servicio eléctrico', 'Ataque ransomware', 'Fuga información', 'Fallo hardware crítico', 'Pérdida datos sensibles', 'Caída sistema principal'];
+
                 const prob = Math.floor(Math.random() * 5) + 1;
                 const imp = Math.floor(Math.random() * 5) + 1;
                 const nivel_calc = prob * imp;
-                
+
                 const riesgo = {
                     id: `RSK-${String(contadores.riesgo++).padStart(3, '0')}`,
                     descripcion: riesgosDesc[Math.floor(Math.random() * riesgosDesc.length)],
@@ -1723,7 +2789,7 @@
                     impacto: imp,
                     nivel: nivel_calc <= 6 ? 'Bajo' : nivel_calc <= 15 ? 'Medio' : 'Alto'
                 };
-                
+
                 datos.riesgos.push(riesgo);
                 agregarLog(`⚠️ Nuevo riesgo: ${riesgo.nivel}`);
                 renderizarRiesgos();
@@ -1731,112 +2797,77 @@
                 actualizarEstadisticas();
             }
 
-            if (Math.random() > 0.82) {
-                const tipos = ['Acceso a Sistema', 'Nuevo Equipo', 'Software', 'Permisos', 'Otro'];
-                const solicitantes = ['Carlos Ruiz', 'María López', 'Juan Martínez', 'Ana García', 'Pedro Silva'];
+            // Generar solicitudes
+            if (Math.random() > 0.75) {
+                const tipos = ['Acceso a Sistema', 'Nuevo Equipo', 'Soporte Técnico', 'Instalación Software', 'Cambio de Contraseña'];
                 const prioridades = ['Alta', 'Media', 'Baja'];
-                const estados = ['Pendiente', 'En Proceso', 'Completado'];
-                
+                const solicitantes = ['Juan Rodríguez', 'María López', 'Pedro Sánchez', 'Ana Martínez'];
+                const estados = ['Pendiente', 'En Proceso', 'Completada'];
+
                 const solicitud = {
                     id: `SOL-${String(contadores.solicitud++).padStart(3, '0')}`,
                     tipo: tipos[Math.floor(Math.random() * tipos.length)],
-                    solicitante: solicitantes[Math.floor(Math.random() * solicitantes.length)],
+                    descripcion: 'Solicitud de servicio TI',
                     prioridad: prioridades[Math.floor(Math.random() * prioridades.length)],
-                    estado: estados[Math.floor(Math.random() * estados.length)],
-                    fecha: new Date().toISOString().split('T')[0]
+                    solicitante: solicitantes[Math.floor(Math.random() * solicitantes.length)],
+                    estado: estados[Math.floor(Math.random() * estados.length)]
                 };
-                
+
                 datos.solicitudes.push(solicitud);
                 agregarLog(`📝 Nueva solicitud: ${solicitud.tipo}`);
                 renderizarSolicitudes();
+                actualizarEstadisticas();
             }
 
-            if (Math.random() > 0.88) {
-                const servicios = ['Portal Web', 'Sistema CRM', 'Base de Datos', 'Servidor Aplicaciones', 'Red WiFi'];
-                
-                const sla = {
-                    id: `SLA-${String(contadores.sla++).padStart(3, '0')}`,
-                    servicio: servicios[Math.floor(Math.random() * servicios.length)],
-                    disponibilidad: (99 + Math.random()).toFixed(1),
-                    tiempoRespuesta: Math.floor(Math.random() * 8) + 1,
-                    tiempoResolucion: Math.floor(Math.random() * 48) + 4,
-                    cumplimiento: (95 + Math.random() * 5).toFixed(1)
-                };
-                
-                datos.sla.push(sla);
-                agregarLog(`⏱️ Nuevo SLA: ${sla.servicio}`);
-                renderizarSLA();
-                renderizarMatrizSLA();
-            }
+            // Generar activos
+            if (Math.random() > 0.8) {
+                const tipos = ['Servidor', 'Laptop', 'Desktop', 'Switch', 'Router', 'Software'];
+                const ubicaciones = ['Datacenter Principal', 'Oficina Central', 'Sucursal Norte', 'Sala de Servidores'];
+                const responsables = ['Carlos Méndez', 'Ana Silva', 'Roberto Gómez', 'María Torres'];
 
-            if (Math.random() > 0.87) {
-                const nombres = ['Servidor Backup', 'Router Edge', 'Switch Piso 2', 'Laptop Gerencia', 'PC Finanzas'];
-                const tipos = ['Servidor', 'PC', 'Laptop', 'Red', 'Software'];
-                const ubicaciones = ['Datacenter', 'Oficina Central', 'Sucursal Norte', 'Piso 3', 'Sala Reuniones'];
-                const responsables = ['IT Admin', 'Red Admin', 'Soporte', 'Gerencia TI', 'Operaciones'];
-                
                 const activo = {
-                    id: `ACT-${String(contadores.activo++).padStart(3, '0')}`,
-                    nombre: nombres[Math.floor(Math.random() * nombres.length)],
+                    id: `AST-${String(contadores.activo++).padStart(3, '0')}`,
                     tipo: tipos[Math.floor(Math.random() * tipos.length)],
+                    nombre: `EQUIPO-${Math.floor(Math.random() * 1000)}`,
                     ubicacion: ubicaciones[Math.floor(Math.random() * ubicaciones.length)],
                     responsable: responsables[Math.floor(Math.random() * responsables.length)],
-                    estado: 'Operativo'
+                    estado: 'Activo'
                 };
-                
+
                 datos.activos.push(activo);
-                agregarLog(`💻 Nuevo activo: ${activo.nombre}`);
+                agregarLog(`💻 Nuevo activo: ${activo.tipo}`);
                 renderizarActivos();
+                actualizarEstadisticas();
             }
 
-            if (Math.random() > 0.89) {
-                const controles = ['Autenticación Multifactor', 'Monitoreo SIEM', 'Escaneo Vulnerabilidades', 'Control Acceso Físico', 'Política Contraseñas'];
-                const categorias = ['Acceso', 'Cifrado', 'Backup', 'Firewall', 'Monitoreo'];
-                const responsables = ['CISO', 'IT Security', 'Operaciones', 'Compliance', 'Auditoria'];
-                
-                const control = {
-                    id: `CTL-${String(contadores.control++).padStart(3, '0')}`,
-                    control: controles[Math.floor(Math.random() * controles.length)],
-                    categoria: categorias[Math.floor(Math.random() * categorias.length)],
-                    cumplimiento: Math.floor(Math.random() * 20) + 80,
-                    responsable: responsables[Math.floor(Math.random() * responsables.length)],
-                    estado: 'Implementado'
-                };
-                
-                datos.controles.push(control);
-                agregarLog(`🔒 Nuevo control: ${control.control}`);
-                renderizarControles();
-            }
+            // Generar incidentes de seguridad
+            if (Math.random() > 0.88) {
+                const tipos = ['Intento de Acceso', 'Malware Detectado', 'Phishing', 'Vulnerabilidad', 'Acceso No Autorizado'];
+                const severidades = ['Crítica', 'Alta', 'Media', 'Baja'];
+                const estados = ['Investigando', 'En Proceso', 'Resuelto'];
 
-            if (Math.random() > 0.90) {
-                const servicios = ['Infraestructura Crítica', 'Aplicaciones Core', 'Servicios Cloud', 'Red Primaria', 'Sistema Financiero'];
-                const estados = ['Actualizado', 'Pendiente Prueba', 'En Revisión'];
-                
-                const hoy = new Date();
-                const fechaPrueba = new Date(hoy.getTime() - Math.random() * 90 * 24 * 60 * 60 * 1000);
-                
-                const continuidad = {
-                    id: `BCP-${String(contadores.continuidad++).padStart(3, '0')}`,
-                    servicio: servicios[Math.floor(Math.random() * servicios.length)],
-                    rto: Math.floor(Math.random() * 24) + 1,
-                    rpo: Math.floor(Math.random() * 12) + 1,
+                const seg = {
+                    id: `SEC-${String(contadores.seguridad++).padStart(3, '0')}`,
+                    tipo: tipos[Math.floor(Math.random() * tipos.length)],
+                    descripcion: 'Incidente de seguridad detectado',
+                    severidad: severidades[Math.floor(Math.random() * severidades.length)],
                     estado: estados[Math.floor(Math.random() * estados.length)],
-                    ultimaPrueba: fechaPrueba.toISOString().split('T')[0]
+                    fecha: new Date().toISOString().split('T')[0]
                 };
-                
-                datos.continuidad.push(continuidad);
-                agregarLog(`🛡️ Nuevo plan: ${continuidad.servicio}`);
-                renderizarContinuidad();
+
+                datos.seguridad.push(seg);
+                agregarLog(`🔒 Incidente de seguridad: ${seg.tipo}`);
+                renderizarSeguridad();
             }
         }
 
         function navegarA(modulo) {
             document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
             document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
-            
+
             document.getElementById(modulo).classList.add('active');
             document.querySelector(`[data-module="${modulo}"]`).classList.add('active');
-            
+
             renderizarModulo(modulo);
         }
 
@@ -1846,24 +2877,18 @@
         }
 
         function renderizarModulo(modulo) {
-            switch(modulo) {
+            switch (modulo) {
                 case 'pmbok': renderizarProyectos(); break;
                 case 'iso20000': renderizarServicios(); break;
                 case 'incidentes': renderizarIncidentes(); break;
                 case 'problemas': renderizarProblemas(); break;
                 case 'cambios': renderizarCambios(); break;
-                case 'riesgos': 
-                    renderizarRiesgos(); 
-                    actualizarMatrizRiesgos();
-                    break;
+                case 'riesgos': renderizarRiesgos(); actualizarMatrizRiesgos(); break;
                 case 'solicitudes': renderizarSolicitudes(); break;
-                case 'sla': 
-                    renderizarSLA(); 
-                    renderizarMatrizSLA();
-                    break;
+                case 'sla': renderizarSLA(); break;
                 case 'activos': renderizarActivos(); break;
-                case 'seguridad': renderizarControles(); break;
-                case 'continuidad': renderizarContinuidad(); break;
+                case 'seguridad': renderizarSeguridad(); renderizarControles(); break;
+                case 'continuidad': renderizarContinuidad(); renderizarRecursos(); break;
             }
         }
 
@@ -1927,12 +2952,12 @@
         function renderizarProyectos() {
             const tbody = document.querySelector('#tabla-proyectos tbody');
             if (!tbody) return;
-            
+
             if (datos.proyectos.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay proyectos registrados</td></tr>';
                 return;
             }
-            
+
             tbody.innerHTML = datos.proyectos.map(p => `
                 <tr>
                     <td>${p.id}</td>
@@ -1976,6 +3001,7 @@
             cerrarModal('modal-servicio');
             renderizarServicios();
             renderizarServiciosDashboard();
+            renderizarSLA();
             agregarLog(`✅ Servicio TI creado: ${servicio.nombre}`);
             actualizarEstadisticas();
             alert(`✅ Servicio ${servicio.id} creado exitosamente`);
@@ -1984,12 +3010,12 @@
         function renderizarServicios() {
             const tbody = document.querySelector('#tabla-servicios tbody');
             if (!tbody) return;
-            
+
             if (datos.servicios.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay servicios registrados</td></tr>';
                 return;
             }
-            
+
             tbody.innerHTML = datos.servicios.map(s => `
                 <tr>
                     <td>${s.id}</td>
@@ -2010,6 +3036,7 @@
                 datos.servicios = datos.servicios.filter(s => s.id !== id);
                 renderizarServicios();
                 renderizarServiciosDashboard();
+                renderizarSLA();
                 agregarLog(`Servicio eliminado: ${id}`);
                 actualizarEstadisticas();
             }
@@ -2018,12 +3045,12 @@
         function renderizarServiciosDashboard() {
             const tbody = document.querySelector('#tabla-servicios-dashboard tbody');
             if (!tbody) return;
-            
+
             if (datos.servicios.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d;">No hay servicios registrados</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #7f8c8d;">No hay servicios registrados</td></tr>';
                 return;
             }
-            
+
             tbody.innerHTML = datos.servicios.map(s => `
                 <tr>
                     <td>${s.id}</td>
@@ -2031,7 +3058,6 @@
                     <td><span class="badge badge-info">${s.categoria}</span></td>
                     <td><span class="badge badge-success">${s.estado}</span></td>
                     <td>${s.disponibilidad}%</td>
-                    <td>${s.responsable}</td>
                 </tr>
             `).join('');
         }
@@ -2057,12 +3083,12 @@
         function renderizarIncidentes() {
             const tbody = document.querySelector('#tabla-incidentes tbody');
             if (!tbody) return;
-            
+
             if (datos.incidentes.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay incidentes registrados</td></tr>';
                 return;
             }
-            
+
             tbody.innerHTML = datos.incidentes.map(i => `
                 <tr>
                     <td>${i.id}</td>
@@ -2125,12 +3151,12 @@
         function renderizarProblemas() {
             const tbody = document.querySelector('#tabla-problemas tbody');
             if (!tbody) return;
-            
+
             if (datos.problemas.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay problemas registrados</td></tr>';
                 return;
             }
-            
+
             tbody.innerHTML = datos.problemas.map(p => `
                 <tr>
                     <td>${p.id}</td>
@@ -2159,20 +3185,18 @@
         function renderizarProblemasDashboard() {
             const tbody = document.querySelector('#tabla-problemas-dashboard tbody');
             if (!tbody) return;
-            
+
             if (datos.problemas.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d;">No hay problemas registrados</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #7f8c8d;">No hay problemas registrados</td></tr>';
                 return;
             }
-            
+
             tbody.innerHTML = datos.problemas.map(p => `
                 <tr>
                     <td>${p.id}</td>
                     <td>${p.descripcion.substring(0, 50)}${p.descripcion.length > 50 ? '...' : ''}</td>
                     <td><span class="badge badge-${getBadgePrioridad(p.prioridad)}">${p.prioridad}</span></td>
                     <td><span class="badge badge-info">${p.estado}</span></td>
-                    <td>${p.incidentes}</td>
-                    <td>${p.responsable}</td>
                 </tr>
             `).join('');
         }
@@ -2200,12 +3224,12 @@
         function renderizarCambios() {
             const tbody = document.querySelector('#tabla-cambios tbody');
             if (!tbody) return;
-            
+
             if (datos.cambios.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay cambios registrados</td></tr>';
                 return;
             }
-            
+
             tbody.innerHTML = datos.cambios.map(c => `
                 <tr>
                     <td>${c.id}</td>
@@ -2234,19 +3258,18 @@
         function renderizarCambiosDashboard() {
             const tbody = document.querySelector('#tabla-cambios-dashboard tbody');
             if (!tbody) return;
-            
+
             if (datos.cambios.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d;">No hay cambios registrados</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #7f8c8d;">No hay cambios registrados</td></tr>';
                 return;
             }
-            
+
             tbody.innerHTML = datos.cambios.map(c => `
                 <tr>
                     <td>${c.id}</td>
                     <td>${c.descripcion.substring(0, 50)}${c.descripcion.length > 50 ? '...' : ''}</td>
                     <td><span class="badge badge-info">${c.tipo}</span></td>
                     <td><span class="badge badge-warning">${c.estado}</span></td>
-                    <td><span class="badge badge-${c.impacto === 'Alto' ? 'danger' : c.impacto === 'Medio' ? 'warning' : 'success'}">${c.impacto}</span></td>
                     <td>${c.fecha}</td>
                 </tr>
             `).join('');
@@ -2258,7 +3281,7 @@
             const prob = parseInt(form.probabilidad.value);
             const imp = parseInt(form.impacto.value);
             const nivel_calc = prob * imp;
-            
+
             const riesgo = {
                 id: `RSK-${String(contadores.riesgo++).padStart(3, '0')}`,
                 descripcion: form.descripcion.value,
@@ -2278,12 +3301,12 @@
         function renderizarRiesgos() {
             const tbody = document.querySelector('#tabla-riesgos tbody');
             if (!tbody) return;
-            
+
             if (datos.riesgos.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay riesgos registrados</td></tr>';
                 return;
             }
-            
+
             tbody.innerHTML = datos.riesgos.map(r => `
                 <tr>
                     <td>${r.id}</td>
@@ -2309,15 +3332,22 @@
         }
 
         function actualizarMatrizRiesgos() {
-            for (let p = 1; p <= 5; p++) {
-                for (let i = 1; i <= 5; i++) {
-                    const cell = document.getElementById(`risk-${p}-${i}`);
-                    if (cell) {
-                        const count = datos.riesgos.filter(r => r.probabilidad === p && r.impacto === i).length;
-                        cell.textContent = count;
-                    }
+            // Limpiar matriz
+            for (let i = 1; i <= 5; i++) {
+                for (let j = 1; j <= 5; j++) {
+                    const cell = document.getElementById(`risk-${i}-${j}`);
+                    if (cell) cell.textContent = '0';
                 }
             }
+
+            // Contar riesgos por celda
+            datos.riesgos.forEach(r => {
+                const cell = document.getElementById(`risk-${r.impacto}-${r.probabilidad}`);
+                if (cell) {
+                    const count = parseInt(cell.textContent) + 1;
+                    cell.textContent = count;
+                }
+            });
         }
 
         function guardarSolicitud(e) {
@@ -2326,35 +3356,36 @@
             const solicitud = {
                 id: `SOL-${String(contadores.solicitud++).padStart(3, '0')}`,
                 tipo: form.tipo.value,
-                solicitante: form.solicitante.value,
+                descripcion: form.descripcion.value,
                 prioridad: form.prioridad.value,
-                estado: 'Pendiente',
-                fecha: new Date().toISOString().split('T')[0]
+                solicitante: form.solicitante.value,
+                estado: 'Pendiente'
             };
             datos.solicitudes.push(solicitud);
             cerrarModal('modal-solicitud');
             renderizarSolicitudes();
             agregarLog(`✅ Solicitud creada: ${solicitud.tipo}`);
+            actualizarEstadisticas();
             alert(`✅ Solicitud ${solicitud.id} creada exitosamente`);
         }
 
         function renderizarSolicitudes() {
             const tbody = document.querySelector('#tabla-solicitudes tbody');
             if (!tbody) return;
-            
+
             if (datos.solicitudes.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay solicitudes registradas</td></tr>';
                 return;
             }
-            
+
             tbody.innerHTML = datos.solicitudes.map(s => `
                 <tr>
                     <td>${s.id}</td>
-                    <td>${s.tipo}</td>
-                    <td>${s.solicitante}</td>
-                    <td><span class="badge badge-${s.estado === 'Completado' ? 'success' : s.estado === 'En Proceso' ? 'info' : 'warning'}">${s.estado}</span></td>
+                    <td><span class="badge badge-info">${s.tipo}</span></td>
+                    <td>${s.descripcion}</td>
                     <td><span class="badge badge-${getBadgePrioridad(s.prioridad)}">${s.prioridad}</span></td>
-                    <td>${s.fecha}</td>
+                    <td><span class="badge badge-${s.estado === 'Completada' ? 'success' : s.estado === 'En Proceso' ? 'warning' : 'info'}">${s.estado}</span></td>
+                    <td>${s.solicitante}</td>
                     <td>
                         <button class="btn btn-danger btn-sm" onclick="eliminarSolicitud('${s.id}')">Eliminar</button>
                     </td>
@@ -2367,127 +3398,146 @@
                 datos.solicitudes = datos.solicitudes.filter(s => s.id !== id);
                 renderizarSolicitudes();
                 agregarLog(`Solicitud eliminada: ${id}`);
+                actualizarEstadisticas();
             }
-        }
-
-        function guardarSLA(e) {
-            e.preventDefault();
-            const form = e.target;
-            const sla = {
-                id: `SLA-${String(contadores.sla++).padStart(3, '0')}`,
-                servicio: form.servicio.value,
-                disponibilidad: form.disponibilidad.value,
-                tiempoRespuesta: form.tiempoRespuesta.value,
-                tiempoResolucion: form.tiempoResolucion.value,
-                cumplimiento: (95 + Math.random() * 5).toFixed(1)
-            };
-            datos.sla.push(sla);
-            cerrarModal('modal-sla');
-            renderizarSLA();
-            renderizarMatrizSLA();
-            agregarLog(`✅ SLA creado: ${sla.servicio}`);
-            alert(`✅ SLA ${sla.id} creado exitosamente`);
         }
 
         function renderizarSLA() {
+            // Renderizar métricas globales de SLA
+            renderizarMetricasSLA();
+
+            // Renderizar indicadores de rendimiento
+            renderizarIndicadoresRendimiento();
+
+            // Renderizar matriz de SLA
+            const container = document.getElementById('sla-matrix');
+            if (container && datos.servicios.length > 0) {
+                container.innerHTML = datos.servicios.map(s => {
+                    const slaReal = (parseFloat(s.disponibilidad) - (Math.random() * 0.5)).toFixed(2);
+                    const cumplimiento = ((slaReal / s.disponibilidad) * 100).toFixed(1);
+                    const borderColor = slaReal >= s.disponibilidad * 0.98 ? '#27ae60' : slaReal >= s.disponibilidad * 0.95 ? '#f39c12' : '#e74c3c';
+                    return `
+                        <div class="sla-card" style="border-left-color: ${borderColor};">
+                            <h4>${s.nombre}</h4>
+                            <div class="sla-percentage" style="color: ${borderColor};">${slaReal}%</div>
+                            <p>Objetivo: ${s.disponibilidad}%</p>
+                            <p>Cumplimiento: ${cumplimiento}%</p>
+                            <div class="performance-indicator">
+                                <div class="indicator-dot ${slaReal >= s.disponibilidad * 0.98 ? 'green' : slaReal >= s.disponibilidad * 0.95 ? 'yellow' : 'red'}"></div>
+                                <span>${slaReal >= s.disponibilidad * 0.98 ? 'Óptimo' : slaReal >= s.disponibilidad * 0.95 ? 'Aceptable' : 'Crítico'}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Renderizar tabla de SLA
             const tbody = document.querySelector('#tabla-sla tbody');
             if (!tbody) return;
-            
-            if (datos.sla.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay SLAs registrados</td></tr>';
+
+            if (datos.servicios.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay servicios para monitorear</td></tr>';
                 return;
             }
-            
-            tbody.innerHTML = datos.sla.map(s => `
-                <tr>
-                    <td>${s.id}</td>
-                    <td>${s.servicio}</td>
-                    <td>${s.disponibilidad}%</td>
-                    <td>${s.tiempoRespuesta}h</td>
-                    <td>${s.tiempoResolucion}h</td>
-                    <td><span class="badge badge-${s.cumplimiento >= 98 ? 'success' : s.cumplimiento >= 95 ? 'warning' : 'danger'}">${s.cumplimiento}%</span></td>
-                    <td>
-                        <button class="btn btn-danger btn-sm" onclick="eliminarSLA('${s.id}')">Eliminar</button>
-                    </td>
-                </tr>
-            `).join('');
+
+            tbody.innerHTML = datos.servicios.map(s => {
+                const slaReal = (parseFloat(s.disponibilidad) - (Math.random() * 0.5)).toFixed(2);
+                const incidentes = Math.floor(Math.random() * 20);
+                const cumplimiento = slaReal >= s.disponibilidad * 0.98;
+                const tendencia = Math.random() > 0.5 ? '📈' : '📉';
+                return `
+                    <tr>
+                        <td>${s.nombre}</td>
+                        <td>${s.disponibilidad}%</td>
+                        <td><strong>${slaReal}%</strong></td>
+                        <td><span class="badge badge-${cumplimiento ? 'success' : 'warning'}">${cumplimiento ? 'Cumplido' : 'En Riesgo'}</span></td>
+                        <td>${incidentes}</td>
+                        <td style="font-size: 20px;">${tendencia}</td>
+                    </tr>
+                `;
+            }).join('');
         }
 
-        function eliminarSLA(id) {
-            if (confirm('¿Eliminar este SLA?')) {
-                datos.sla = datos.sla.filter(s => s.id !== id);
-                renderizarSLA();
-                renderizarMatrizSLA();
-                agregarLog(`SLA eliminado: ${id}`);
-            }
+        function renderizarMetricasSLA() {
+            if (datos.servicios.length === 0) return;
+
+            // Calcular cumplimiento global
+            let totalCumplimiento = 0;
+            let serviciosEnRiesgo = 0;
+            let totalIncidentes = 0;
+            let tiemposResolucion = [];
+
+            datos.servicios.forEach(s => {
+                const slaReal = parseFloat(s.disponibilidad) - (Math.random() * 0.5);
+                totalCumplimiento += slaReal;
+                if (slaReal < s.disponibilidad * 0.98) serviciosEnRiesgo++;
+                const incidentes = Math.floor(Math.random() * 20);
+                totalIncidentes += incidentes;
+                tiemposResolucion.push(Math.random() * 5);
+            });
+
+            const cumplimientoGlobal = (totalCumplimiento / datos.servicios.length).toFixed(1);
+            const tiempoPromedio = (tiemposResolucion.reduce((a, b) => a + b, 0) / tiemposResolucion.length).toFixed(1);
+
+            document.getElementById('sla-cumplimiento-global').textContent = cumplimientoGlobal + '%';
+            document.getElementById('sla-servicios-riesgo').textContent = serviciosEnRiesgo;
+            document.getElementById('sla-incidentes-mes').textContent = totalIncidentes;
+            document.getElementById('sla-tiempo-promedio').textContent = tiempoPromedio + 'h';
         }
 
-        function renderizarMatrizSLA() {
-            const container = document.getElementById('sla-matrix');
-            if (!container) return;
-            
-            if (datos.sla.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #7f8c8d;">No hay SLAs registrados</p>';
-                return;
-            }
-            
-            container.innerHTML = datos.sla.map(s => `
-                <div class="sla-card">
-                    <h4>${s.servicio}</h4>
-                    <div class="sla-metric">
-                        <span>Disponibilidad:</span>
-                        <strong>${s.disponibilidad}%</strong>
+        function renderizarIndicadoresRendimiento() {
+            const container = document.getElementById('performance-indicators');
+            if (!container || datos.servicios.length === 0) return;
+
+            container.innerHTML = datos.servicios.map(s => {
+                const slaReal = (parseFloat(s.disponibilidad) - (Math.random() * 0.5)).toFixed(2);
+                const status = slaReal >= s.disponibilidad * 0.98 ? 'green' : slaReal >= s.disponibilidad * 0.95 ? 'yellow' : 'red';
+                const statusText = status === 'green' ? 'Óptimo' : status === 'yellow' ? 'Aceptable' : 'Crítico';
+                return `
+                    <div class="performance-indicator">
+                        <div class="indicator-dot ${status}"></div>
+                        <strong>${s.nombre}:</strong>
+                        <span>${slaReal}% - ${statusText}</span>
                     </div>
-                    <div class="sla-metric">
-                        <span>Tiempo Respuesta:</span>
-                        <strong>${s.tiempoRespuesta}h</strong>
-                    </div>
-                    <div class="sla-metric">
-                        <span>Tiempo Resolución:</span>
-                        <strong>${s.tiempoResolucion}h</strong>
-                    </div>
-                    <div class="sla-metric">
-                        <span>Cumplimiento:</span>
-                        <strong style="color: ${s.cumplimiento >= 98 ? '#27ae60' : s.cumplimiento >= 95 ? '#f39c12' : '#e74c3c'}">${s.cumplimiento}%</strong>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function guardarActivo(e) {
             e.preventDefault();
             const form = e.target;
             const activo = {
-                id: `ACT-${String(contadores.activo++).padStart(3, '0')}`,
-                nombre: form.nombre.value,
+                id: `AST-${String(contadores.activo++).padStart(3, '0')}`,
                 tipo: form.tipo.value,
+                nombre: form.nombre.value,
                 ubicacion: form.ubicacion.value,
                 responsable: form.responsable.value,
-                estado: 'Operativo'
+                estado: 'Activo'
             };
             datos.activos.push(activo);
             cerrarModal('modal-activo');
             renderizarActivos();
-            agregarLog(`✅ Activo creado: ${activo.nombre}`);
+            agregarLog(`✅ Activo creado: ${activo.tipo} - ${activo.nombre}`);
+            actualizarEstadisticas();
             alert(`✅ Activo ${activo.id} creado exitosamente`);
         }
 
         function renderizarActivos() {
             const tbody = document.querySelector('#tabla-activos tbody');
             if (!tbody) return;
-            
+
             if (datos.activos.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay activos registrados</td></tr>';
                 return;
             }
-            
+
             tbody.innerHTML = datos.activos.map(a => `
                 <tr>
                     <td>${a.id}</td>
-                    <td>${a.nombre}</td>
                     <td><span class="badge badge-info">${a.tipo}</span></td>
-                    <td><span class="badge badge-success">${a.estado}</span></td>
+                    <td>${a.nombre}</td>
                     <td>${a.ubicacion}</td>
+                    <td><span class="badge badge-success">${a.estado}</span></td>
                     <td>${a.responsable}</td>
                     <td>
                         <button class="btn btn-danger btn-sm" onclick="eliminarActivo('${a.id}')">Eliminar</button>
@@ -2501,112 +3551,88 @@
                 datos.activos = datos.activos.filter(a => a.id !== id);
                 renderizarActivos();
                 agregarLog(`Activo eliminado: ${id}`);
+                actualizarEstadisticas();
             }
         }
 
-        function guardarControl(e) {
-            e.preventDefault();
-            const form = e.target;
-            const control = {
-                id: `CTL-${String(contadores.control++).padStart(3, '0')}`,
-                control: form.control.value,
-                categoria: form.categoria.value,
-                cumplimiento: form.cumplimiento.value,
-                responsable: form.responsable.value,
-                estado: 'Implementado'
-            };
-            datos.controles.push(control);
-            cerrarModal('modal-control');
-            renderizarControles();
-            agregarLog(`✅ Control creado: ${control.control}`);
-            alert(`✅ Control ${control.id} creado exitosamente`);
+        function renderizarSeguridad() {
+            const tbody = document.querySelector('#tabla-seguridad tbody');
+            if (!tbody) return;
+
+            if (datos.seguridad.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay incidentes de seguridad</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = datos.seguridad.map(s => `
+                <tr>
+                    <td>${s.id}</td>
+                    <td><span class="badge badge-warning">${s.tipo}</span></td>
+                    <td>${s.descripcion}</td>
+                    <td><span class="badge badge-${s.severidad === 'Crítica' ? 'danger' : s.severidad === 'Alta' ? 'warning' : 'info'}">${s.severidad}</span></td>
+                    <td><span class="badge badge-${s.estado === 'Resuelto' ? 'success' : 'warning'}">${s.estado}</span></td>
+                    <td>${s.fecha}</td>
+                </tr>
+            `).join('');
         }
 
         function renderizarControles() {
             const tbody = document.querySelector('#tabla-controles tbody');
             if (!tbody) return;
-            
+
             if (datos.controles.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay controles registrados</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay controles registrados</td></tr>';
                 return;
             }
-            
+
             tbody.innerHTML = datos.controles.map(c => `
                 <tr>
-                    <td>${c.id}</td>
                     <td>${c.control}</td>
                     <td><span class="badge badge-info">${c.categoria}</span></td>
                     <td><span class="badge badge-success">${c.estado}</span></td>
-                    <td>
-                        <div class="progress-bar">
-                            <div class="progress-bar-fill" style="width: ${c.cumplimiento}%; background: ${c.cumplimiento >= 90 ? '#27ae60' : c.cumplimiento >= 70 ? '#f39c12' : '#e74c3c'}"></div>
-                        </div>
-                        ${c.cumplimiento}%
-                    </td>
-                    <td>${c.responsable}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm" onclick="eliminarControl('${c.id}')">Eliminar</button>
-                    </td>
+                    <td>${c.revision}</td>
                 </tr>
             `).join('');
-        }
-
-        function eliminarControl(id) {
-            if (confirm('¿Eliminar este control?')) {
-                datos.controles = datos.controles.filter(c => c.id !== id);
-                renderizarControles();
-                agregarLog(`Control eliminado: ${id}`);
-            }
-        }
-
-        function guardarContinuidad(e) {
-            e.preventDefault();
-            const form = e.target;
-            const continuidad = {
-                id: `BCP-${String(contadores.continuidad++).padStart(3, '0')}`,
-                servicio: form.servicio.value,
-                rto: form.rto.value,
-                rpo: form.rpo.value,
-                estado: 'Actualizado',
-                ultimaPrueba: form.ultimaPrueba.value
-            };
-            datos.continuidad.push(continuidad);
-            cerrarModal('modal-continuidad');
-            renderizarContinuidad();
-            agregarLog(`✅ Plan de continuidad creado: ${continuidad.servicio}`);
-            alert(`✅ Plan ${continuidad.id} creado exitosamente`);
         }
 
         function renderizarContinuidad() {
             const tbody = document.querySelector('#tabla-continuidad tbody');
             if (!tbody) return;
-            
+
             if (datos.continuidad.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay planes registrados</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay planes de continuidad</td></tr>';
                 return;
             }
-            
+
             tbody.innerHTML = datos.continuidad.map(c => `
                 <tr>
                     <td>${c.id}</td>
-                    <td>${c.servicio}</td>
-                    <td>${c.rto}h</td>
-                    <td>${c.rpo}h</td>
-                    <td><span class="badge badge-${c.estado === 'Actualizado' ? 'success' : c.estado === 'Pendiente Prueba' ? 'warning' : 'info'}">${c.estado}</span></td>
-                    <td>${c.ultimaPrueba}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm" onclick="eliminarContinuidad('${c.id}')">Eliminar</button>
-                    </td>
+                    <td><strong>${c.proceso}</strong></td>
+                    <td>${c.rto}</td>
+                    <td>${c.rpo}</td>
+                    <td><span class="badge badge-success">${c.estado}</span></td>
+                    <td>${c.prueba}</td>
                 </tr>
             `).join('');
         }
 
-        function eliminarContinuidad(id) {
-            if (confirm('¿Eliminar este plan?')) {
-                datos.continuidad = datos.continuidad.filter(c => c.id !== id);
-                renderizarContinuidad();
-                agregarLog(`Plan eliminado: ${id}`);
+        function renderizarRecursos() {
+            const tbody = document.querySelector('#tabla-recursos tbody');
+            if (!tbody) return;
+
+            if (datos.recursos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay recursos de respaldo</td></tr>';
+                return;
             }
+
+            tbody.innerHTML = datos.recursos.map(r => `
+                <tr>
+                    <td>${r.recurso}</td>
+                    <td><span class="badge badge-info">${r.tipo}</span></td>
+                    <td>${r.disponibilidad}</td>
+                    <td>${r.ubicacion}</td>
+                </tr>
+            `).join('');
         }
 
         function actualizarEstadisticas() {
@@ -2616,6 +3642,8 @@
             document.getElementById('stat-problemas').textContent = datos.problemas.filter(p => p.estado !== 'Resuelto').length;
             document.getElementById('stat-cambios').textContent = datos.cambios.filter(c => c.estado !== 'Completado').length;
             document.getElementById('stat-riesgos').textContent = datos.riesgos.filter(r => r.nivel === 'Alto').length;
+            document.getElementById('stat-solicitudes').textContent = datos.solicitudes.filter(s => s.estado !== 'Completada').length;
+            document.getElementById('stat-activos').textContent = datos.activos.length;
         }
 
         function actualizarReloj() {
@@ -2624,7 +3652,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             generarDatosIniciales();
-            
+
             renderizarProyectos();
             renderizarServicios();
             renderizarIncidentes();
@@ -2632,24 +3660,26 @@
             renderizarCambios();
             renderizarRiesgos();
             renderizarSolicitudes();
-            renderizarSLA();
             renderizarActivos();
+            renderizarSeguridad();
             renderizarControles();
             renderizarContinuidad();
+            renderizarRecursos();
             renderizarServiciosDashboard();
             renderizarProblemasDashboard();
             renderizarCambiosDashboard();
-            renderizarMatrizSLA();
+            renderizarSLA();
             actualizarMatrizRiesgos();
             renderizarLogs();
             actualizarEstadisticas();
             actualizarReloj();
-            
+
             setInterval(actualizarReloj, 1000);
             setInterval(generarDatosAutomaticos, 5000);
-            
+
             agregarLog('✅ Sistema SIGPROSERV 4.0 iniciado correctamente');
         });
     </script>
 </body>
+
 </html>
