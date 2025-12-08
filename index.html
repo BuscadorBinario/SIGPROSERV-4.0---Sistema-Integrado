@@ -1447,6 +1447,861 @@
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
         }
     </style>
+    <style>
+        /* REQUEST MANAGEMENT STYLES */
+        .service-catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: #3498db;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: #3498db;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .service-card h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .service-card p {
+            color: #7f8c8d;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .service-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #95a5a6;
+            border-top: 1px solid #ecf0f1;
+            padding-top: 15px;
+            margin-top: auto;
+        }
+
+        .req-status-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .req-status-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #ecf0f1;
+            z-index: 0;
+        }
+
+        .req-step {
+            position: relative;
+            z-index: 1;
+            background: white;
+            padding: 0 10px;
+            text-align: center;
+            color: #bdc3c7;
+        }
+
+        .req-step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #ecf0f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 5px;
+            font-weight: bold;
+            font-size: 12px;
+            color: #7f8c8d;
+            transition: all 0.3s;
+        }
+
+        .req-step.active .req-step-circle {
+            background: #3498db;
+            color: white;
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
+        }
+
+        .req-step.active {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .req-step.completed .req-step-circle {
+            background: #27ae60;
+            color: white;
+        }
+
+        /* PMBOK 7 & ISO 20000 EXPANSION STYLES */
+
+        /* PMBOK 7 DOMAINS */
+        .domains-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .domain-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #dfe6e9;
+            transition: all 0.3s;
+        }
+
+        .domain-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: #3498db;
+        }
+
+        .domain-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .domain-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* PROJECT DETAIL DASHBOARD */
+        .project-dashboard {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+        }
+
+        .project-health-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #e1e1e1;
+        }
+
+        .health-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .health-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #dfe6e9;
+        }
+
+        .health-dot.good {
+            background: #2ecc71;
+        }
+
+        .health-dot.warning {
+            background: #f1c40f;
+        }
+
+        .health-dot.bad {
+            background: #e74c3c;
+        }
+
+        /* ISO 20000 LIFECYCLE */
+        .lifecycle-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .lifecycle-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #ecf0f1;
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+
+        .lifecycle-step {
+            width: 120px;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .lifecycle-bubble {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #bdc3c7;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .lifecycle-step.active .lifecycle-bubble {
+            border-color: #3498db;
+            background: #3498db;
+            color: white;
+            box-shadow: 0 0 0 5px rgba(52, 152, 219, 0.2);
+        }
+
+        .lifecycle-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #7f8c8d;
+        }
+
+        .lifecycle-step.active .lifecycle-title {
+            color: #2c3e50;
+        }
+
+        /* PROCESS GRID */
+        .iso-process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .process-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .process-card h5 {
+            margin: 0 0 5px 0;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        .process-card small {
+            color: #7f8c8d;
+            font-size: 12px;
+        }
+
+        /* ITIL INCIDENT & PROBLEM EXPANSION STYLES */
+
+        /* INCIDENT LIFECYCLE */
+        .incident-lifecycle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .inc-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .inc-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #dfe6e9;
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            font-weight: bold;
+            border: 2px solid #bdc3c7;
+        }
+
+        .inc-step.completed .inc-circle {
+            background: #27ae60;
+            color: white;
+            border-color: #27ae60;
+        }
+
+        .inc-step.active .inc-circle {
+            background: #e67e22;
+            color: white;
+            border-color: #e67e22;
+            box-shadow: 0 0 0 4px rgba(230, 126, 34, 0.2);
+        }
+
+        .inc-line {
+            position: absolute;
+            top: 45px;
+            /* Adjust based on padding */
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #bdc3c7;
+            z-index: 1;
+        }
+
+        /* MAJOR INCIDENT BANNER */
+        .major-incident-banner {
+            background: #c0392b;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% {
+                box-shadow: 0 0 0 0 rgba(192, 57, 43, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(192, 57, 43, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(192, 57, 43, 0);
+            }
+        }
+
+        /* KEDB GRID */
+        .kedb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .kedb-card {
+            background: white;
+            border: 1px solid #dfe6e9;
+            border-radius: 8px;
+            padding: 15px;
+            transition: transform 0.2s;
+        }
+
+        .kedb-card:hover {
+            transform: translateY(-2px);
+            border-color: #3498db;
+        }
+
+        .kedb-tag {
+            background: #ecf0f1;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #2c3e50;
+        }
+
+        /* RCA VISUAL (Simplified) */
+        .rca-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border: 1px dashed #bdc3c7;
+            border-radius: 8px;
+        }
+
+        .fishbone-mock {
+            width: 100%;
+            height: 150px;
+            background-image: linear-gradient(to right, #34495e 2px, transparent 2px),
+                linear-gradient(45deg, #34495e 2px, transparent 2px);
+            background-size: 50% 2px, 50px 50px;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: relative;
+        }
+
+        .rca-category {
+            position: absolute;
+            background: #ecf0f1;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* CHANGE & SLA EXPANSION STYLES */
+
+        /* CHANGE CALENDAR */
+        .change-calendar-container {
+            overflow-x: auto;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dfe6e9;
+        }
+
+        .calendar-week-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            min-width: 800px;
+        }
+
+        .cal-day {
+            border: 1px solid #eee;
+            border-radius: 4px;
+            min-height: 120px;
+            padding: 5px;
+            background: #fafafa;
+        }
+
+        .cal-header {
+            text-align: center;
+            font-weight: bold;
+            color: #7f8c8d;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .cal-event {
+            background: #3498db;
+            color: white;
+            font-size: 10px;
+            padding: 4px;
+            margin-bottom: 4px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .cal-event:hover {
+            opacity: 0.8;
+        }
+
+        /* CHANGE RISK CALCULATOR */
+        .risk-calculator-form {
+            background: #fdfefe;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #bdc3c7;
+        }
+
+        /* CAB VOTING */
+        .cab-approval-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #f1c40f;
+            margin-bottom: 10px;
+        }
+
+        /* SLA HEATMAP */
+        .sla-heatmap {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 5px;
+            padding: 10px;
+        }
+
+        .heatmap-cell {
+            padding: 10px;
+            text-align: center;
+            border-radius: 4px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 60px;
+        }
+
+        .heatmap-green {
+            background-color: #27ae60;
+        }
+
+        .heatmap-yellow {
+            background-color: #f1c40f;
+            color: #2c3e50;
+        }
+
+        .heatmap-red {
+            background-color: #e74c3c;
+        }
+
+        /* PENALTY CALCULATOR */
+        .penalty-card {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .penalty-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        /* RIESGOS & CMDB EXPANSION STYLES */
+
+        /* ADVANCED RISK HEATMAP */
+        .risk-heatmap-visual {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2px;
+            background: #ecf0f1;
+            padding: 2px;
+            border-radius: 4px;
+        }
+
+        .risk-heatmap-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #fff;
+            font-size: 14px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .risk-heatmap-cell:hover {
+            transform: scale(1.05);
+            z-index: 2;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .risk-heatmap-count {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+        }
+
+        /* BOWTIE DIAGRAM */
+        .bowtie-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .bowtie-box {
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            min-width: 120px;
+            position: relative;
+        }
+
+        .bowtie-center {
+            background: #e74c3c;
+            color: white;
+            padding: 20px;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .bowtie-line {
+            height: 2px;
+            background: #95a5a6;
+            flex-grow: 1;
+        }
+
+        /* CMDB TOPOLOGY */
+        .topology-tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .topo-level {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .topo-node {
+            background: white;
+            border: 2px solid #3498db;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: relative;
+            width: 140px;
+        }
+
+        .topo-node.root {
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+
+        .topo-node::after {
+            content: '';
+            position: absolute;
+            bottom: -32px;
+            left: 50%;
+            width: 2px;
+            height: 30px;
+            background: #bdc3c7;
+        }
+
+        .topo-level:last-child .topo-node::after {
+            display: none;
+        }
+
+        /* ASSET LIFECYCLE */
+        .lifecycle-track {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .lifecycle-track::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #ecf0f1;
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .lifecycle-step {
+            width: 40px;
+            height: 40px;
+            background: #ecf0f1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            position: relative;
+            font-size: 18px;
+            color: #bdc3c7;
+            transition: all 0.3s;
+        }
+
+        .lifecycle-step.active {
+            background: #2ecc71;
+            color: white;
+            box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.2);
+        }
+
+        .lifecycle-label {
+            position: absolute;
+            top: 45px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            white-space: nowrap;
+            color: #7f8c8d;
+        }
+
+        /* SECURITY & CONTINUITY EXPANSION */
+        .cia-triad-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .cia-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            flex: 1;
+            border-top: 4px solid #3498db;
+        }
+
+        .cia-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .cia-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+        }
+
+        .bia-visual-container {
+            display: flex;
+            align-items: flex-end;
+            height: 150px;
+            gap: 10px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .bia-bar {
+            flex: 1;
+            background: #3498db;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            transition: height 0.5s ease;
+        }
+
+        .bia-bar span {
+            position: absolute;
+            top: -20px;
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .bia-bar label {
+            position: absolute;
+            bottom: -25px;
+            width: 100%;
+            text-align: center;
+            font-size: 10px;
+            color: #7f8c8d;
+        }
+
+        .rto-timeline {
+            position: relative;
+            padding: 20px 0;
+            margin-top: 20px;
+        }
+
+        .rto-line {
+            height: 4px;
+            background: #dfe6e9;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .rto-marker {
+            position: absolute;
+            top: -6px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #34495e;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .rto-range-fill {
+            position: absolute;
+            height: 100%;
+            background: #2ecc71;
+            opacity: 0.5;
+            border-radius: 2px;
+        }
+    </style>
 </head>
 
 <body>
@@ -1590,11 +2445,56 @@
             </div>
         </div>
 
-        <!-- MÓDULO PROYECTOS -->
+        <!-- MÓDULO PROYECTOS (PMBOK 7) -->
         <div class="module" id="pmbok">
+            <div class="alert alert-info">
+                <strong>Estándar PMBOK 7ª Edición</strong><br>
+                Gestión moderna de proyectos basada en 8 Dominios de Desempeño y 12 Principios
+            </div>
+
+            <!-- Performance Domains Visual -->
+            <div class="card">
+                <div class="card-header">📊 Dominios de Desempeño del Proyecto (PMBOK 7)</div>
+                <div class="domains-grid">
+                    <div class="domain-card">
+                        <span class="domain-icon">👥</span>
+                        <div class="domain-name">Interesados</div>
+                    </div>
+                    <div class="domain-card">
+                        <span class="domain-icon">🤝</span>
+                        <div class="domain-name">Equipo</div>
+                    </div>
+                    <div class="domain-card">
+                        <span class="domain-icon">🧬</span>
+                        <div class="domain-name">Desarrollo</div>
+                    </div>
+                    <div class="domain-card">
+                        <span class="domain-icon">📅</span>
+                        <div class="domain-name">Planificación</div>
+                    </div>
+                    <div class="domain-card">
+                        <span class="domain-icon">🏗️</span>
+                        <div class="domain-name">Trabajo</div>
+                    </div>
+                    <div class="domain-card">
+                        <span class="domain-icon">📦</span>
+                        <div class="domain-name">Entrega</div>
+                    </div>
+                    <div class="domain-card">
+                        <span class="domain-icon">📏</span>
+                        <div class="domain-name">Medición</div>
+                    </div>
+                    <div class="domain-card">
+                        <span class="domain-icon">❓</span>
+                        <div class="domain-name">Incertidumbre</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Table -->
             <div class="card">
                 <div class="card-header">
-                    📊 Gestión de Proyectos (PMBOK 7)
+                    📑 Portafolio de Proyectos
                     <button class="btn btn-primary" onclick="abrirModal('modal-proyecto')">+ Nuevo Proyecto</button>
                 </div>
                 <table id="tabla-proyectos">
@@ -1603,7 +2503,8 @@
                             <th>ID</th>
                             <th>Nombre</th>
                             <th>Estado</th>
-                            <th>Avance</th>
+                            <th>Salud (KPIs)</th>
+                            <th>Enfoque</th>
                             <th>Responsable</th>
                             <th>Acciones</th>
                         </tr>
@@ -1616,22 +2517,59 @@
         <!-- MÓDULO SERVICIOS TI (ISO 20000) -->
         <div class="module" id="iso20000">
             <div class="alert alert-info">
-                <strong>Gestión de Servicios TI según ISO 20000</strong><br>
-                Sistema de gestión de servicios que garantiza la entrega de servicios TI de calidad
+                <strong>Sistema de Gestión de Servicios (ISO/IEC 20000-1:2018)</strong><br>
+                Ciclo de vida completo del servicio: Planificación, Diseño, Transición, Entrega y Mejora
             </div>
 
-            <div class="info-grid">
-                <div class="info-card">
-                    <h4>📋 Catálogo de Servicios</h4>
-                    <p>Registro completo de todos los servicios TI activos y sus características</p>
+            <!-- Service Lifecycle View -->
+            <div class="card">
+                <div class="card-header">🔄 Ciclo de Vida del Servicio TI</div>
+                <div class="lifecycle-container">
+                    <div class="lifecycle-line"></div>
+
+                    <div class="lifecycle-step active">
+                        <div class="lifecycle-bubble">📋</div>
+                        <div class="lifecycle-title">Planificación</div>
+                    </div>
+                    <div class="lifecycle-step active">
+                        <div class="lifecycle-bubble">🎨</div>
+                        <div class="lifecycle-title">Diseño</div>
+                    </div>
+                    <div class="lifecycle-step active">
+                        <div class="lifecycle-bubble">🚚</div>
+                        <div class="lifecycle-title">Transición</div>
+                    </div>
+                    <div class="lifecycle-step">
+                        <div class="lifecycle-bubble">🔌</div>
+                        <div class="lifecycle-title">Operación</div>
+                    </div>
+                    <div class="lifecycle-step">
+                        <div class="lifecycle-bubble">📈</div>
+                        <div class="lifecycle-title">Mejora</div>
+                    </div>
                 </div>
-                <div class="info-card">
-                    <h4>🎯 Niveles de Servicio</h4>
-                    <p>Cumplimiento de SLA y métricas de disponibilidad</p>
-                </div>
-                <div class="info-card">
-                    <h4>📊 Métricas de Calidad</h4>
-                    <p>Monitoreo continuo del rendimiento y satisfacción</p>
+            </div>
+
+            <!-- ISO 20000 Processes -->
+            <div class="card">
+                <div class="card-header">⚙️ Procesos Clave de Gestión (SGS)</div>
+                <div class="iso-process-grid">
+                    <div class="process-card">
+                        <h5>Gestion de Relaciones (BRM)</h5>
+                        <small>Gestión de clientes y partes interesadas</small>
+                    </div>
+                    <div class="process-card">
+                        <h5>Niveles de Servicio (SLM)</h5>
+                        <small>Acuerdos SLA, OLA y catálogo</small>
+                    </div>
+                    <div class="process-card">
+                        <h5>Seguridad de la Información</h5>
+                        <small>Controles y políticas de seguridad</small>
+                    </div>
+                    <div class="process-card">
+                        <h5>Gestión de Capacidad</h5>
+                        <small>Planificación de recursos y rendimiento</small>
+                    </div>
                 </div>
             </div>
 
@@ -1645,7 +2583,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Nombre del Servicio</th>
-                            <th>Categoría</th>
+                            <th>Fase Ciclo de Vida</th>
                             <th>Estado</th>
                             <th>Disponibilidad</th>
                             <th>Responsable</th>
@@ -1655,14 +2593,101 @@
                     <tbody></tbody>
                 </table>
             </div>
+
+            <div class="card">
+                <div class="card-header">📈 Registro de Mejora Continua</div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Iniciativa</th>
+                            <th>Origen</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Automatización de backups</td>
+                            <td>Auditoría Interna</td>
+                            <td>Alta</td>
+                            <td>En Progreso</td>
+                        </tr>
+                        <tr>
+                            <td>Optimización portal usuario</td>
+                            <td>Feedback Cliente</td>
+                            <td>Media</td>
+                            <td>Planificado</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <!-- MÓDULO INCIDENTES -->
+        <!-- MÓDULO INCIDENTES (ITIL) -->
         <div class="module" id="incidentes">
+            <div class="alert alert-info">
+                <strong>Gestión de Incidentes (ITIL v4)</strong><br>
+                Restauración rápida del servicio para minimizar el impacto en el negocio.
+            </div>
+
+            <!-- Major Incident Alert (Conditional) -->
+            <div id="major-incident-alert" class="major-incident-banner" style="display: none;">
+                <div>
+                    <strong>🚨 INCIDENTE MAYOR EN CURSO</strong>
+                    <div>Servicio Crítico Afectado - Sala de Guerra Activada</div>
+                </div>
+                <button class="btn btn-outline-light btn-sm">Unirse a Bridge</button>
+            </div>
+
+            <!-- Incident Lifecycle Visual -->
+            <div class="card">
+                <div class="card-header">🔄 Ciclo de Vida del Incidente</div>
+                <div class="incident-lifecycle">
+                    <div class="inc-line"></div>
+                    <div class="inc-step active">
+                        <div class="inc-circle">1</div>
+                        <small>Registro</small>
+                    </div>
+                    <div class="inc-step">
+                        <div class="inc-circle">2</div>
+                        <small>Clasificación</small>
+                    </div>
+                    <div class="inc-step">
+                        <div class="inc-circle">3</div>
+                        <small>Diagnóstico</small>
+                    </div>
+                    <div class="inc-step">
+                        <div class="inc-circle">4</div>
+                        <small>Resolución</small>
+                    </div>
+                    <div class="inc-step">
+                        <div class="inc-circle">5</div>
+                        <small>Cierre</small>
+                    </div>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-header">
-                    🚨 Gestión de Incidentes (ITIL)
-                    <button class="btn btn-primary" onclick="abrirModal('modal-incidente')">+ Nuevo Incidente</button>
+                    🚨 Consola de Incidentes
+                    <div>
+                        <button class="btn btn-primary" onclick="abrirModal('modal-incidente')">+ Nuevo
+                            Incidente</button>
+                    </div>
+                </div>
+                <div class="stats-grid" style="margin-bottom: 20px;">
+                    <div class="stat-card">
+                        <h3 id="inc-active-count">0</h3>
+                        <p>Activos</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="inc-p1-count" style="color: #e74c3c">0</h3>
+                        <p>Prioridad 1</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="inc-mttr">45m</h3>
+                        <p>MTTR Promedio</p>
+                    </div>
                 </div>
                 <table id="tabla-incidentes">
                     <thead>
@@ -1671,6 +2696,7 @@
                             <th>Título</th>
                             <th>Prioridad</th>
                             <th>Estado</th>
+                            <th>SLA Restante</th>
                             <th>Asignado a</th>
                             <th>Acciones</th>
                         </tr>
@@ -1683,52 +2709,93 @@
         <!-- MÓDULO PROBLEMAS (ITIL) -->
         <div class="module" id="problemas">
             <div class="alert alert-info">
-                <strong>Gestión de Problemas según ITIL</strong><br>
-                Identificación y resolución de causas raíz de incidentes recurrentes
+                <strong>Gestión de Problemas (ITIL v4)</strong><br>
+                Identificación de causas raíz para eliminar incidentes recurrentes y errores conocidos.
             </div>
 
-            <div class="info-grid">
-                <div class="info-card">
-                    <h4>🔍 Análisis de Causa Raíz</h4>
-                    <p>Investigación profunda de problemas para prevenir incidentes futuros</p>
-                </div>
-                <div class="info-card">
-                    <h4>📈 Base de Conocimiento</h4>
-                    <p>Documentación de soluciones y errores conocidos</p>
-                </div>
-                <div class="info-card">
-                    <h4>🎯 Prevención Proactiva</h4>
-                    <p>Identificación de problemas potenciales antes de que ocurran</p>
+            <!-- Proactive & Reactive Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchProblemTab('records')">Registros de Problemas</button>
+                <button class="tab" onclick="switchProblemTab('kedb')">Base de Errores (KEDB)</button>
+                <button class="tab" onclick="switchProblemTab('analysis')">Análisis (RCA)</button>
+            </div>
+
+            <!-- TAB: Records -->
+            <div id="prob-tab-records" class="tab-content active">
+                <div class="card">
+                    <div class="card-header">
+                        🔍 Registro de Problemas Activos
+                        <button class="btn btn-primary" onclick="abrirModal('modal-problema')">+ Nuevo Problema</button>
+                    </div>
+                    <table id="tabla-problemas">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Descripción</th>
+                                <th>Prioridad</th>
+                                <th>Estado</th>
+                                <th>Incidentes</th>
+                                <th>Responsable</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    🔍 Registro de Problemas
-                    <button class="btn btn-primary" onclick="abrirModal('modal-problema')">+ Nuevo Problema</button>
+            <!-- TAB: KEDB -->
+            <div id="prob-tab-kedb" class="tab-content">
+                <div class="card">
+                    <div class="card-header">📚 Base de Datos de Errores Conocidos (KEDB)</div>
+                    <div class="input-group" style="margin-bottom: 20px;">
+                        <input type="text" placeholder="Buscar error por código, descripción o workaround..."
+                            onkeyup="filtrarKEDB(this.value)">
+                    </div>
+                    <div class="kedb-grid" id="kedb-container">
+                        <!-- Populated by JS -->
+                    </div>
                 </div>
-                <table id="tabla-problemas">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Descripción</th>
-                            <th>Prioridad</th>
-                            <th>Estado</th>
-                            <th>Incidentes Relacionados</th>
-                            <th>Responsable</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+            </div>
+
+            <!-- TAB: RCA -->
+            <div id="prob-tab-analysis" class="tab-content">
+                <div class="card">
+                    <div class="card-header">🧠 Análisis de Causa Raíz (Ishikawa / 5 Whys)</div>
+                    <p style="text-align: center; color: #7f8c8d;">Visualización del Problema Seleccionado:
+                        <strong>PRB-004</strong>
+                    </p>
+
+                    <div class="rca-visual">
+                        <div class="fishbone-mock">
+                            <div class="rca-category" style="top: 10px; left: 10%;">Personas</div>
+                            <div class="rca-category" style="top: 10px; left: 40%;">Procesos</div>
+                            <div class="rca-category" style="bottom: 10px; left: 20%;">Tecnología</div>
+                            <div class="rca-category" style="bottom: 10px; left: 60%;">Entorno</div>
+                            <div
+                                style="position: absolute; right: 10px; top: 40%; font-weight: bold; background: #e74c3c; color: white; padding: 5px;">
+                                EFECTO</div>
+                        </div>
+                    </div>
+
+                    <h5>📋 Notas de Investigación:</h5>
+                    <ul style="color: #2c3e50;">
+                        <li><strong>Causa Inmediata:</strong> Fallo en balanceador de carga.</li>
+                        <li><strong>Causa Raíz:</strong> Firmware desactualizado incompatible con nuevo parche de
+                            seguridad.</li>
+                        <li><strong>Acción Correctiva:</strong> Rollback del parche y actualización programada de
+                            firmware.</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
         <!-- MÓDULO CAMBIOS (ITIL) -->
         <div class="module" id="cambios">
             <div class="alert alert-info">
-                <strong>Gestión de Cambios según ITIL</strong><br>
-                Control y aprobación de cambios para minimizar riesgos en servicios TI
+                <strong>Gestión de Cambios (ITIL - RFC)</strong><br>
+                Control y aprobación de cambios para minimizar riesgos en servicios TI, incluyendo CAB y Evaluación de
+                Riesgos.
             </div>
 
             <div class="info-grid">
@@ -1746,6 +2813,76 @@
                 </div>
             </div>
 
+            <!-- Change Calendar -->
+            <div class="card">
+                <div class="card-header">📅 Calendario de Cambios Programados</div>
+                <div class="change-calendar-container">
+                    <div class="calendar-week-grid" id="change-calendar-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- CAB Pending Approval -->
+            <div class="card">
+                <div class="card-header">⚠️ Pendientes de Aprobación CAB</div>
+                <div id="cab-approval-list">
+                    <!-- Example Static Item -->
+                    <div class="cab-approval-card">
+                        <div>
+                            <strong>RFC-009: Actualización Core Switch Nivel 3</strong>
+                            <div style="font-size:12px;">Riesgo Calculado: <span class="badge badge-danger">Alto
+                                    (85/100)</span></div>
+                        </div>
+                        <div>
+                            <button class="btn btn-success btn-sm" onclick="aprobarRFC('RFC-009')">✅ Aprobar</button>
+                            <button class="btn btn-danger btn-sm" onclick="rechazarRFC('RFC-009')">❌ Rechazar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Calculator Mock -->
+            <div class="card">
+                <div class="card-header">🧮 Calculadora de Riesgo de Cambio</div>
+                <div class="risk-calculator-form">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                        <div>
+                            <label>Complejidad Técnica</label>
+                            <select id="risk-complexity" class="form-control" onchange="calcularRiesgoCambio()">
+                                <option value="10">Baja</option>
+                                <option value="20">Media</option>
+                                <option value="40">Alta</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Impacto Usuarios</label>
+                            <select id="risk-impact" class="form-control" onchange="calcularRiesgoCambio()">
+                                <option value="10">Deparamental</option>
+                                <option value="30">Multi-sitio</option>
+                                <option value="50">Global</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Plan de Reversible (Rollback)</label>
+                            <select id="risk-rollback" class="form-control" onchange="calcularRiesgoCambio()">
+                                <option value="0">Probado y Documentado</option>
+                                <option value="20">Solo Documentado</option>
+                                <option value="50">Sin Plan Claro</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; text-align: center;">
+                        <h4>Puntaje de Riesgo: <span id="risk-score-display" style="color: #27ae60;">20</span></h4>
+                        <div style="width: 100%; height: 10px; background: #eee; border-radius: 5px; margin-top: 5px;">
+                            <div id="risk-score-bar"
+                                style="width: 20%; height: 100%; background: #27ae60; border-radius: 5px; transition: width 0.3s, background 0.3s;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-header">
                     🔄 Solicitudes de Cambio (RFC)
@@ -1759,7 +2896,7 @@
                             <th>Tipo</th>
                             <th>Estado</th>
                             <th>Impacto</th>
-                            <th>Fecha Programada</th>
+                            <th>Fecha</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -1771,44 +2908,69 @@
         <!-- MÓDULO SOLICITUDES -->
         <div class="module" id="solicitudes">
             <div class="alert alert-info">
-                <strong>Gestión de Solicitudes de Servicio</strong><br>
-                Procesamiento de solicitudes estándar de usuarios y departamentos
+                <strong>Gestión de Solicitudes de Servicio (Service Desk)</strong><br>
+                Portal de autoservicio para gestión de requerimientos y servicios TI con catálogo integrado
             </div>
 
-            <div class="info-grid">
-                <div class="info-card">
-                    <h4>📋 Catálogo de Solicitudes</h4>
-                    <p>Servicios predefinidos con tiempos de respuesta establecidos</p>
+            <!-- Stats Row -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="req-stat-total">0</h3>
+                    <p>Total Solicitudes</p>
                 </div>
-                <div class="info-card">
-                    <h4>⚡ Automatización</h4>
-                    <p>Procesamiento automático de solicitudes comunes</p>
+                <div class="stat-card">
+                    <h3 id="req-stat-pending">0</h3>
+                    <p>Pendientes</p>
                 </div>
-                <div class="info-card">
-                    <h4>📊 Métricas de Cumplimiento</h4>
-                    <p>Seguimiento de tiempos de respuesta y satisfacción</p>
+                <div class="stat-card">
+                    <h3 id="req-stat-approved">0</h3>
+                    <p>En Proceso</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="req-stat-completed">0</h3>
+                    <p>Completadas</p>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    📝 Registro de Solicitudes
-                    <button class="btn btn-primary" onclick="abrirModal('modal-solicitud')">+ Nueva Solicitud</button>
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchRequestTab('catalog')">Catálogo de Servicios</button>
+                <button class="tab" onclick="switchRequestTab('my-requests')">Mis Solicitudes</button>
+            </div>
+
+            <!-- Catalog Tab -->
+            <div id="req-tab-catalog" class="tab-content active">
+                <div class="input-group input-icon" data-icon="🔍">
+                    <input type="text" placeholder="Buscar categoría o servicio..."
+                        onkeyup="filtrarCatalogo(this.value)">
                 </div>
-                <table id="tabla-solicitudes">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Tipo</th>
-                            <th>Descripción</th>
-                            <th>Prioridad</th>
-                            <th>Estado</th>
-                            <th>Solicitante</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="service-catalog-grid" id="service-catalog">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- My Requests Tab -->
+            <div id="req-tab-my-requests" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        📝 Mis Solicitudes
+                        <button class="btn btn-primary" onclick="abrirModal('modal-solicitud')">+ Nueva Solicitud
+                            Manual</button>
+                    </div>
+                    <table id="tabla-solicitudes">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Servicio</th>
+                                <th>Prioridad</th>
+                                <th>Estado</th>
+                                <th>Solicitante</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -1816,7 +2978,15 @@
         <div class="module" id="sla">
             <div class="alert alert-info">
                 <strong>Gestión de Niveles de Servicio (SLA)</strong><br>
-                Monitoreo y cumplimiento de acuerdos de nivel de servicio con matriz RACI para responsabilidades
+                Monitoreo continuo de cumplimiento, cálculo de penalizaciones y gestión de dependencias (OLA).
+            </div>
+
+            <!-- Heatmap Visualization -->
+            <div class="card">
+                <div class="card-header">🌡️ Mapa de Calor de Cumplimiento (Últimos 30 días)</div>
+                <div class="sla-heatmap" id="sla-heatmap-grid">
+                    <!-- Populated by JS -->
+                </div>
             </div>
 
             <!-- SLA Metrics Dashboard -->
@@ -1842,105 +3012,43 @@
                 </div>
             </div>
 
-            <!-- RACI Matrix -->
-            <div class="card">
-                <div class="card-header">👥 Matriz RACI - Gestión de SLA</div>
-                <div class="raci-legend">
-                    <div class="raci-legend-item">
-                        <span class="raci-badge raci-r">R</span>
-                        <span>Responsable (Responsible): Ejecuta la tarea</span>
-                    </div>
-                    <div class="raci-legend-item">
-                        <span class="raci-badge raci-a">A</span>
-                        <span>Aprobador (Accountable): Autoridad final y aprueba</span>
-                    </div>
-                    <div class="raci-legend-item">
-                        <span class="raci-badge raci-c">C</span>
-                        <span>Consultado (Consulted): Proporciona información</span>
-                    </div>
-                    <div class="raci-legend-item">
-                        <span class="raci-badge raci-i">I</span>
-                        <span>Informado (Informed): Recibe información</span>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <!-- Penalty Calculator -->
+                <div class="card">
+                    <div class="card-header">💸 Calculadora de Penalizaciones</div>
+                    <div class="penalty-card">
+                        <p>Ingrese Tiempo de Indisponibilidad (horas):</p>
+                        <input type="number" id="down-time-input" class="form-control"
+                            style="width: 100px; margin: 0 auto 10px auto; text-align: center;" value="0"
+                            onchange="calcularPenalizacion()">
+                        <p>Servicio Crítico (SLA 99.9%)</p>
+                        <hr style="border-color: #34495e;">
+                        <div class="penalty-amount" id="penalty-display">$0.00</div>
+                        <small>Crédito estimado a clientes</small>
                     </div>
                 </div>
-                <table class="raci-matrix">
-                    <thead>
-                        <tr>
-                            <th>Actividad / Rol</th>
-                            <th>Gerente de Servicios TI</th>
-                            <th>Administrador de SLA</th>
-                            <th>Equipo de Soporte</th>
-                            <th>Gerente de Operaciones</th>
-                            <th>Cliente/Usuario</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Definición de SLA</td>
-                            <td><span class="raci-badge raci-a">A</span></td>
-                            <td><span class="raci-badge raci-r">R</span></td>
-                            <td><span class="raci-badge raci-c">C</span></td>
-                            <td><span class="raci-badge raci-c">C</span></td>
-                            <td><span class="raci-badge raci-i">I</span></td>
-                        </tr>
-                        <tr>
-                            <td>Monitoreo de Cumplimiento</td>
-                            <td><span class="raci-badge raci-i">I</span></td>
-                            <td><span class="raci-badge raci-a">A</span> <span class="raci-badge raci-r">R</span></td>
-                            <td><span class="raci-badge raci-c">C</span></td>
-                            <td><span class="raci-badge raci-i">I</span></td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td>Resolución de Incidentes</td>
-                            <td><span class="raci-badge raci-i">I</span></td>
-                            <td><span class="raci-badge raci-i">I</span></td>
-                            <td><span class="raci-badge raci-a">A</span> <span class="raci-badge raci-r">R</span></td>
-                            <td><span class="raci-badge raci-c">C</span></td>
-                            <td><span class="raci-badge raci-i">I</span></td>
-                        </tr>
-                        <tr>
-                            <td>Reportes de SLA</td>
-                            <td><span class="raci-badge raci-a">A</span></td>
-                            <td><span class="raci-badge raci-r">R</span></td>
-                            <td><span class="raci-badge raci-c">C</span></td>
-                            <td><span class="raci-badge raci-i">I</span></td>
-                            <td><span class="raci-badge raci-i">I</span></td>
-                        </tr>
-                        <tr>
-                            <td>Revisión de Métricas</td>
-                            <td><span class="raci-badge raci-a">A</span></td>
-                            <td><span class="raci-badge raci-r">R</span></td>
-                            <td><span class="raci-badge raci-i">I</span></td>
-                            <td><span class="raci-badge raci-c">C</span></td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td>Escalamiento de Incidentes</td>
-                            <td><span class="raci-badge raci-a">A</span></td>
-                            <td><span class="raci-badge raci-c">C</span></td>
-                            <td><span class="raci-badge raci-r">R</span></td>
-                            <td><span class="raci-badge raci-c">C</span></td>
-                            <td><span class="raci-badge raci-i">I</span></td>
-                        </tr>
-                        <tr>
-                            <td>Mejora Continua de SLA</td>
-                            <td><span class="raci-badge raci-a">A</span></td>
-                            <td><span class="raci-badge raci-r">R</span></td>
-                            <td><span class="raci-badge raci-c">C</span></td>
-                            <td><span class="raci-badge raci-c">C</span></td>
-                            <td><span class="raci-badge raci-i">I</span></td>
-                        </tr>
-                        <tr>
-                            <td>Comunicación con Clientes</td>
-                            <td><span class="raci-badge raci-a">A</span></td>
-                            <td><span class="raci-badge raci-r">R</span></td>
-                            <td><span class="raci-badge raci-c">C</span></td>
-                            <td><span class="raci-badge raci-i">I</span></td>
-                            <td><span class="raci-badge raci-i">I</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+
+                <!-- RACI Matrix Mini -->
+                <div class="card">
+                    <div class="card-header">👥 Mapa de Dependencias (OLA)</div>
+                    <div style="padding: 15px; text-align: center;">
+                        <div style="display: flex; justify-content: space-around; align-items: center;">
+                            <div
+                                style="background: #3498db; color: white; padding: 10px; border-radius: 50%; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                Service Desk</div>
+                            <div style="font-size: 24px;">➡️</div>
+                            <div
+                                style="background: #e67e22; color: white; padding: 10px; border-radius: 50%; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                DevOps</div>
+                            <div style="font-size: 24px;">➡️</div>
+                            <div
+                                style="background: #9b59b6; color: white; padding: 10px; border-radius: 50%; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                Infra</div>
+                        </div>
+                        <p style="margin-top: 15px; font-size: 12px; color: #7f8c8d;">Flujo de escalado para Servicios
+                            Críticos</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Performance Indicators -->
@@ -1978,60 +3086,59 @@
         <div class="module" id="riesgos">
             <div class="alert alert-info">
                 <strong>Gestión de Riesgos según ISO 31000</strong><br>
-                Identificación, análisis y tratamiento de riesgos organizacionales
+                Identificación, análisis, análisis causa-raíz y tratamiento de riesgos organizacionales dinámicos.
             </div>
 
+            <!-- Advanced Risk Heatmap -->
             <div class="card">
-                <div class="card-header">⚠️ Matriz de Riesgos</div>
-                <div class="risk-matrix">
-                    <div class="risk-header" style="grid-column: 1;"></div>
-                    <div class="risk-header">Muy Baja</div>
-                    <div class="risk-header">Baja</div>
-                    <div class="risk-header">Media</div>
-                    <div class="risk-header">Alta</div>
-                    <div class="risk-header">Muy Alta</div>
+                <div class="card-header">🌡️ Mapa de Calor de Riesgos (Interactivo)</div>
+                <div style="display: flex; gap: 20px;">
+                    <div style="flex: 2;">
+                        <h5 style="text-align: center; margin-bottom: 10px;">Distribución de Riesgos Activos</h5>
+                        <div class="risk-heatmap-visual" id="risk-heatmap-canvas">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div
+                            style="display: flex; justify-content: space-between; margin-top: 5px; font-size: 10px; color: #7f8c8d;">
+                            <span>Baja Probabilidad</span>
+                            <span>Alta Probabilidad</span>
+                        </div>
+                    </div>
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                        <div class="stat-card" style="margin-bottom: 10px; border-left: 5px solid #e74c3c;">
+                            <h3 id="risk-critical-count">0</h3>
+                            <p>Riesgos Críticos</p>
+                        </div>
+                        <div class="stat-card" style="border-left: 5px solid #f1c40f;">
+                            <h3 id="risk-warning-count">0</h3>
+                            <p>Para Monitoreo</p>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <h5>Tratamiento Sugerido:</h5>
+                            <ul id="risk-treatment-suggestions"
+                                style="font-size: 12px; padding-left: 20px; color: #34495e;">
+                                <li>Mitigar riesgos de cuadrante rojo.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                    <div class="risk-header">Muy Alto</div>
-                    <div class="risk-cell risk-medium" id="risk-5-1">0</div>
-                    <div class="risk-cell risk-medium" id="risk-5-2">0</div>
-                    <div class="risk-cell risk-high" id="risk-5-3">0</div>
-                    <div class="risk-cell risk-high" id="risk-5-4">0</div>
-                    <div class="risk-cell risk-high" id="risk-5-5">0</div>
-
-                    <div class="risk-header">Alto</div>
-                    <div class="risk-cell risk-low" id="risk-4-1">0</div>
-                    <div class="risk-cell risk-medium" id="risk-4-2">0</div>
-                    <div class="risk-cell risk-medium" id="risk-4-3">0</div>
-                    <div class="risk-cell risk-high" id="risk-4-4">0</div>
-                    <div class="risk-cell risk-high" id="risk-4-5">0</div>
-
-                    <div class="risk-header">Medio</div>
-                    <div class="risk-cell risk-low" id="risk-3-1">0</div>
-                    <div class="risk-cell risk-low" id="risk-3-2">0</div>
-                    <div class="risk-cell risk-medium" id="risk-3-3">0</div>
-                    <div class="risk-cell risk-medium" id="risk-3-4">0</div>
-                    <div class="risk-cell risk-high" id="risk-3-5">0</div>
-
-                    <div class="risk-header">Bajo</div>
-                    <div class="risk-cell risk-low" id="risk-2-1">0</div>
-                    <div class="risk-cell risk-low" id="risk-2-2">0</div>
-                    <div class="risk-cell risk-low" id="risk-2-3">0</div>
-                    <div class="risk-cell risk-medium" id="risk-2-4">0</div>
-                    <div class="risk-cell risk-medium" id="risk-2-5">0</div>
-
-                    <div class="risk-header">Muy Bajo</div>
-                    <div class="risk-cell risk-low" id="risk-1-1">0</div>
-                    <div class="risk-cell risk-low" id="risk-1-2">0</div>
-                    <div class="risk-cell risk-low" id="risk-1-3">0</div>
-                    <div class="risk-cell risk-low" id="risk-1-4">0</div>
-                    <div class="risk-cell risk-medium" id="risk-1-5">0</div>
+            <!-- Bowtie Analysis (Concept) -->
+            <div class="card">
+                <div class="card-header">🎀 Análisis Bowtie (Causa - Riesgo - Consecuencia)</div>
+                <div id="bowtie-analysis-view">
+                    <p style="text-align: center; color: #95a5a6; padding: 20px;">Seleccione un riesgo para ver el
+                        análisis</p>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-header">
-                    ⚠️ Registro de Riesgos (ISO 31000)
+                    ⚠️ Registro de Riesgos y Evaluación
                     <button class="btn btn-primary" onclick="abrirModal('modal-riesgo')">+ Nuevo Riesgo</button>
+                    <button class="btn btn-secondary" onclick="renderizarAnalisisBowtie()">🔄 Actualizar
+                        Análisis</button>
                 </div>
                 <table id="tabla-riesgos">
                     <thead>
@@ -2041,6 +3148,7 @@
                             <th>Probabilidad</th>
                             <th>Impacto</th>
                             <th>Nivel</th>
+                            <th>Estrategia</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -2052,22 +3160,60 @@
         <!-- MÓDULO ACTIVOS -->
         <div class="module" id="activos">
             <div class="alert alert-info">
-                <strong>Gestión de Activos y CMDB</strong><br>
-                Base de datos de configuración y registro de activos TI
+                <strong>Gestión de Activos y CMDB (Configuration Management Database)</strong><br>
+                Mapeo de relaciones entre CIs (Configuration Items) y ciclo de vida de los activos TI.
+            </div>
+
+            <!-- CMDB Topology Map -->
+            <div class="card">
+                <div class="card-header">🕸️ Mapa de Topología de Servicios (CMDB Visual)</div>
+                <div class="topology-tree" id="cmdb-topology-tree">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Asset Lifecycle Tracker (Mock) -->
+            <div class="card">
+                <div class="card-header">🔄 Ciclo de Vida del Activo (Ejemplo)</div>
+                <div style="padding: 20px;">
+                    <h5 id="lifecycle-asset-name">Servidor ERP-PROD-01</h5>
+                    <div class="lifecycle-track">
+                        <div class="lifecycle-step active">
+                            <span>1</span>
+                            <span class="lifecycle-label">Planificación</span>
+                        </div>
+                        <div class="lifecycle-step active">
+                            <span>2</span>
+                            <span class="lifecycle-label">Adquisición</span>
+                        </div>
+                        <div class="lifecycle-step active">
+                            <span>3</span>
+                            <span class="lifecycle-label">Despliegue</span>
+                        </div>
+                        <div class="lifecycle-step">
+                            <span>4</span>
+                            <span class="lifecycle-label">Mantenimiento</span>
+                        </div>
+                        <div class="lifecycle-step">
+                            <span>5</span>
+                            <span class="lifecycle-label">Retiro</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="info-grid">
                 <div class="info-card">
-                    <h4>💻 Hardware</h4>
+                    <h4>💻 Hardware CI</h4>
                     <p>Servidores, equipos de red, estaciones de trabajo</p>
                 </div>
                 <div class="info-card">
-                    <h4>📦 Software</h4>
+                    <h4>📦 Software CI</h4>
                     <p>Aplicaciones, licencias y sistemas operativos</p>
                 </div>
                 <div class="info-card">
                     <h4>🔗 Relaciones</h4>
-                    <p>Dependencias entre activos y servicios</p>
+                    <p>Dependencias Upstream/Downstream</p>
                 </div>
             </div>
 
@@ -2075,6 +3221,7 @@
                 <div class="card-header">
                     💻 Inventario de Activos TI
                     <button class="btn btn-primary" onclick="abrirModal('modal-activo')">+ Nuevo Activo</button>
+                    <button class="btn btn-secondary" onclick="renderizarTopologiaCMDB()">🔄 Actualizar Mapa</button>
                 </div>
                 <table id="tabla-activos">
                     <thead>
@@ -2084,6 +3231,7 @@
                             <th>Nombre</th>
                             <th>Ubicación</th>
                             <th>Estado</th>
+                            <th>Depreciación</th>
                             <th>Responsable</th>
                             <th>Acciones</th>
                         </tr>
@@ -2097,26 +3245,49 @@
         <div class="module" id="seguridad">
             <div class="alert alert-info">
                 <strong>Gestión de Seguridad de la Información (ISO 27001)</strong><br>
-                Sistema de gestión de seguridad de la información
+                CIA Triad Dashboard y Sistema de Gestión de Seguridad de la Información (SGSI).
+            </div>
+
+            <!-- CIA Triad Dashboard -->
+            <div class="cia-triad-grid">
+                <div class="cia-card">
+                    <div class="cia-label">Confidencialidad</div>
+                    <div class="cia-value" style="color: #27ae60;" id="cia-confidentiality">98%</div>
+                    <small>Cifrado & Accesso</small>
+                </div>
+                <div class="cia-card">
+                    <div class="cia-label">Integridad</div>
+                    <div class="cia-value" style="color: #f1c40f;" id="cia-integrity">85%</div>
+                    <small>Control de Cambios</small>
+                </div>
+                <div class="cia-card">
+                    <div class="cia-label">Disponibilidad</div>
+                    <div class="cia-value" style="color: #27ae60;" id="cia-availability">99.9%</div>
+                    <small>Uptime & Redundancia</small>
+                </div>
             </div>
 
             <div class="info-grid">
                 <div class="info-card">
-                    <h4>🔐 Controles de Acceso</h4>
-                    <p>Gestión de identidades y autenticación</p>
+                    <h4>🔐 Control de Acceso</h4>
+                    <p>Compliance (A.9): <strong style="color:#2ecc71">92%</strong></p>
                 </div>
                 <div class="info-card">
-                    <h4>🛡️ Protección de Datos</h4>
-                    <p>Cifrado, backup y prevención de pérdida</p>
+                    <h4>🛡️ Ops Security</h4>
+                    <p>Compliance (A.12): <strong style="color:#f1c40f">78%</strong></p>
                 </div>
                 <div class="info-card">
-                    <h4>📋 Auditorías</h4>
-                    <p>Revisiones periódicas y cumplimiento normativo</p>
+                    <h4>📋 Auditoría</h4>
+                    <p>Próxima: <strong>15 días</strong></p>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-header">🔒 Incidentes de Seguridad</div>
+                <div class="card-header">🔒 Incidentes de Seguridad (SIEM)
+                    <button class="btn btn-primary" onclick="alert('Funcionalidad de escaneo simulada')">📡 Escanear
+                        Red</button>
+                    <button class="btn btn-secondary" onclick="renderizarSeguridad()">🔄 Actualizar</button>
+                </div>
                 <table id="tabla-seguridad">
                     <thead>
                         <tr>
@@ -2124,6 +3295,7 @@
                             <th>Tipo</th>
                             <th>Descripción</th>
                             <th>Severidad</th>
+                            <th>Activo</th>
                             <th>Estado</th>
                             <th>Fecha</th>
                         </tr>
@@ -2133,14 +3305,15 @@
             </div>
 
             <div class="card">
-                <div class="card-header">📊 Controles de Seguridad Activos</div>
+                <div class="card-header">📊 Dashboard de Controles (SOA - ISO 27001)</div>
                 <table id="tabla-controles">
                     <thead>
                         <tr>
                             <th>Control</th>
                             <th>Categoría</th>
-                            <th>Estado</th>
-                            <th>Última Revisión</th>
+                            <th>Estado Implementación</th>
+                            <th>Madurez (1-5)</th>
+                            <th>Revisión</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -2152,35 +3325,63 @@
         <div class="module" id="continuidad">
             <div class="alert alert-info">
                 <strong>Gestión de Continuidad del Negocio (ISO 22301)</strong><br>
-                Preparación y respuesta ante interrupciones del negocio
+                Análisis de Impacto (BIA) y Estrategias de Recuperación (RTO/RPO).
             </div>
 
-            <div class="info-grid">
-                <div class="info-card">
-                    <h4>📋 BIA - Business Impact Analysis</h4>
-                    <p>Análisis de impacto en procesos críticos</p>
+            <!-- BIA Visuals -->
+            <div class="card">
+                <div class="card-header">📉 Análisis de Impacto en el Negocio (BIA) - Pérdida Financiera x Tiempo</div>
+                <div class="bia-visual-container">
+                    <!-- Mock Bars -->
+                    <div class="bia-bar" style="height: 20%; background:#2ecc71"><label>1h</label><span>Bajo</span>
+                    </div>
+                    <div class="bia-bar" style="height: 40%; background:#f1c40f"><label>4h</label><span>Medio</span>
+                    </div>
+                    <div class="bia-bar" style="height: 60%; background:#e67e22"><label>24h</label><span>Alto</span>
+                    </div>
+                    <div class="bia-bar" style="height: 90%; background:#e74c3c"><label>48h+</label><span>Crítico</span>
+                    </div>
                 </div>
-                <div class="info-card">
-                    <h4>🔄 Planes de Recuperación</h4>
-                    <p>Estrategias de continuidad y recuperación</p>
-                </div>
-                <div class="info-card">
-                    <h4>🧪 Pruebas y Ejercicios</h4>
-                    <p>Validación de planes de contingencia</p>
+                <p style="text-align:center; font-size:12px; color:#7f8c8d;">Impacto financiero exponencial tras 24h de
+                    inactividad.</p>
+            </div>
+
+            <!-- RTO Timeline -->
+            <div class="card">
+                <div class="card-header">⏱️ Línea de Tiempo de Recuperación (Ejemplo: Caída ERP)</div>
+                <div class="rto-timeline">
+                    <div class="rto-line">
+                        <div class="rto-range-fill" style="width: 40%; left: 10%;"></div>
+                        <div class="rto-marker" style="left: 0%;" title="Incidente (0h)"></div>
+                        <div class="rto-marker" style="left: 10%; background:#e74c3c" title="Detección (1h)"></div>
+                        <div class="rto-marker" style="left: 40%;" title="Respuesta (4h)"></div>
+                        <div class="rto-marker" style="left: 80%; background:#2ecc71" title="RTO Objetivo (8h)"></div>
+                    </div>
+                    <div
+                        style="display:flex; justify-content:space-between; margin-top:10px; font-size:10px; color:#7f8c8d;">
+                        <span>0h</span>
+                        <span>4h</span>
+                        <span>8h (RTO)</span>
+                        <span>12h</span>
+                    </div>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-header">🛡️ Planes de Continuidad</div>
+                <div class="card-header">🛡️ Planes de Recuperación y Continuidad
+                    <button class="btn btn-primary" onclick="alert('Generando PDF del Plan...')">📄 Exportar
+                        Plan</button>
+                </div>
                 <table id="tabla-continuidad">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Proceso Crítico</th>
-                            <th>RTO</th>
-                            <th>RPO</th>
-                            <th>Estado</th>
-                            <th>Última Prueba</th>
+                            <th>RTO Objetivo</th>
+                            <th>RPO Objetivo</th>
+                            <th>Estrategia</th>
+                            <th>Ultimo Test</th>
+                            <th>Resultado</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -2196,6 +3397,7 @@
                             <th>Tipo</th>
                             <th>Disponibilidad</th>
                             <th>Ubicación</th>
+                            <th>Estado</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -2400,35 +3602,50 @@
 
     <div class="modal" id="modal-solicitud">
         <div class="modal-content">
-            <div class="modal-header">Nueva Solicitud de Servicio</div>
+            <div class="modal-header">Nueva Solicitud</div>
             <form onsubmit="guardarSolicitud(event)">
+                <input type="hidden" name="tipo_servicio" id="form-tipo-servicio">
+                <div class="alert alert-info" id="form-servicio-info" style="display:none; margin-bottom: 20px;">
+                    <strong>Servicio Seleccionado:</strong> <span id="selected-service-name"></span>
+                </div>
+
                 <div class="form-group">
-                    <label>Tipo de Solicitud</label>
-                    <select name="tipo">
+                    <label>Tipo de Solicitud (Si no seleccionó catálogo)</label>
+                    <select name="tipo" id="form-tipo-select">
                         <option>Acceso a Sistema</option>
                         <option>Nuevo Equipo</option>
                         <option>Soporte Técnico</option>
                         <option>Instalación Software</option>
                         <option>Cambio de Contraseña</option>
+                        <option>Otro</option>
                     </select>
                 </div>
+
                 <div class="form-group">
-                    <label>Descripción</label>
-                    <textarea name="descripcion" required></textarea>
+                    <label>Descripción Detallada</label>
+                    <textarea name="descripcion" required placeholder="Describa su necesidad..."></textarea>
                 </div>
+
                 <div class="form-group">
                     <label>Prioridad</label>
                     <select name="prioridad">
-                        <option>Alta</option>
-                        <option>Media</option>
                         <option>Baja</option>
+                        <option>Media</option>
+                        <option>Alta</option>
                     </select>
                 </div>
+
                 <div class="form-group">
                     <label>Solicitante</label>
-                    <input type="text" name="solicitante" required>
+                    <input type="text" name="solicitante" required value="Usuario Actual">
                 </div>
-                <button type="submit" class="btn btn-success">Guardar</button>
+
+                <div class="form-group">
+                    <label>Departamento</label>
+                    <input type="text" name="departamento" placeholder="Ej. Finanzas, RRHH">
+                </div>
+
+                <button type="submit" class="btn btn-success">Generar Solicitud</button>
                 <button type="button" class="btn btn-danger" onclick="cerrarModal('modal-solicitud')">Cancelar</button>
             </form>
         </div>
@@ -2799,23 +4016,30 @@
 
             // Generar solicitudes
             if (Math.random() > 0.75) {
-                const tipos = ['Acceso a Sistema', 'Nuevo Equipo', 'Soporte Técnico', 'Instalación Software', 'Cambio de Contraseña'];
+                const catalogo = [
+                    'Acceso VPN', 'Nuevo Laptop', 'Reset Password', 'Licencia Office 365',
+                    'Acceso ERP', 'Mantenimiento Impresora', 'Instalación Monitor', 'Desbloqueo Cuenta'
+                ];
                 const prioridades = ['Alta', 'Media', 'Baja'];
                 const solicitantes = ['Juan Rodríguez', 'María López', 'Pedro Sánchez', 'Ana Martínez'];
-                const estados = ['Pendiente', 'En Proceso', 'Completada'];
+                const estados = ['Pendiente', 'En Proceso', 'Completada', 'Aprobada', 'Rechazada'];
+
+                const servicio = catalogo[Math.floor(Math.random() * catalogo.length)];
 
                 const solicitud = {
                     id: `SOL-${String(contadores.solicitud++).padStart(3, '0')}`,
-                    tipo: tipos[Math.floor(Math.random() * tipos.length)],
-                    descripcion: 'Solicitud de servicio TI',
+                    tipo: servicio,
+                    descripcion: `Solicitud automática para: ${servicio}`,
                     prioridad: prioridades[Math.floor(Math.random() * prioridades.length)],
                     solicitante: solicitantes[Math.floor(Math.random() * solicitantes.length)],
-                    estado: estados[Math.floor(Math.random() * estados.length)]
+                    estado: estados[Math.floor(Math.random() * estados.length)],
+                    departamento: 'IT'
                 };
 
                 datos.solicitudes.push(solicitud);
                 agregarLog(`📝 Nueva solicitud: ${solicitud.tipo}`);
                 renderizarSolicitudes();
+                actualizarEstadisticasSolicitudes();
                 actualizarEstadisticas();
             }
 
@@ -2884,7 +4108,7 @@
                 case 'problemas': renderizarProblemas(); break;
                 case 'cambios': renderizarCambios(); break;
                 case 'riesgos': renderizarRiesgos(); actualizarMatrizRiesgos(); break;
-                case 'solicitudes': renderizarSolicitudes(); break;
+                case 'solicitudes': renderizarSolicitudes(); renderizarCatalogo(); break;
                 case 'sla': renderizarSLA(); break;
                 case 'activos': renderizarActivos(); break;
                 case 'seguridad': renderizarSeguridad(); renderizarControles(); break;
@@ -2920,6 +4144,95 @@
             renderizarLogs();
         }
 
+        // --- REQUEST MANAGEMENT LOGIC ---
+
+        const catalogoServicios = [
+            { id: 1, nombre: "Acceso a VPN", categoria: "Accesos", icon: "🔒", desc: "Solicitar acceso remoto seguro a la red corporativa." },
+            { id: 2, nombre: "Nuevo Equipo", categoria: "Hardware", icon: "💻", desc: "Solicitud de laptop, desktop o periféricos." },
+            { id: 3, nombre: "Reset Contraseña", categoria: "Cuentas", icon: "🔑", desc: "Restablecer contraseña de dominio o aplicaciones." },
+            { id: 4, nombre: "Licencia Software", categoria: "Software", icon: "💾", desc: "Solicitud de software nuevo o renovación de licencias." },
+            { id: 5, nombre: "Acceso a ERP", categoria: "Aplicaciones", icon: "📊", desc: "Permisos para módulos del sistema ERP." },
+            { id: 6, nombre: "Carpeta Compartida", categoria: "Accesos", icon: "📂", desc: "Acceso a unidades de red o carpetas compartidas." },
+            { id: 7, nombre: "Correo Electrónico", categoria: "Cuentas", icon: "📧", desc: "Creación de buzón, listas de distribución o alias." },
+            { id: 8, nombre: "Soporte Impresora", categoria: "Hardware", icon: "🖨️", desc: "Instalación o reparación de impresoras." }
+        ];
+
+        function renderizarCatalogo() {
+            const container = document.getElementById('service-catalog');
+            if (!container) return;
+
+            container.innerHTML = catalogoServicios.map(s => `
+                <div class="service-card" onclick="iniciarSolicitudCatalogo('${s.nombre}')">
+                    <div class="service-icon">${s.icon}</div>
+                    <h4>${s.nombre}</h4>
+                    <p>${s.desc}</p>
+                    <div class="service-meta">
+                        <span>${s.categoria}</span>
+                        <span>SLA: 24h</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filtrarCatalogo(busqueda) {
+            const term = busqueda.toLowerCase();
+            const filtered = catalogoServicios.filter(s =>
+                s.nombre.toLowerCase().includes(term) ||
+                s.categoria.toLowerCase().includes(term) ||
+                s.desc.toLowerCase().includes(term)
+            );
+
+            const container = document.getElementById('service-catalog');
+            if (!container) return;
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #7f8c8d; padding: 40px;">No se encontraron servicios</div>';
+                return;
+            }
+
+            container.innerHTML = filtered.map(s => `
+                <div class="service-card" onclick="iniciarSolicitudCatalogo('${s.nombre}')">
+                    <div class="service-icon">${s.icon}</div>
+                    <h4>${s.nombre}</h4>
+                    <p>${s.desc}</p>
+                    <div class="service-meta">
+                        <span>${s.categoria}</span>
+                        <span>SLA: 24h</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function switchRequestTab(tabId) {
+            document.querySelectorAll('#solicitudes .tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('#solicitudes .tab-content').forEach(c => c.classList.remove('active'));
+
+            // Find the button that called this and activate it (naive approach, better pass event)
+            const buttons = document.querySelectorAll('#solicitudes .tab');
+            if (tabId === 'catalog') buttons[0].classList.add('active');
+            else buttons[1].classList.add('active');
+
+            document.getElementById(`req-tab-${tabId}`).classList.add('active');
+        }
+
+        function iniciarSolicitudCatalogo(nombreServicio) {
+            document.getElementById('form-tipo-servicio').value = nombreServicio;
+            document.getElementById('selected-service-name').textContent = nombreServicio;
+            document.getElementById('form-servicio-info').style.display = 'block';
+            document.getElementById('form-tipo-select').value = 'Otro'; // Ocultar o deshabilitar si se quiere
+
+            abrirModal('modal-solicitud');
+        }
+
+        function actualizarEstadisticasSolicitudes() {
+            if (datos.solicitudes.length === 0) return;
+
+            document.getElementById('req-stat-total').textContent = datos.solicitudes.length;
+            document.getElementById('req-stat-pending').textContent = datos.solicitudes.filter(s => s.estado === 'Pendiente').length;
+            document.getElementById('req-stat-approved').textContent = datos.solicitudes.filter(s => s.estado === 'En Proceso' || s.estado === 'Aprobada').length;
+            document.getElementById('req-stat-completed').textContent = datos.solicitudes.filter(s => s.estado === 'Completada').length;
+        }
+
         function renderizarLogs() {
             const container = document.getElementById('log-container');
             if (!container) return;
@@ -2935,16 +4248,17 @@
             e.preventDefault();
             const form = e.target;
             const proyecto = {
-                id: `PRY-${String(contadores.proyecto++).padStart(3, '0')}`,
+                id: `PRJ-${String(contadores.proyecto++).padStart(3, '0')}`,
                 nombre: form.nombre.value,
                 responsable: form.responsable.value,
                 estado: form.estado.value,
-                avance: form.avance.value
+                avance: form.avance.value,
+                enfoque: 'Ágil' // Default for now
             };
             datos.proyectos.push(proyecto);
             cerrarModal('modal-proyecto');
             renderizarProyectos();
-            agregarLog(`✅ Proyecto creado: ${proyecto.nombre}`);
+            agregarLog(`📊 Proyecto creado: ${proyecto.nombre}`);
             actualizarEstadisticas();
             alert(`✅ Proyecto ${proyecto.id} creado exitosamente`);
         }
@@ -2954,27 +4268,31 @@
             if (!tbody) return;
 
             if (datos.proyectos.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay proyectos registrados</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay proyectos registrados</td></tr>';
                 return;
             }
 
             tbody.innerHTML = datos.proyectos.map(p => `
                 <tr>
                     <td>${p.id}</td>
-                    <td><strong>${p.nombre}</strong></td>
-                    <td><span class="badge badge-info">${p.estado}</span></td>
+                    <td><strong>${p.nombre}</strong><br><small style="color:#7f8c8d">Avance: ${p.avance}%</small></td>
+                    <td><span class="badge badge-${p.estado === 'Completado' ? 'success' : 'info'}">${p.estado}</span></td>
                     <td>
-                        <div class="progress-bar">
-                            <div class="progress-bar-fill" style="width: ${p.avance}%"></div>
+                        <div class="health-indicator" style="margin:0; justify-content: flex-start; gap: 5px;">
+                            <div class="health-dot ${Math.random() > 0.3 ? 'good' : 'warning'}" title="Alcance"></div>
+                            <div class="health-dot ${Math.random() > 0.3 ? 'good' : 'warning'}" title="Cronograma"></div>
+                            <div class="health-dot ${Math.random() > 0.3 ? 'good' : 'bad'}" title="Presupuesto"></div>
                         </div>
-                        ${p.avance}%
                     </td>
+                     <td>${p.enfoque || 'Híbrido'}</td>
                     <td>${p.responsable}</td>
                     <td>
                         <button class="btn btn-danger btn-sm" onclick="eliminarProyecto('${p.id}')">Eliminar</button>
                     </td>
                 </tr>
             `).join('');
+
+            actualizarEstadisticas();
         }
 
         function eliminarProyecto(id) {
@@ -2995,7 +4313,7 @@
                 categoria: form.categoria.value,
                 responsable: form.responsable.value,
                 disponibilidad: form.disponibilidad.value,
-                estado: 'Operativo'
+                estado: 'Activo'
             };
             datos.servicios.push(servicio);
             cerrarModal('modal-servicio');
@@ -3016,12 +4334,14 @@
                 return;
             }
 
+            const fases = ['Diseño', 'Transición', 'Operación', 'Mejora'];
+
             tbody.innerHTML = datos.servicios.map(s => `
                 <tr>
                     <td>${s.id}</td>
                     <td><strong>${s.nombre}</strong></td>
-                    <td><span class="badge badge-info">${s.categoria}</span></td>
-                    <td><span class="badge badge-success">${s.estado}</span></td>
+                    <td><span class="badge badge-info">${fases[Math.floor(Math.random() * fases.length)]}</span></td>
+                    <td><span class="badge badge-${s.estado === 'Activo' ? 'success' : 'warning'}">${s.estado}</span></td>
                     <td>${s.disponibilidad}%</td>
                     <td>${s.responsable}</td>
                     <td>
@@ -3062,6 +4382,8 @@
             `).join('');
         }
 
+        // --- INCIDENT MANAGEMENT LOGIC ---
+
         function guardarIncidente(e) {
             e.preventDefault();
             const form = e.target;
@@ -3075,6 +4397,7 @@
             datos.incidentes.push(incidente);
             cerrarModal('modal-incidente');
             renderizarIncidentes();
+            renderizarIncidentesDashboard(); // Ensure this exists if called, or remove
             agregarLog(`✅ Incidente creado: ${incidente.titulo}`);
             actualizarEstadisticas();
             alert(`✅ Incidente ${incidente.id} creado exitosamente`);
@@ -3085,23 +4408,58 @@
             if (!tbody) return;
 
             if (datos.incidentes.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay incidentes registrados</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay incidentes registrados</td></tr>';
+                document.getElementById('inc-active-count').textContent = 0;
+                document.getElementById('inc-p1-count').textContent = 0;
                 return;
             }
 
-            tbody.innerHTML = datos.incidentes.map(i => `
+            // Update stats
+            const activos = datos.incidentes.filter(i => i.estado !== 'Cerrado');
+            if (document.getElementById('inc-active-count')) document.getElementById('inc-active-count').textContent = activos.length;
+            const p1 = datos.incidentes.filter(i => i.prioridad === 'Crítica' && i.estado !== 'Cerrado').length;
+            if (document.getElementById('inc-p1-count')) document.getElementById('inc-p1-count').textContent = p1;
+
+            // Show Major Incident Banner if P1 > 0
+            const banner = document.getElementById('major-incident-alert');
+            if (banner) banner.style.display = p1 > 0 ? 'flex' : 'none';
+
+            tbody.innerHTML = datos.incidentes.map(i => {
+                // Simulate SLA
+                let slaHours = 4;
+                if (i.prioridad === 'Crítica') slaHours = 1;
+                if (i.prioridad === 'Baja') slaHours = 24;
+
+                // Mock random time remaining for demo
+                const percent = Math.floor(Math.random() * 100);
+                const isBreached = percent < 20;
+
+                return `
                 <tr>
                     <td>${i.id}</td>
                     <td>${i.titulo}</td>
                     <td><span class="badge badge-${getBadgePrioridad(i.prioridad)}">${i.prioridad}</span></td>
-                    <td><span class="badge badge-${i.estado === 'Abierto' ? 'warning' : 'success'}">${i.estado}</span></td>
+                    <td><span class="badge badge-${i.estado === 'Abierto' ? 'warning' : i.estado === 'Cerrado' ? 'success' : 'info'}">${i.estado}</span></td>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <div style="width:50px; height:6px; background:#dfe6e9; border-radius:3px;">
+                                <div style="width:${percent}%; height:100%; background:${isBreached ? '#e74c3c' : '#2ecc71'}; border-radius:3px;"></div>
+                            </div>
+                            <small>${isBreached ? 'Breached' : percent + '%'}</small>
+                        </div>
+                    </td>
                     <td>${i.asignado}</td>
                     <td>
                         <button class="btn btn-success btn-sm" onclick="cerrarIncidente('${i.id}')">Cerrar</button>
                         <button class="btn btn-danger btn-sm" onclick="eliminarIncidente('${i.id}')">Eliminar</button>
                     </td>
                 </tr>
-            `).join('');
+            `}).join('');
+        }
+
+        function renderizarIncidentesDashboard() {
+            // Optional: if there's a dashboard table for incidents, render it here.
+            // Currently using #stat-incidentes in main dashboard which is updated by actualizarEstadisticas
         }
 
         function getBadgePrioridad(prioridad) {
@@ -3126,6 +4484,48 @@
                 agregarLog(`Incidente eliminado: ${id}`);
                 actualizarEstadisticas();
             }
+        }
+
+        // --- PROBLEM MANAGEMENT LOGIC ---
+
+        function switchProblemTab(tabId) {
+            document.querySelectorAll('#problemas .tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('#problemas .tab-content').forEach(c => c.classList.remove('active'));
+
+            // Activate button (naive)
+            const btnIndex = tabId === 'records' ? 0 : tabId === 'kedb' ? 1 : 2;
+            const buttons = document.querySelectorAll('#problemas .tab');
+            if (buttons[btnIndex]) buttons[btnIndex].classList.add('active');
+
+            const content = document.getElementById(`prob-tab-${tabId}`);
+            if (content) content.classList.add('active');
+
+            if (tabId === 'kedb') renderizarKEDB();
+        }
+
+        const kedbData = [
+            { error: "Error 500 en Checkout", rootCause: "Timeout en API de Pagos", workaround: "Reiniciar servicio PaymentGateway en Servidor 3", tags: ["E-commerce", "Pagos"] },
+            { error: "VPN desconecta cada hora", rootCause: "Renegociación de llaves IKEv2", workaround: "Aumentar lifetime de seguridad en cliente VPN", tags: ["Red", "Seguridad"] },
+            { error: "Pantallazo Azul Driver Video", rootCause: "Conflicto driver v23.4", workaround: "Rollback a driver v23.1 o deshabilitar aceleración hardware", tags: ["Desktop", "Hardware"] },
+            { error: "Outlook pide password", rootCause: "Token OAuth expirado", workaround: "Borrar credenciales de Windows y reiniciar Outlook", tags: ["Office 365", "Correo"] }
+        ];
+
+        function renderizarKEDB() {
+            const container = document.getElementById('kedb-container');
+            if (!container) return;
+
+            container.innerHTML = kedbData.map(k => `
+                <div class="kedb-card">
+                    <h5 style="color:#c0392b; margin-bottom:5px;">${k.error}</h5>
+                    <p style="font-size:12px; color:#7f8c8d; margin-bottom:10px;"><strong>Causa:</strong> ${k.rootCause}</p>
+                    <div style="background:#f0f9eb; padding:10px; border-radius:4px; border:1px dashed #2ecc71; font-size:12px;">
+                        <strong>Workaround:</strong><br>${k.workaround}
+                    </div>
+                    <div style="margin-top:10px;">
+                        ${k.tags.map(t => `<span class="kedb-tag">${t}</span>`).join(' ')}
+                    </div>
+                </div>
+            `).join('');
         }
 
         function guardarProblema(e) {
@@ -3201,6 +4601,8 @@
             `).join('');
         }
 
+        // --- CHANGE MANAGEMENT LOGIC ---
+
         function guardarCambio(e) {
             e.preventDefault();
             const form = e.target;
@@ -3210,12 +4612,13 @@
                 tipo: form.tipo.value,
                 estado: 'Solicitud',
                 impacto: form.impacto.value,
-                fecha: form.fecha.value
+                fecha: form.fecha.value || new Date().toISOString().split('T')[0]
             };
             datos.cambios.push(cambio);
             cerrarModal('modal-cambio');
             renderizarCambios();
             renderizarCambiosDashboard();
+            renderizarCalendarioCambios(); // Update calendar
             agregarLog(`✅ RFC creada: ${cambio.id}`);
             actualizarEstadisticas();
             alert(`✅ RFC ${cambio.id} creado exitosamente`);
@@ -3224,6 +4627,8 @@
         function renderizarCambios() {
             const tbody = document.querySelector('#tabla-cambios tbody');
             if (!tbody) return;
+
+            renderizarCalendarioCambios(); // Ensure calendar is rendered
 
             if (datos.cambios.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay cambios registrados</td></tr>';
@@ -3235,7 +4640,7 @@
                     <td>${c.id}</td>
                     <td>${c.descripcion}</td>
                     <td><span class="badge badge-info">${c.tipo}</span></td>
-                    <td><span class="badge badge-warning">${c.estado}</span></td>
+                    <td><span class="badge badge-${c.estado === 'Aprobado' ? 'success' : c.estado === 'Rechazado' ? 'danger' : 'warning'}">${c.estado}</span></td>
                     <td><span class="badge badge-${c.impacto === 'Alto' ? 'danger' : c.impacto === 'Medio' ? 'warning' : 'success'}">${c.impacto}</span></td>
                     <td>${c.fecha}</td>
                     <td>
@@ -3250,6 +4655,7 @@
                 datos.cambios = datos.cambios.filter(c => c.id !== id);
                 renderizarCambios();
                 renderizarCambiosDashboard();
+                renderizarCalendarioCambios();
                 agregarLog(`Cambio eliminado: ${id}`);
                 actualizarEstadisticas();
             }
@@ -3275,6 +4681,73 @@
             `).join('');
         }
 
+        // New Logic: Risk Calculator
+        function calcularRiesgoCambio() {
+            const comp = parseInt(document.getElementById('risk-complexity').value);
+            const imp = parseInt(document.getElementById('risk-impact').value);
+            const roll = parseInt(document.getElementById('risk-rollback').value);
+
+            const score = comp + imp + roll;
+
+            const display = document.getElementById('risk-score-display');
+            const bar = document.getElementById('risk-score-bar');
+
+            display.textContent = score;
+            bar.style.width = score + '%';
+
+            if (score < 50) {
+                display.style.color = '#27ae60';
+                bar.style.background = '#27ae60';
+            } else if (score < 80) {
+                display.style.color = '#f1c40f';
+                bar.style.background = '#f1c40f';
+            } else {
+                display.style.color = '#e74c3c';
+                bar.style.background = '#e74c3c';
+            }
+        }
+
+        // New Logic: Calendar Render (Mock)
+        function renderizarCalendarioCambios() {
+            const container = document.getElementById('change-calendar-grid');
+            if (!container) return;
+
+            // Mocking a 7-day view starting "today"
+            let html = '';
+            const today = new Date();
+            for (let i = 0; i < 7; i++) {
+                const day = new Date(today);
+                day.setDate(today.getDate() + i);
+                const dayStr = day.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' });
+                const dateIso = day.toISOString().split('T')[0];
+
+                // Find changes for this day
+                const dayChanges = datos.cambios.filter(c => c.fecha === dateIso);
+
+                html += `
+                    <div class="cal-day">
+                        <div class="cal-header">${dayStr}</div>
+                        ${dayChanges.map(c => `
+                            <div class="cal-event" onclick="alert('RFC: ${c.descripcion}')">
+                                ${c.id} - ${c.tipo}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        // New Logic: CAB Actions
+        function aprobarRFC(id) {
+            alert(`✅ Cambio ${id} Aprobado por CAB. Notificación enviada al equipo de implementación.`);
+            // In real app, update state
+        }
+
+        function rechazarRFC(id) {
+            alert(`❌ Cambio ${id} Rechazado. Se requiere revisión del plan de rollback.`);
+        }
+
         function guardarRiesgo(e) {
             e.preventDefault();
             const form = e.target;
@@ -3287,12 +4760,13 @@
                 descripcion: form.descripcion.value,
                 probabilidad: prob,
                 impacto: imp,
-                nivel: nivel_calc <= 6 ? 'Bajo' : nivel_calc <= 15 ? 'Medio' : 'Alto'
+                nivel: nivel_calc <= 6 ? 'Bajo' : nivel_calc <= 15 ? 'Medio' : 'Alto',
+                estrategia: nivel_calc <= 6 ? 'Aceptar' : nivel_calc <= 15 ? 'Mitigar' : 'Evitar'
             };
             datos.riesgos.push(riesgo);
             cerrarModal('modal-riesgo');
             renderizarRiesgos();
-            actualizarMatrizRiesgos();
+            renderizarHeatmapRiesgos(); // Update Heatmap
             agregarLog(`✅ Riesgo registrado: ${riesgo.id} - Nivel ${riesgo.nivel}`);
             actualizarEstadisticas();
             alert(`✅ Riesgo ${riesgo.id} registrado - Nivel: ${riesgo.nivel}`);
@@ -3302,8 +4776,10 @@
             const tbody = document.querySelector('#tabla-riesgos tbody');
             if (!tbody) return;
 
+            renderizarHeatmapRiesgos(); // Ensure visual heatmap is updated
+
             if (datos.riesgos.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay riesgos registrados</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay riesgos registrados</td></tr>';
                 return;
             }
 
@@ -3314,7 +4790,9 @@
                     <td>${r.probabilidad}</td>
                     <td>${r.impacto}</td>
                     <td><span class="badge badge-${r.nivel === 'Alto' ? 'danger' : r.nivel === 'Medio' ? 'warning' : 'success'}">${r.nivel}</span></td>
+                     <td><span class="badge badge-info">${r.estrategia || 'Mitigar'}</span></td>
                     <td>
+                        <button class="btn btn-secondary btn-sm" onclick="verBowtie('${r.id}')">🎀</button>
                         <button class="btn btn-danger btn-sm" onclick="eliminarRiesgo('${r.id}')">Eliminar</button>
                     </td>
                 </tr>
@@ -3325,47 +4803,128 @@
             if (confirm('¿Eliminar este riesgo?')) {
                 datos.riesgos = datos.riesgos.filter(r => r.id !== id);
                 renderizarRiesgos();
-                actualizarMatrizRiesgos();
+                renderizarHeatmapRiesgos();
                 agregarLog(`Riesgo eliminado: ${id}`);
                 actualizarEstadisticas();
             }
         }
 
-        function actualizarMatrizRiesgos() {
-            // Limpiar matriz
-            for (let i = 1; i <= 5; i++) {
-                for (let j = 1; j <= 5; j++) {
-                    const cell = document.getElementById(`risk-${i}-${j}`);
-                    if (cell) cell.textContent = '0';
-                }
-            }
+        // New Logic: Interactive Heatmap Render
+        function renderizarHeatmapRiesgos() {
+            const container = document.getElementById('risk-heatmap-canvas');
+            if (!container) return;
 
-            // Contar riesgos por celda
-            datos.riesgos.forEach(r => {
-                const cell = document.getElementById(`risk-${r.impacto}-${r.probabilidad}`);
-                if (cell) {
-                    const count = parseInt(cell.textContent) + 1;
-                    cell.textContent = count;
-                }
-            });
+            // 5x5 Grid logic
+            let html = '';
+            for (let i = 0; i < 25; i++) {
+                // Calculate P (y) and I (x) from index 0-24? No, simpler to just map risks to cells
+                // Let's make it a flat grid of cells 1-25
+                // Actually, let's keep it simple: 5 rows (Probability), 5 cols (Impact)
+                // We'll generate 25 cells. 
+                // Row 5 (High Prob) -> Row 1 (Low)
+                // Col 1 (Low Imp) -> Col 5 (High)
+
+                // We need to map linear index to Prob/Impact
+                // Grid is 5 cols. 
+                const row = 5 - Math.floor(i / 5); // 5,5,5,5,5... 1,1,1,1,1
+                const col = (i % 5) + 1; // 1,2,3,4,5...
+
+                const risksInCell = datos.riesgos.filter(r => parseInt(r.probabilidad) === row && parseInt(r.impacto) === col);
+                const count = risksInCell.length;
+
+                // Color based on Risk Level (P*I)
+                const score = row * col;
+                let color = '#2ecc71'; // Low
+                if (score > 15) color = '#e74c3c'; // High
+                else if (score > 6) color = '#f1c40f'; // Med
+
+                // Opacity based on count? Or just fixed color
+                let style = `background-color: ${color}; opacity: ${count > 0 ? 1 : 0.3};`;
+
+                html += `
+                    <div class="risk-heatmap-cell" style="${style}" title="Prob: ${row}, Imp: ${col} - ${count} Riesgos">
+                        ${count > 0 ? `<div class="risk-heatmap-count">${count}</div>` : ''}
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+
+            // Update stats
+            document.getElementById('risk-critical-count').textContent = datos.riesgos.filter(r => (r.probabilidad * r.impacto) > 15).length;
+            document.getElementById('risk-warning-count').textContent = datos.riesgos.filter(r => (r.probabilidad * r.impacto) > 6 && (r.probabilidad * r.impacto) <= 15).length;
+        }
+
+        // New Logic: Bowtie View
+        function verBowtie(id) {
+            const r = datos.riesgos.find(x => x.id === id);
+            if (!r) return;
+
+            const container = document.getElementById('bowtie-analysis-view');
+            container.innerHTML = `
+                <div class="bowtie-container">
+                    <div class="bowtie-box" style="border:2px solid #3498db; background:#eaf2f8;">
+                        <strong>Causas Generadoras</strong><br><br>
+                        Fallos de Control<br>
+                        Error Humano<br>
+                        Amenaza Externa
+                    </div>
+                    <div class="bowtie-line"></div>
+                    <div class="bowtie-center">
+                        ${r.descripcion.substring(0, 15)}...<br>
+                        <span style="font-size:10px">${r.id}</span>
+                    </div>
+                    <div class="bowtie-line"></div>
+                    <div class="bowtie-box" style="border:2px solid #e74c3c; background:#fadbd8;">
+                        <strong>Consecuencias</strong><br><br>
+                        Interrupción de Servicio<br>
+                        Pérdida Financiera<br>
+                        Daño Reputacional
+                    </div>
+                </div>
+                <p style="text-align:center; font-size:12px; margin-top:10px;">Análisis simplificado Bowtie para ${r.id}</p>
+            `;
+        }
+
+        function renderizarAnalisisBowtie() {
+            // Just a refresh wrapper or logic to show "all" ? 
+            // For now, reset view
+            document.getElementById('bowtie-analysis-view').innerHTML = '<p style="text-align: center; color: #95a5a6; padding: 20px;">Seleccione un riesgo de la tabla para ver su análisis</p>';
+        }
+
+        // Deprecated outdated matrix function (removed/replaced logic)
+        function actualizarMatrizRiesgos() {
+            // No-op or keep for backward compat if called elsewhere
+            // We replaced it with renderizarHeatmapRiesgos
         }
 
         function guardarSolicitud(e) {
             e.preventDefault();
             const form = e.target;
+            const tipoServicio = form.tipo_servicio.value;
+            const tipoFinal = tipoServicio ? tipoServicio : form.tipo.value;
+
             const solicitud = {
                 id: `SOL-${String(contadores.solicitud++).padStart(3, '0')}`,
-                tipo: form.tipo.value,
+                tipo: tipoFinal,
                 descripcion: form.descripcion.value,
                 prioridad: form.prioridad.value,
                 solicitante: form.solicitante.value,
-                estado: 'Pendiente'
+                departamento: form.departamento.value || 'General',
+                estado: 'Pendiente',
+                fecha: new Date().toLocaleDateString()
             };
             datos.solicitudes.push(solicitud);
             cerrarModal('modal-solicitud');
+
+            // Reset form specials
+            document.getElementById('form-servicio-info').style.display = 'none';
+            document.getElementById('form-tipo-servicio').value = '';
+
             renderizarSolicitudes();
+            switchRequestTab('my-requests'); // Switch to list view
             agregarLog(`✅ Solicitud creada: ${solicitud.tipo}`);
             actualizarEstadisticas();
+            actualizarEstadisticasSolicitudes();
             alert(`✅ Solicitud ${solicitud.id} creada exitosamente`);
         }
 
@@ -3375,6 +4934,7 @@
 
             if (datos.solicitudes.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay solicitudes registradas</td></tr>';
+                actualizarEstadisticasSolicitudes();
                 return;
             }
 
@@ -3382,7 +4942,6 @@
                 <tr>
                     <td>${s.id}</td>
                     <td><span class="badge badge-info">${s.tipo}</span></td>
-                    <td>${s.descripcion}</td>
                     <td><span class="badge badge-${getBadgePrioridad(s.prioridad)}">${s.prioridad}</span></td>
                     <td><span class="badge badge-${s.estado === 'Completada' ? 'success' : s.estado === 'En Proceso' ? 'warning' : 'info'}">${s.estado}</span></td>
                     <td>${s.solicitante}</td>
@@ -3391,6 +4950,8 @@
                     </td>
                 </tr>
             `).join('');
+
+            actualizarEstadisticasSolicitudes();
         }
 
         function eliminarSolicitud(id) {
@@ -3399,23 +4960,51 @@
                 renderizarSolicitudes();
                 agregarLog(`Solicitud eliminada: ${id}`);
                 actualizarEstadisticas();
+                actualizarEstadisticasSolicitudes();
             }
         }
 
+        // --- SLA MANAGEMENT LOGIC ---
+
         function renderizarSLA() {
-            // Renderizar métricas globales de SLA
             renderizarMetricasSLA();
-
-            // Renderizar indicadores de rendimiento
             renderizarIndicadoresRendimiento();
+            renderizarHeatmapSLA();
 
-            // Renderizar matriz de SLA
+            // Render SLA Matrix Table (Detailed)
+            const tbody = document.querySelector('#tabla-sla tbody');
+            if (tbody) {
+                if (datos.servicios.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay servicios para monitorear</td></tr>';
+                } else {
+                    tbody.innerHTML = datos.servicios.map(s => {
+                        const slaReal = (parseFloat(s.disponibilidad) - (Math.random() * 0.5)).toFixed(2);
+                        const cumplimiento = slaReal >= s.disponibilidad * 0.98;
+                        const tendencia = Math.random() > 0.5 ? '📈' : '📉';
+                        const incidentes = Math.floor(Math.random() * 10);
+                        return `
+                            <tr>
+                                <td>${s.nombre}</td>
+                                <td>${s.disponibilidad}%</td>
+                                <td><strong>${slaReal}%</strong></td>
+                                <td><span class="badge badge-${cumplimiento ? 'success' : 'warning'}">${cumplimiento ? 'Cumplido' : 'En Riesgo'}</span></td>
+                                <td>${incidentes}</td>
+                                <td style="font-size: 20px;">${tendencia}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            }
+
+            // Render SLA visual cards (Matrix)
             const container = document.getElementById('sla-matrix');
             if (container && datos.servicios.length > 0) {
                 container.innerHTML = datos.servicios.map(s => {
                     const slaReal = (parseFloat(s.disponibilidad) - (Math.random() * 0.5)).toFixed(2);
                     const cumplimiento = ((slaReal / s.disponibilidad) * 100).toFixed(1);
-                    const borderColor = slaReal >= s.disponibilidad * 0.98 ? '#27ae60' : slaReal >= s.disponibilidad * 0.95 ? '#f39c12' : '#e74c3c';
+                    const status = slaReal >= s.disponibilidad * 0.98 ? 'green' : slaReal >= s.disponibilidad * 0.95 ? 'yellow' : 'red';
+                    const borderColor = status === 'green' ? '#27ae60' : status === 'yellow' ? '#f39c12' : '#e74c3c';
+
                     return `
                         <div class="sla-card" style="border-left-color: ${borderColor};">
                             <h4>${s.nombre}</h4>
@@ -3423,45 +5012,53 @@
                             <p>Objetivo: ${s.disponibilidad}%</p>
                             <p>Cumplimiento: ${cumplimiento}%</p>
                             <div class="performance-indicator">
-                                <div class="indicator-dot ${slaReal >= s.disponibilidad * 0.98 ? 'green' : slaReal >= s.disponibilidad * 0.95 ? 'yellow' : 'red'}"></div>
-                                <span>${slaReal >= s.disponibilidad * 0.98 ? 'Óptimo' : slaReal >= s.disponibilidad * 0.95 ? 'Aceptable' : 'Crítico'}</span>
+                                <div class="indicator-dot ${status}"></div>
+                                <span>${status === 'green' ? 'Óptimo' : status === 'yellow' ? 'Aceptable' : 'Crítico'}</span>
                             </div>
                         </div>
                     `;
                 }).join('');
             }
+        }
 
-            // Renderizar tabla de SLA
-            const tbody = document.querySelector('#tabla-sla tbody');
-            if (!tbody) return;
+        function renderizarHeatmapSLA() {
+            const container = document.getElementById('sla-heatmap-grid');
+            if (!container) return;
 
+            // Mocking logic for last 30 days visualization
+            // In a real app, this would iterate dates. Here we mock services * random metrics.
             if (datos.servicios.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay servicios para monitorear</td></tr>';
+                container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:20px;">No data</div>';
                 return;
             }
 
-            tbody.innerHTML = datos.servicios.map(s => {
-                const slaReal = (parseFloat(s.disponibilidad) - (Math.random() * 0.5)).toFixed(2);
-                const incidentes = Math.floor(Math.random() * 20);
-                const cumplimiento = slaReal >= s.disponibilidad * 0.98;
-                const tendencia = Math.random() > 0.5 ? '📈' : '📉';
+            container.innerHTML = datos.servicios.map(s => {
+                const health = Math.random();
+                const colorClass = health > 0.8 ? 'heatmap-green' : health > 0.6 ? 'heatmap-yellow' : 'heatmap-red';
+                const score = (95 + (health * 5)).toFixed(1);
                 return `
-                    <tr>
-                        <td>${s.nombre}</td>
-                        <td>${s.disponibilidad}%</td>
-                        <td><strong>${slaReal}%</strong></td>
-                        <td><span class="badge badge-${cumplimiento ? 'success' : 'warning'}">${cumplimiento ? 'Cumplido' : 'En Riesgo'}</span></td>
-                        <td>${incidentes}</td>
-                        <td style="font-size: 20px;">${tendencia}</td>
-                    </tr>
+                    <div class="heatmap-cell ${colorClass}">
+                        <div>${s.nombre}</div>
+                        <div style="font-size:16px;">${score}%</div>
+                    </div>
                 `;
             }).join('');
+        }
+
+        function calcularPenalizacion() {
+            const hours = parseFloat(document.getElementById('down-time-input').value);
+            if (isNaN(hours) || hours < 0) return;
+
+            // Simple mock logic: $500 per hour of downtime
+            const ratePerHour = 500;
+            const penalty = hours * ratePerHour;
+
+            document.getElementById('penalty-display').textContent = '$' + penalty.toFixed(2);
         }
 
         function renderizarMetricasSLA() {
             if (datos.servicios.length === 0) return;
 
-            // Calcular cumplimiento global
             let totalCumplimiento = 0;
             let serviciosEnRiesgo = 0;
             let totalIncidentes = 0;
@@ -3512,11 +5109,14 @@
                 nombre: form.nombre.value,
                 ubicacion: form.ubicacion.value,
                 responsable: form.responsable.value,
-                estado: 'Activo'
+                estado: 'Activo',
+                depreciacion: '0%', // Default for new
+                lifecycleStage: 1 // Planning
             };
             datos.activos.push(activo);
             cerrarModal('modal-activo');
             renderizarActivos();
+            renderizarTopologiaCMDB(); // Update topology
             agregarLog(`✅ Activo creado: ${activo.tipo} - ${activo.nombre}`);
             actualizarEstadisticas();
             alert(`✅ Activo ${activo.id} creado exitosamente`);
@@ -3525,6 +5125,8 @@
         function renderizarActivos() {
             const tbody = document.querySelector('#tabla-activos tbody');
             if (!tbody) return;
+
+            renderizarTopologiaCMDB(); // Ensure topology is visual
 
             if (datos.activos.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay activos registrados</td></tr>';
@@ -3535,9 +5137,10 @@
                 <tr>
                     <td>${a.id}</td>
                     <td><span class="badge badge-info">${a.tipo}</span></td>
-                    <td>${a.nombre}</td>
+                    <td><strong onclick="mostrarCicloVida('${a.id}')" style="cursor:pointer; color:#3498db;">${a.nombre}</strong></td>
                     <td>${a.ubicacion}</td>
                     <td><span class="badge badge-success">${a.estado}</span></td>
+                    <td>${Math.floor(Math.random() * 30)}%</td>
                     <td>${a.responsable}</td>
                     <td>
                         <button class="btn btn-danger btn-sm" onclick="eliminarActivo('${a.id}')">Eliminar</button>
@@ -3550,17 +5153,78 @@
             if (confirm('¿Eliminar este activo?')) {
                 datos.activos = datos.activos.filter(a => a.id !== id);
                 renderizarActivos();
+                renderizarTopologiaCMDB();
                 agregarLog(`Activo eliminado: ${id}`);
                 actualizarEstadisticas();
             }
+        }
+
+        // New Logic: CMDB Topology Render
+        function renderizarTopologiaCMDB() {
+            const container = document.getElementById('cmdb-topology-tree');
+            if (!container) return;
+
+            // Mock Topology: Service -> App -> Server -> DB
+            if (datos.activos.length === 0) {
+                container.innerHTML = 'No Data';
+                return;
+            }
+
+            // Just visualize a static mock tree derived from real data counts or names
+            // Level 1: Business Services (from ISO 20000 services)
+            // Level 2: Applications (Software Assets)
+            // Level 3: Infrastructure (Hardware Assets)
+
+            const services = datos.servicios.slice(0, 2); // Take top 2 services
+            const hwAssets = datos.activos.filter(a => a.tipo === 'Hardware').slice(0, 3);
+            const swAssets = datos.activos.filter(a => a.tipo === 'Software').slice(0, 3);
+
+            container.innerHTML = `
+                <div class="topo-level">
+                    ${services.map(s => `<div class="topo-node root">${s.nombre}<br><small>Service</small></div>`).join('')}
+                    ${services.length === 0 ? '<div class="topo-node root">Main Service</div>' : ''}
+                </div>
+                <div class="topo-level">
+                    ${swAssets.map(a => `<div class="topo-node">${a.nombre}<br><small>App</small></div>`).join('')}
+                    ${swAssets.length === 0 ? '<div class="topo-node">ERP System</div>' : ''}
+                </div>
+                 <div class="topo-level">
+                    ${hwAssets.map(a => `<div class="topo-node" style="border-color:#e67e22;">${a.nombre}<br><small>Infra</small></div>`).join('')}
+                    ${hwAssets.length === 0 ? '<div class="topo-node">Server Cluster</div>' : ''}
+                </div>
+            `;
+        }
+
+        // New Logic: Lifecycle View
+        function mostrarCicloVida(id) {
+            const asset = datos.activos.find(a => a.id === id);
+            if (!asset) return;
+
+            document.getElementById('lifecycle-asset-name').textContent = `${asset.nombre} (${asset.tipo})`;
+
+            // Random stage for demo
+            const stage = Math.floor(Math.random() * 5) + 1;
+
+            const steps = document.querySelectorAll('.lifecycle-step');
+            steps.forEach((s, index) => {
+                if (index + 1 <= stage) s.classList.add('active');
+                else s.classList.remove('active');
+            });
+
+            // Scroll to view
+            document.getElementById('activos').scrollIntoView({ behavior: 'smooth' });
         }
 
         function renderizarSeguridad() {
             const tbody = document.querySelector('#tabla-seguridad tbody');
             if (!tbody) return;
 
+            // Simulate Security Scan / Updates
+            const ciaConf = (95 + Math.random() * 5).toFixed(1);
+            if (document.getElementById('cia-confidentiality')) document.getElementById('cia-confidentiality').textContent = ciaConf + '%';
+
             if (datos.seguridad.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay incidentes de seguridad</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay incidentes de seguridad</td></tr>';
                 return;
             }
 
@@ -3570,6 +5234,7 @@
                     <td><span class="badge badge-warning">${s.tipo}</span></td>
                     <td>${s.descripcion}</td>
                     <td><span class="badge badge-${s.severidad === 'Crítica' ? 'danger' : s.severidad === 'Alta' ? 'warning' : 'info'}">${s.severidad}</span></td>
+                    <td>Servidor-Principal-01</td>
                     <td><span class="badge badge-${s.estado === 'Resuelto' ? 'success' : 'warning'}">${s.estado}</span></td>
                     <td>${s.fecha}</td>
                 </tr>
@@ -3581,18 +5246,25 @@
             if (!tbody) return;
 
             if (datos.controles.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay controles registrados</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay controles registrados</td></tr>';
                 return;
             }
 
-            tbody.innerHTML = datos.controles.map(c => `
+            tbody.innerHTML = datos.controles.map(c => {
+                const maturity = Math.floor(Math.random() * 3) + 3; // 3-5
+                return `
                 <tr>
-                    <td>${c.control}</td>
+                    <td><strong>${c.control}</strong></td>
                     <td><span class="badge badge-info">${c.categoria}</span></td>
                     <td><span class="badge badge-success">${c.estado}</span></td>
+                    <td>
+                        <div style="display:flex; gap:2px;">
+                            ${[1, 2, 3, 4, 5].map(i => `<div style="width:10px; height:10px; background:${i <= maturity ? '#2ecc71' : '#ecf0f1'}; border-radius:50%;"></div>`).join('')}
+                        </div>
+                    </td>
                     <td>${c.revision}</td>
                 </tr>
-            `).join('');
+            `}).join('');
         }
 
         function renderizarContinuidad() {
@@ -3600,7 +5272,7 @@
             if (!tbody) return;
 
             if (datos.continuidad.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay planes de continuidad</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay planes de continuidad</td></tr>';
                 return;
             }
 
@@ -3610,8 +5282,9 @@
                     <td><strong>${c.proceso}</strong></td>
                     <td>${c.rto}</td>
                     <td>${c.rpo}</td>
-                    <td><span class="badge badge-success">${c.estado}</span></td>
+                    <td><span class="badge badge-info">Redundancia Activa</span></td>
                     <td>${c.prueba}</td>
+                    <td><span class="badge badge-success">Exitoso</span></td>
                 </tr>
             `).join('');
         }
@@ -3621,7 +5294,7 @@
             if (!tbody) return;
 
             if (datos.recursos.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay recursos de respaldo</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #7f8c8d; padding: 40px;">No hay recursos de respaldo</td></tr>';
                 return;
             }
 
@@ -3631,6 +5304,7 @@
                     <td><span class="badge badge-info">${r.tipo}</span></td>
                     <td>${r.disponibilidad}</td>
                     <td>${r.ubicacion}</td>
+                    <td><span class="badge badge-success">En Línea</span></td>
                 </tr>
             `).join('');
         }
@@ -3659,7 +5333,10 @@
             renderizarProblemas();
             renderizarCambios();
             renderizarRiesgos();
+
             renderizarSolicitudes();
+            renderizarCatalogo();
+            actualizarEstadisticasSolicitudes();
             renderizarActivos();
             renderizarSeguridad();
             renderizarControles();
